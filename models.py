@@ -4,7 +4,7 @@ from flask_sqlalchemy import SQLAlchemy
 
 app = Flask(__name__)
 app.config["SECRET_KEY"] = "123456"
-app.config["SQLALCHEMY_DATABASE_URI"] = "mysql+pymysql://root:qwer@localhost:3306/exam_ol_database"
+app.config["SQLALCHEMY_DATABASE_URI"] = "mysql+pymysqlconnector://root:qwer@localhost:3306/exam_ol_database"
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = True
 app.config["SQLALCHEMY_COMMIT_ON_TEARDOWN"] = True
 
@@ -165,3 +165,8 @@ class TestType(db.Model):
 
     def __repr__(self):
         return "<TestType %r>" % self.id
+
+    pass
+
+
+db.create_all()
