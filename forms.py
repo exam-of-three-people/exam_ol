@@ -4,11 +4,11 @@ from wtforms.validators import DataRequired, EqualTo
 
 
 class LoginForm(FlaskForm):
-    id = StringField(label="学号", validators=[DataRequired(message="id is None")])
-    role = SelectField(coerce=int, choices=[(1, '学生'), (2, '教师'), (3, '管理员')])
-    remember_me = BooleanField(label="记住密码", default=False)
-    password = PasswordField(label='密码', validators=[DataRequired(message="password is None")])
-    login = SubmitField(label="登录")
+    id = StringField(label=u"学号", validators=[DataRequired(message="id is None")])
+    role = SelectField(coerce=int, choices=[(1, u'学生'), (2, u'教师'), (3, u'管理员')])
+    remember_me = BooleanField(label=u"记住密码", default=False)
+    password = PasswordField(label=u'密码', validators=[DataRequired(message="password is None")])
+    login = SubmitField(label=u"登录")
     pass
 
 
@@ -61,6 +61,8 @@ class TeacherInfoForm(FlaskForm):
 class TestCreaterForm(FlaskForm):
     start_time = DateTimeField(u'开始时间', validators=[DataRequired()])
     end_time = DateTimeField(u'结束时间', validators=[DataRequired()])
+    college = SelectField(u'学院', validators=[DataRequired()])
+
     subject = SelectField(u'科目')
     submit = SubmitField(u'创建')
     pass

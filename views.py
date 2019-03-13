@@ -101,6 +101,7 @@ def testList():
 
 @app.route("/login", methods=['POST'])
 def login():
+    print(request.form['id'])
     form = LoginForm(request.form)
     if form.validate_on_submit():
         if form.role.data == 1:
