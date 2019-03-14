@@ -1,13 +1,43 @@
 from flask import render_template, redirect, flash, url_for, request
-from flask_login import login_required, current_user
+from flask_login import login_required, current_user, LoginManager, login_user
 from forms import LoginForm, RegisterFormStudent, RegisterFormTeacher, StudentInfoForm, TeacherInfoForm, TestCreaterForm
-from models import app, Student, Teacher, College, Major, Subject, Plan, Page, Test, Class, TestType, Admin, db
+from models import app, Student, Teacher, College, Major, Subject, Plan, Page, Test, Class, TestType, db
 
 
 @app.route("/", methods=['GET', 'POST'])
 @app.route("/index", methods=['GET', 'POST'])
+@app.route("/login", methods=['GET', 'POST'])
 def index():
-    form = LoginForm()
+    if request.method == 'POST':
+        form = LoginForm(request.form)
+        if form.validate_on_submit():
+            id = int(form.id.data)
+            password = form.password.data
+            if form.role.data == 1:
+                user = Student.query.get(id)
+                if user is None:
+                    flash("学号输入错误！")
+                elif user.checkPassword(password):
+                    login_user(id)
+                    return redirect("studentMenu")
+                else:
+                    flash("密码不正确！")
+            elif form.role.data == 2:
+                user = Teacher.query.get(id)
+                if user is None:
+                    flash("工号输入错误！")
+                elif user.checkPassword(password):
+                    login_user(id)
+                    return redirect("teacherMenu")
+                else:
+                    flash("密码不正确！")
+                    pass
+                pass
+            pass
+        else:
+            pass
+    else:
+        form = LoginForm()
     return render_template("登录页面.html", form=form)
 
 
@@ -97,20 +127,6 @@ def testCreater():
 @app.route("/testList")
 def testList():
     return render_template("教师考试计划页面.html", methods=['GET', 'POST'])
-
-
-@app.route("/login", methods=['POST'])
-def login():
-    form = LoginForm(request.form)
-    if form.validate_on_submit():
-        if form.role.data == 1:
-            return redirect("studentMenu")
-        elif form.role.data == 2:
-            return redirect("teacherMenu")
-        else:
-            return redirect("adminMenu")
-    else:
-        return render_template("登录页面.html", form=form)
 
 
 @app.route("/logout", methods=['GET', 'POST'])

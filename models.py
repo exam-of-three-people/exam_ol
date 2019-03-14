@@ -1,6 +1,7 @@
 from flask import Flask
 from flask_login import UserMixin
 from flask_sqlalchemy import SQLAlchemy
+from werkzeug.security import generate_password_hash, check_password_hash
 
 app = Flask(__name__)
 app.config["SECRET_KEY"] = "123456"
@@ -24,7 +25,7 @@ class Student(UserMixin, db.Model):
     pages = db.relationship("Page", backref="tb_student")
 
     def checkPassword(self, password):
-        return True
+        return check_password_hash(self.password_hash, password)
 
     def __repr__(self):
         return ("<Student %r>" % self.id)
@@ -32,16 +33,16 @@ class Student(UserMixin, db.Model):
     pass
 
 
-class Admin(UserMixin, db.Model):
-    __tablename__ = "tb_admin"
-    id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(10), nullable=False)
-    password_hash = db.Column(db.String(128), nullable=False)
-
-    def __repr__(self):
-        return "<Admin %r>" % self.id
-
-    pass
+# class Admin(UserMixin, db.Model):
+#     __tablename__ = "tb_admin"
+#     id = db.Column(db.Integer, primary_key=True)
+#     name = db.Column(db.String(10), nullable=False)
+#     password_hash = db.Column(db.String(128), nullable=False)
+#
+#     def __repr__(self):
+#         return "<Admin %r>" % self.id
+#
+#     pass
 
 
 class Teacher(UserMixin, db.Model):

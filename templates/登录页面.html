@@ -7,9 +7,12 @@
     <title>登录页面</title>
 </head>
 <body>
+{% for msg in get_flashed_messages() %}
+    <p class="login-box-msg">{{ msg }}</p>
+{% endfor %}
 <form action="/login" method="post">
-    {{ form.id.label }}{{ form.id }}{{ form.role }}
-    {{ form.password.label }}{{ form.csrf_token }}{{ form.password }}{{ form.remember_me }}{{ form.remember_me.label }}
+    {{ form.id.label }}{{ form.id }}{{ form.role }}<br>
+    {{ form.password.label }}{{ form.csrf_token }}{{ form.password }}{{ form.remember_me }}{{ form.remember_me.label }}<br>
     <a onclick="signUp()">注册</a>
     {{ form.login }}
 </form>
