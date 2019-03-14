@@ -137,3 +137,9 @@ def teacherInfoUpdate():
 @app.route("/studentInfoUpdate", methods=['GET', 'POST'])
 def studentInfoUpdate():
     return redirect("studentInfo")
+
+
+@app.route("/collegeChecked/<int:college_id>", methods=['GET', 'POST'])
+def collegeChecked():
+    majors = [{'id': 1, 'name': "专"}, {'id': 2, 'name': "业"}]
+    return majors

@@ -2,28 +2,29 @@
 <html>
 <head>
     <meta charset="utf-8">
+    <link href="../static/js/学生管理页面.js">
     <title>学生管理页面</title>
 </head>
 <body>
 <div>
     <label for="select3">年级:</label>
-    <select name="select">
+    <select onchange="f1()" name="select">
     </select>
     <label for="select">学院:</label>
-    <select name="select">
+    <select id='' onchange="f2()" name="select">
     </select>
     <label for="select2">专业:</label>
-    <select name="select">
+    <select onchange="f3()" name="select">
     </select>
     <label for="select4">班:</label>
-    <select name="select">
+    <select onchange="f4()" name="select">
     </select>
 </div>
 <div>
     <ul>
         <li>
             <a href="#">张三1601100000</a>&nbsp;
-            <input type="button" name="button" value="重置密码">
+            <input onclick="f5()" type="button" name="button" value="重置密码">
         </li>
     </ul>
 </div>
