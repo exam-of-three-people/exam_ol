@@ -19,7 +19,7 @@ class Student(UserMixin, db.Model):
     id_college = db.Column(db.Integer, db.ForeignKey('tb_college.id'), nullable=False)
     id_major = db.Column(db.Integer, db.ForeignKey('tb_major.id'), nullable=False)
     grade = db.Column(db.Integer, nullable=False)
-    id_class = db.Column(db.Integer, db.ForeignKey('tb_class.id'), nullable=False)
+    id_class = db.Column(db.Integer, db.ForeignKey('tb_class.id'),nullable=False)
 
     pages = db.relationship("Page", backref="tb_student")
 
