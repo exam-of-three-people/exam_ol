@@ -136,6 +136,11 @@ def logout():
 
 @app.route("/teacherRegister", methods=['GET', 'POST'])
 def teacherRegister():
+    # id = request.POST['id']
+    # name = request.POST['name']
+    # user = Teacher()
+    # user.id = id
+    # user.name = name
     return redirect("index")
 
 

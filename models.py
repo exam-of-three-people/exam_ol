@@ -51,6 +51,9 @@ class Teacher(UserMixin, db.Model):
     name = db.Column(db.String(10), nullable=False)
     password_hash = db.Column(db.String(128), nullable=False)
 
+    # def insertTeacher(self,user):
+    #     db.session.add(user)
+
     def __repr__(self):
         return "<Teacher %r>" % self.id
 
