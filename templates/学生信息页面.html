@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>学生信息页面</title>
+</head>
+<body>
+<form action="/studentInfoUpdate" method="post">
+    {{ form.id.label }}{{ form.id }}
+    {{ form.name.label }}{{ form.name }}
+    {{ form.college.label }}{{ form.college }}
+    {{ form.major.label }}{{ form.major }}
+    {{ form.grade.label }}{{ form.grade }}
+    {{ form.classes.label }}{{ form.classes }}
+    {{ form.csrf_token }}
+    {{ form.pre_password.label }}{{ form.pre_password }}
+    {{ form.new_password.label }}{{ form.new_password }}
+    {{ form.ensure_password.label }}{{ form.ensure_password }}
+    {{ form.submit }}
+</form>
+</body>
+</html>
