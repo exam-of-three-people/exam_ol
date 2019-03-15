@@ -14,7 +14,7 @@ db = SQLAlchemy(app)
 
 class Student(UserMixin, db.Model):
     __tablename__ = "tb_student"
-    id = db.Column(db.Integer, primary_key=True,unique=True)
+    id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(10), nullable=False)
     password_hash = db.Column(db.String(128), nullable=False)
     id_college = db.Column(db.Integer, db.ForeignKey('tb_college.id'), nullable=False)
@@ -23,6 +23,14 @@ class Student(UserMixin, db.Model):
     id_class = db.Column(db.Integer, db.ForeignKey('tb_class.id'), nullable=False)
 
     pages = db.relationship("Page", backref="tb_student")
+
+    @property
+    def password(self):
+        return AttributeError('password is not a readable attribute')
+
+    @password.setter
+    def password(self, password):
+        self.password_hash = generate_password_hash(password)
 
     def checkPassword(self, password):
         return check_password_hash(self.password_hash, password)

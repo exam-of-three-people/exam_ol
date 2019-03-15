@@ -2,6 +2,7 @@ from flask import render_template, redirect, flash, url_for, request
 from flask_login import login_required, current_user, LoginManager, login_user
 from forms import LoginForm, RegisterFormStudent, RegisterFormTeacher, StudentInfoForm, TeacherInfoForm, TestCreaterForm
 from models import app, Student, Teacher, College, Major, Subject, Plan, Page, Test, Class, TestType, db
+from sqlalchemy.exc import IntegrityError
 
 
 @app.route("/", methods=['GET', 'POST'])
@@ -88,16 +89,6 @@ def teacherSignUp():
     return render_template("教师注册页面.html", form=form)
 
 
-@app.route("/studentSignUp", methods=['GET', 'POST'])
-def studentSignUp():
-    form = RegisterFormStudent()
-    form.college.choices = [(1, '测试')]
-    form.major.choices = [(1, '测试')]
-    form.grade.choices = [(1, '测试')]
-    form.classes.choices = [(1, '测试')]
-    return render_template("学生注册页面.html", form=form)
-
-
 @app.route("/teacherInfo", methods=['GET', 'POST'])
 def teacherInfo():
     form = TeacherInfoForm()
@@ -147,24 +138,25 @@ def teacherRegister():
 @app.route("/studentRegister", methods=['GET', 'POST'])
 def studentRegister():
     if request.method == "POST":
-        id = request.form.get("id")
+        id = int(request.form.get("id"))
         name = request.form.get("name")
-        college_name = request.form.get("college")
-        college = College.query.get(name=college_name)
-        major = request.form.get("major")
-        grade = request.form.get("grade")
-        classes = request.form.get("classes")
+        college_id = request.form.get("college")
+        # grade = request.form.get("grade")
+        grade = 2016
+        classes_id = request.form.get("classes")
+        major_id = request.form.get("major")
         password = request.form.get("password")
         ensure_password = request.form.get("ensure_password")
-        user = Student(id=id, name=name, college=college, major=major, grade=grade, classes=classes, password=password)
+        user = Student(id=id, name=name, id_college=college_id, id_major=major_id, grade=grade, id_class=classes_id, password=password)
+
         if password == ensure_password:
             try:
                 db.session.add(user)
                 db.session.commit()
                 pass
-            except InterruptedError :
+            except IntegrityError :
                 db.session.rollback()
-                flash("学号已注册！")
+                flash("该学号已被其他用户注册，请联系管理员！")
                 pass
             return redirect("/login")
             pass
@@ -174,8 +166,11 @@ def studentRegister():
             pass
     else:
         form = RegisterFormStudent()
+        form.college.choices = [(1, '测试')]
+        form.major.choices = [(1, '测试')]
+        form.grade.choices = [(1, '测试')]
+        form.classes.choices = [(1, '测试')]
         return render_template("学生注册页面.html", form=form)
-
 
 
 @app.route("/teacherInfoUpdate", methods=['GET', 'POST'])

@@ -5,6 +5,9 @@
     <title>学生注册页面</title>
 </head>
 <body>
+{% for msg in get_flashed_messages() %}
+    <p class="login-box-msg">{{ msg }}</p>
+{% endfor %}
 <form action="/studentRegister" method="post">
     {{ form.id.label }}{{ form.id }}
     {{ form.name.label }}{{ form.name }}
