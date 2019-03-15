@@ -149,8 +149,8 @@ def studentRegister():
     if request.method == "POST":
         id = request.form.get("id")
         name = request.form.get("name")
-        college_name = request.form.get("college")
-        college = College.query.get(name=college_name)
+        college_id = request.form.get("college")
+        college = College.query.get(college_id)
         major = request.form.get("major")
         grade = request.form.get("grade")
         classes = request.form.get("classes")
