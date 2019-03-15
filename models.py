@@ -61,6 +61,11 @@ class Teacher(UserMixin, db.Model):
 
     # def insertTeacher(self,user):
     #     db.session.add(user)
+    def checkPassword(self, password):
+        return check_password_hash(self.password_hash, password)
+
+    def setPassword(self, password):
+        self.password_hash = generate_password_hash(password)
 
     def __repr__(self):
         return "<Teacher %r>" % self.id
