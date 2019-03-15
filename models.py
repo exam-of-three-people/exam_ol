@@ -14,7 +14,7 @@ db = SQLAlchemy(app)
 
 class Student(UserMixin, db.Model):
     __tablename__ = "tb_student"
-    id = db.Column(db.Integer, primary_key=True,unique=True)
+    id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(10), nullable=False)
     password_hash = db.Column(db.String(128), nullable=False)
     id_college = db.Column(db.Integer, db.ForeignKey('tb_college.id'), nullable=False)
