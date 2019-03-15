@@ -146,7 +146,36 @@ def teacherRegister():
 
 @app.route("/studentRegister", methods=['GET', 'POST'])
 def studentRegister():
-    return redirect("index")
+    if request.method == "POST":
+        id = request.form.get("id")
+        name = request.form.get("name")
+        college_name = request.form.get("college")
+        college = College.query.get(name=college_name)
+        major = request.form.get("major")
+        grade = request.form.get("grade")
+        classes = request.form.get("classes")
+        password = request.form.get("password")
+        ensure_password = request.form.get("ensure_password")
+        user = Student(id=id, name=name, college=college, major=major, grade=grade, classes=classes, password=password)
+        if password == ensure_password:
+            try:
+                db.session.add(user)
+                db.session.commit()
+                pass
+            except InterruptedError :
+                db.session.rollback()
+                flash("学号已注册！")
+                pass
+            return redirect("/login")
+            pass
+        else:
+            flash("两次密码不一致！")
+            return redirect("/studentRegister")
+            pass
+    else:
+        form = RegisterFormStudent()
+        return render_template("学生注册页面.html", form=form)
+
 
 
 @app.route("/teacherInfoUpdate", methods=['GET', 'POST'])

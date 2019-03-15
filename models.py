@@ -14,13 +14,13 @@ db = SQLAlchemy(app)
 
 class Student(UserMixin, db.Model):
     __tablename__ = "tb_student"
-    id = db.Column(db.Integer, primary_key=True)
+    id = db.Column(db.Integer, primary_key=True,unique=True)
     name = db.Column(db.String(10), nullable=False)
     password_hash = db.Column(db.String(128), nullable=False)
     id_college = db.Column(db.Integer, db.ForeignKey('tb_college.id'), nullable=False)
     id_major = db.Column(db.Integer, db.ForeignKey('tb_major.id'), nullable=False)
     grade = db.Column(db.Integer, nullable=False)
-    id_class = db.Column(db.Integer, db.ForeignKey('tb_class.id'),nullable=False)
+    id_class = db.Column(db.Integer, db.ForeignKey('tb_class.id'), nullable=False)
 
     pages = db.relationship("Page", backref="tb_student")
 
