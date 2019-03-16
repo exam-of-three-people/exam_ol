@@ -1,6 +1,4 @@
-from views import app
 from flask_script import Manager
-from flask_login import login_required, current_user, LoginManager
 from flask_admin import Admin
 from flask_admin.contrib.sqla import ModelView
 from models import app, Student, Teacher, College, Major, Subject, Plan, Page, Test, Class, TestType, db
@@ -14,14 +12,6 @@ manager.add_command('db', MigrateCommand)
 
 admin = Admin()
 admin.init_app(app)
-
-login_manager = LoginManager()
-login_manager.init_app(app)
-
-
-@login_manager.user_loader
-def load_user(user_id):
-    return None
 
 
 class IdBrandForm(BaseForm):
