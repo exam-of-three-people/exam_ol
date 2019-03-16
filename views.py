@@ -1,4 +1,4 @@
-from flask import render_template, redirect, flash, url_for, request, json
+from flask import render_template, redirect, flash, url_for, request, json, session
 from flask_login import login_required, current_user, LoginManager, login_user
 from forms import LoginForm, RegisterFormStudent, RegisterFormTeacher, StudentInfoForm, TeacherInfoForm, TestCreaterForm
 from models import app, Student, Teacher, College, Major, Subject, Plan, Page, Test, Class, TestType, db
@@ -20,7 +20,9 @@ def index():
                 if user is None:
                     flash("学号输入错误！")
                 elif user.checkPassword(password):
-                    login_user(id)
+                    session["is_login"] = True
+                    session["uid"] = user.id
+                    session["role"] = "student"
                     return redirect("studentMenu")
                 else:
                     flash("密码不正确！")
@@ -29,7 +31,9 @@ def index():
                 if user is None:
                     flash("工号输入错误！")
                 elif user.checkPassword(password):
-                    login_user(id)
+                    session["is_login"] = True
+                    session["uid"] = user.id
+                    session["role"] = "teacher"
                     return redirect("teacherMenu")
                 else:
                     flash("密码不正确！")
@@ -39,6 +43,9 @@ def index():
         else:
             pass
     else:
+        if session["is_login"]:
+            flash("你已经登录，无需重复登录！")
+            return redirect(session["role"] + "Menu")
         form = LoginForm()
     return render_template("登录页面.html", form=form)
 
@@ -123,6 +130,7 @@ def testList():
 
 @app.route("/logout", methods=['GET', 'POST'])
 def logout():
+    session.clear()
     return redirect("index")
 
 
