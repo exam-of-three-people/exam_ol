@@ -42,6 +42,7 @@ def index():
     return render_template("登录页面.html", form=form)
 
 
+@login_required
 @app.route("/studentMenu", methods=['GET', 'POST'])
 def studentMenu():
     return render_template("学生菜单.html")
