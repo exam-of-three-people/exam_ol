@@ -14,7 +14,6 @@ $(function () {
 
 
 })
-alert("ddddhjjjjjjjjjjjjjjjjjj");
 
 function Bind(str) {
     alert($("#college").html());
@@ -31,14 +30,14 @@ function collegeBind() {
     var str = "<option>==请选择===</option>";
     $.ajax({
         type: "POST",
-        url: "/selects",
-        data: {"parentiD": "", "MyColums": "Province"},
+        url: "/studentRegister/selects",
+        data: {"parent_id": "", "my_select": "college"},
         dataType: "JSON",
         async: false,
         success: function (data) {
             //从服务器获取数据进行绑定
-            $.each(data.Data, function (i, item) {
-                str += "<option value=" + item.Id + ">" + item.MyTexts + "</option>";
+            $.each(data.data, function (i, item) {
+                str += "<option value=" + item.id + ">" + item.name + "</option>";
             })
             //将数据添加到省份这个下拉框里面
             $("#college").append(str);
@@ -54,9 +53,9 @@ function collegeBind() {
 function majorBind() {
 
 
-    var provice = $("#college").attr("value");
+    var college_id = $("#college").val();
     //判断省份这个下拉框选中的值是否为空
-    if (provice == "") {
+    if (college_id == "") {
         return;
     }
     $("#major").html("");
@@ -65,14 +64,14 @@ function majorBind() {
 
     $.ajax({
         type: "POST",
-        url: "/selects",
-        data: {"parentiD": provice, "MyColums": "City"},
+        url: "/studentRegister/selects",
+        data: {"parent_id": '' + college_id, "my_select": "major"},
         dataType: "JSON",
         async: false,
         success: function (data) {
             //从服务器获取数据进行绑定
-            $.each(data.Data, function (i, item) {
-                str += "<option value=" + item.Id + ">" + item.MyTexts + "</option>";
+            $.each(data.data, function (i, item) {
+                str += "<option value=" + item.id + ">" + item.name + "</option>";
             })
             //将数据添加到省份这个下拉框里面
             $("#major").append(str);
@@ -88,9 +87,9 @@ function majorBind() {
 function classBind() {
 
 
-    var provice = $("#major").attr("value");
+    var major_id = $("#major").val();
     //判断市这个下拉框选中的值是否为空
-    if (provice == "") {
+    if (major_id == "") {
         return;
     }
     $("#classes").html("");
@@ -98,14 +97,14 @@ function classBind() {
     //将市的ID拿到数据库进行查询，查询出他的下级进行绑定
     $.ajax({
         type: "POST",
-        url: "/selects",
-        data: {"parentiD": provice, "MyColums": "Village"},
+        url: "/studentRegister/selects",
+        data: {"parent_id": major_id, "my_select": "class"},
         dataType: "JSON",
         async: false,
         success: function (data) {
             //从服务器获取数据进行绑定
-            $.each(data.Data, function (i, item) {
-                str += "<option value=" + item.Id + ">" + item.MyTexts + "</option>";
+            $.each(data.data, function (i, item) {
+                str += "<option value=" + item.id + ">" + item.name + "</option>";
             })
             //将数据添加到省份这个下拉框里面
             $("#classes").append(str);
@@ -114,10 +113,5 @@ function classBind() {
             alert("Error");
         }
     });
-    //$.post("/Home/GetAddress", { parentiD: provice, MyColums: "Village" }, function (data) {  
-    //    $.each(data.Data, function (i, item) {
-    //        str += "<option value=" + item.Id + ">" + item.MyTexts + "</option>";
-    //    })
-    //    $("#classes").append(str);
-    //})
+
 }

@@ -1,4 +1,4 @@
-from flask import render_template, redirect, flash, url_for, request
+from flask import render_template, redirect, flash, url_for, request, json
 from flask_login import login_required, current_user, LoginManager, login_user
 from forms import LoginForm, RegisterFormStudent, RegisterFormTeacher, StudentInfoForm, TeacherInfoForm, TestCreaterForm
 from models import app, Student, Teacher, College, Major, Subject, Plan, Page, Test, Class, TestType, db
@@ -147,14 +147,15 @@ def studentRegister():
         major_id = request.form.get("major")
         password = request.form.get("password")
         ensure_password = request.form.get("ensure_password")
-        user = Student(id=id, name=name, id_college=college_id, id_major=major_id, grade=grade, id_class=classes_id, password=password)
+        user = Student(id=id, name=name, id_college=college_id, id_major=major_id, grade=grade, id_class=classes_id,
+                       password=password)
 
         if password == ensure_password:
             try:
                 db.session.add(user)
                 db.session.commit()
                 pass
-            except IntegrityError :
+            except IntegrityError:
                 db.session.rollback()
                 flash("该学号已被其他用户注册，请联系管理员！")
                 pass
@@ -166,10 +167,10 @@ def studentRegister():
             pass
     else:
         form = RegisterFormStudent()
-        form.college.choices = [(1, 'one'),(2,"two"),(3,"three")]
-        form.major.choices = [(1, '1'),(2,"2"),(3,"3")]
+        form.college.choices = [(1, 'one'), (2, "two"), (3, "three")]
+        form.major.choices = [(1, '1'), (2, "2"), (3, "3")]
         form.grade.choices = [(1, '2099')]
-        form.classes.choices = [(1, 'a'),(2,"b"),(3,"c")]
+        form.classes.choices = [(1, 'a'), (2, "b"), (3, "c")]
         return render_template("学生注册页面.html", form=form)
 
 
@@ -185,5 +186,15 @@ def studentInfoUpdate():
 
 @app.route("/studentRegister/selects", methods=["POST"])
 def studentRegisterSelects():
-    print(request.POST)
-    return
+    print(request.form)
+    if request.form['my_select'] == 'college':
+        colleges = College.query.all()
+        data = {"data": []}
+        for college in colleges:
+            data["data"].append({"id": college.id, "name": college.name})
+        pass
+    elif request.form['my_select'] == 'major':
+        pass
+    else:
+        pass
+    return json.dumps(data)
