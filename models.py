@@ -94,6 +94,7 @@ class Major(db.Model):
     id_college = db.Column(db.Integer, db.ForeignKey('tb_college.id'), nullable=False)
 
     students = db.relationship("Student", backref="tb_major")
+    classes = db.relationship("Class",backref="tb_major")
 
     def __repr__(self):
         return "<Major %r>" % self.id
@@ -164,6 +165,7 @@ class Class(db.Model):
     __tablename__ = "tb_class"
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(10), nullable=False)
+    id_major = db.Column(db.Integer, db.ForeignKey('tb_major.id'), nullable=False)
 
     students = db.relationship("Student", backref="tb_class")
 

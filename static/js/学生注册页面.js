@@ -65,7 +65,7 @@ function majorBind() {
     $.ajax({
         type: "POST",
         url: "/studentRegister/selects",
-        data: {"parent_id": '' + college_id, "my_select": "major"},
+        data: {"parent_id":college_id, "my_select": "major"},
         dataType: "JSON",
         async: false,
         success: function (data) {

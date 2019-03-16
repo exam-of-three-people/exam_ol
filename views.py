@@ -3,6 +3,7 @@ from flask_login import login_required, current_user, LoginManager, login_user
 from forms import LoginForm, RegisterFormStudent, RegisterFormTeacher, StudentInfoForm, TeacherInfoForm, TestCreaterForm
 from models import app, Student, Teacher, College, Major, Subject, Plan, Page, Test, Class, TestType, db
 from sqlalchemy.exc import IntegrityError
+from time import sleep
 
 
 @app.route("/", methods=['GET', 'POST'])
@@ -141,8 +142,7 @@ def studentRegister():
         id = int(request.form.get("id"))
         name = request.form.get("name")
         college_id = request.form.get("college")
-        # grade = request.form.get("grade")
-        grade = 2016
+        grade = request.form.get("grade")
         classes_id = request.form.get("classes")
         major_id = request.form.get("major")
         password = request.form.get("password")
@@ -154,6 +154,7 @@ def studentRegister():
             try:
                 db.session.add(user)
                 db.session.commit()
+                flash("注册成功！")
                 pass
             except IntegrityError:
                 db.session.rollback()
@@ -167,10 +168,10 @@ def studentRegister():
             pass
     else:
         form = RegisterFormStudent()
-        form.college.choices = [(1, 'one'), (2, "two"), (3, "three")]
-        form.major.choices = [(1, '1'), (2, "2"), (3, "3")]
-        form.grade.choices = [(1, '2099')]
-        form.classes.choices = [(1, 'a'), (2, "b"), (3, "c")]
+        form.college.choices = [(1, '==请选择===')]
+        form.major.choices = [(1, '请先选择学院')]
+        form.grade.choices = [(1, '2015'),(2,'2016'),(3,'2017'),(4,'2018')]
+        form.classes.choices = [(1, '请先选择专业')]
         return render_template("学生注册页面.html", form=form)
 
 
@@ -187,14 +188,22 @@ def studentInfoUpdate():
 @app.route("/studentRegister/selects", methods=["POST"])
 def studentRegisterSelects():
     print(request.form)
+    data = {"data": []}
     if request.form['my_select'] == 'college':
         colleges = College.query.all()
-        data = {"data": []}
         for college in colleges:
             data["data"].append({"id": college.id, "name": college.name})
         pass
     elif request.form['my_select'] == 'major':
+        parent_id = request.form['parent_id']
+        college = College.query.get(parent_id)
+        for major in college.majors:
+            data["data"].append({"id": major.id, "name": major.name})
         pass
     else:
+        parent_id = request.form['parent_id']
+        major = Major.query.get(parent_id)
+        for clas in major.classes:
+            data["data"].append({"id": clas.id, "name": clas.name})
         pass
     return json.dumps(data)
