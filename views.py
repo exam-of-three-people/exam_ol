@@ -181,3 +181,9 @@ def teacherInfoUpdate():
 @app.route("/studentInfoUpdate", methods=['GET', 'POST'])
 def studentInfoUpdate():
     return redirect("studentInfo")
+
+
+@app.route("/studentRegister/selects", methods=["POST"])
+def studentRegisterSelects():
+    print(request.POST)
+    return
