@@ -42,7 +42,6 @@ def index():
     return render_template("登录页面.html", form=form)
 
 
-@login_required
 @app.route("/studentMenu", methods=['GET', 'POST'])
 def studentMenu():
     return render_template("学生菜单.html")
@@ -182,3 +181,9 @@ def teacherInfoUpdate():
 @app.route("/studentInfoUpdate", methods=['GET', 'POST'])
 def studentInfoUpdate():
     return redirect("studentInfo")
+
+
+@app.route("/studentRegister/selects", methods=["POST"])
+def studentRegisterSelects():
+    print(request.POST)
+    return
