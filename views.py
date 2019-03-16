@@ -166,10 +166,10 @@ def studentRegister():
             pass
     else:
         form = RegisterFormStudent()
-        form.college.choices = [(1, '测试')]
-        form.major.choices = [(1, '测试')]
-        form.grade.choices = [(1, '测试')]
-        form.classes.choices = [(1, '测试')]
+        form.college.choices = [(1, 'one'),(2,"two"),(3,"three")]
+        form.major.choices = [(1, '1'),(2,"2"),(3,"3")]
+        form.grade.choices = [(1, '2099')]
+        form.classes.choices = [(1, 'a'),(2,"b"),(3,"c")]
         return render_template("学生注册页面.html", form=form)
 
 
