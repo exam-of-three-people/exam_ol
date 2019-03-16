@@ -1,10 +1,11 @@
 from flask_script import Manager
 from flask_admin import Admin
 from flask_admin.contrib.sqla import ModelView
-from models import app, Student, Teacher, College, Major, Subject, Plan, Page, Test, Class, TestType, db
+from models import Student, Teacher, College, Major, Subject, Plan, Page, Test, Class, TestType, db
 from flask_migrate import Migrate, MigrateCommand
 from flask_admin.form import BaseForm
 from wtforms import StringField
+from views import app
 
 migrate = Migrate(app, db)
 manager = Manager(app)
