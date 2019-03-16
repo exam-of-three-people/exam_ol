@@ -1,5 +1,4 @@
 from flask import Flask
-from flask_login import UserMixin
 from flask_sqlalchemy import SQLAlchemy
 from werkzeug.security import generate_password_hash, check_password_hash
 
@@ -12,7 +11,7 @@ app.config["SQLALCHEMY_COMMIT_ON_TEARDOWN"] = True
 db = SQLAlchemy(app)
 
 
-class Student(UserMixin, db.Model):
+class Student(db.Model):
     __tablename__ = "tb_student"
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(10), nullable=False)
@@ -41,19 +40,7 @@ class Student(UserMixin, db.Model):
     pass
 
 
-# class Admin(UserMixin, db.Model):
-#     __tablename__ = "tb_admin"
-#     id = db.Column(db.Integer, primary_key=True)
-#     name = db.Column(db.String(10), nullable=False)
-#     password_hash = db.Column(db.String(128), nullable=False)
-#
-#     def __repr__(self):
-#         return "<Admin %r>" % self.id
-#
-#     pass
-
-
-class Teacher(UserMixin, db.Model):
+class Teacher(db.Model):
     __tablename__ = "tb_teacher"
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(10), nullable=False)
