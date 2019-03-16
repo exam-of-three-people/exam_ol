@@ -3,7 +3,7 @@ from flask_login import login_required, current_user, LoginManager, login_user
 from forms import LoginForm, RegisterFormStudent, RegisterFormTeacher, StudentInfoForm, TeacherInfoForm, TestCreaterForm
 from models import app, Student, Teacher, College, Major, Subject, Plan, Page, Test, Class, TestType, db
 from sqlalchemy.exc import IntegrityError
-from time import sleep
+import time
 
 
 @app.route("/", methods=['GET', 'POST'])
@@ -180,7 +180,12 @@ def studentRegister():
         form = RegisterFormStudent()
         form.college.choices = [(1, '==请选择===')]
         form.major.choices = [(1, '请先选择学院')]
-        form.grade.choices = [(1, '2015'),(2,'2016'),(3,'2017'),(4,'2018')]
+        localtime = time.localtime(time.time())
+        if localtime.tm_mon >= 9:
+            first_grade = localtime.tm_year
+        else:
+            first_grade = localtime.tm_year - 1
+        form.grade.choices = [(1, first_grade-3),(2,first_grade-2),(3,first_grade-1),(4,first_grade)]
         form.classes.choices = [(1, '请先选择专业')]
         return render_template("学生注册页面.html", form=form)
 
