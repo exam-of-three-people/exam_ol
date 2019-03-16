@@ -6,16 +6,14 @@
 </head>
 <body>
 {% macro render_field(field) %}
-    <dt>{{ field.label }}
-    <dd>{{ field(**kwargs)|safe }}
-        {% if field.errors %}
-            <ul class=errors>
-                {% for error in field.errors %}
-                    <li>{{ error }}</li>
-                {% endfor %}
-            </ul>
-        {% endif %}
-    </dd>
+    {{ field(**kwargs)|safe }}
+    {% if field.errors %}
+        <ul class=errors>
+            {% for error in field.errors %}
+                <li>{{ error }}</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
 {% endmacro %}
 {% for msg in get_flashed_messages() %}
     <p class="login-box-msg">{{ msg }}</p>
