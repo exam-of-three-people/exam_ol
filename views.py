@@ -43,11 +43,13 @@ def index():
         else:
             pass
     else:
-        if session["is_login"]:
-            flash("你已经登录，无需重复登录！")
-            return redirect(session["role"] + "Menu")
-        form = LoginForm()
-    return render_template("登录页面.html", form=form)
+        try:
+            if session["is_login"]:
+                flash("你已经登录，无需重复登录！")
+                return redirect(session["role"] + "Menu")
+        except Exception:
+            form = LoginForm()
+            return render_template("登录页面.html", form=form)
 
 
 @app.route("/studentMenu", methods=['GET', 'POST'])
