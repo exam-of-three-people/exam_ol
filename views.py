@@ -159,14 +159,16 @@ def teacherRegister():
             user.name=form.name.data
             user.setPassword(form.password.data)
             if Teacher.query.get(user.id) is not None:
-                flash("此工号已经被注册！！！！")
+                flash("渣渣，此工号已经被注册！！！！")
+                return render_template('教师注册页面.html',form=form)
+            if  form.password.data == form.ensure_password.data:
+                flash("渣渣，输入的两次密码不一致！！！")
                 return render_template('教师注册页面.html',form=form)
             db.session.add(user)
             db.session.commit()
-
             return redirect('index')
         else:
-            flash("输入有误，请重新输入")
+            flash("渣渣，输入有误，请重新输入")
             return render_template('教师注册页面.html', form=form)
 
 
