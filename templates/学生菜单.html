@@ -7,6 +7,9 @@
     <title>学生菜单</title>
 </head>
 <body>
+{% for msg in get_flashed_messages() %}
+    <p class="login-box-msg">{{ msg }}</p>
+{% endfor %}
 <a onclick="startTest()">开始考试</a>
 <a href="/studentInfo">学生信息</a>
 <a href="/testQuery">成绩查询</a>

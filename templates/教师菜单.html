@@ -7,6 +7,9 @@
     <title>教师菜单</title>
 </head>
 <body>
+{% for msg in get_flashed_messages() %}
+    <p class="login-box-msg">{{ msg }}</p>
+{% endfor %}
 <a href="/testCreater">创建考试</a>
 <a href="/testList">考试列表</a>
 <a href="/teacherInfo">个人信息</a>

@@ -1,7 +1,9 @@
-from flask import render_template, redirect, flash, url_for, request
+from flask import render_template, redirect, flash, url_for, request, json, session
 from flask_login import login_required, current_user, LoginManager, login_user
 from forms import LoginForm, RegisterFormStudent, RegisterFormTeacher, StudentInfoForm, TeacherInfoForm, TestCreaterForm
 from models import app, Student, Teacher, College, Major, Subject, Plan, Page, Test, Class, TestType, db
+from sqlalchemy.exc import IntegrityError
+import time
 
 
 @app.route("/", methods=['GET', 'POST'])
@@ -18,7 +20,9 @@ def index():
                 if user is None:
                     flash("学号输入错误！")
                 elif user.checkPassword(password):
-                    login_user(id)
+                    session["is_login"] = True
+                    session["uid"] = user.id
+                    session["role"] = "student"
                     return redirect("studentMenu")
                 else:
                     flash("密码不正确！")
@@ -27,7 +31,9 @@ def index():
                 if user is None:
                     flash("工号输入错误！")
                 elif user.checkPassword(password):
-                    login_user(user)
+                    session["is_login"] = True
+                    session["uid"] = user.id
+                    session["role"] = "teacher"
                     return redirect("teacherMenu")
                 else:
                     flash("密码不正确！")
@@ -37,8 +43,13 @@ def index():
         else:
             pass
     else:
-        form = LoginForm()
-    return render_template("登录页面.html", form=form)
+        try:
+            if session["is_login"]:
+                flash("你已经登录，无需重复登录！")
+                return redirect(session["role"] + "Menu")
+        except Exception:
+            form = LoginForm()
+            return render_template("登录页面.html", form=form)
 
 
 @app.route("/studentMenu", methods=['GET', 'POST'])
@@ -131,6 +142,7 @@ def testList():
 
 @app.route("/logout", methods=['GET', 'POST'])
 def logout():
+    session.clear()
     return redirect("index")
 
 # 浩：教师注册页面==================================================================================
@@ -162,24 +174,26 @@ def teacherRegister():
 @app.route("/studentRegister", methods=['GET', 'POST'])
 def studentRegister():
     if request.method == "POST":
-        id = request.form.get("id")
+        id = int(request.form.get("id"))
         name = request.form.get("name")
         college_id = request.form.get("college")
-        college = College.query.get(college_id)
-        major = request.form.get("major")
         grade = request.form.get("grade")
-        classes = request.form.get("classes")
+        classes_id = request.form.get("classes")
+        major_id = request.form.get("major")
         password = request.form.get("password")
         ensure_password = request.form.get("ensure_password")
-        user = Student(id=id, name=name, college=college, major=major, grade=grade, classes=classes, password=password)
+        user = Student(id=id, name=name, id_college=college_id, id_major=major_id, grade=grade, id_class=classes_id,
+                       password=password)
+
         if password == ensure_password:
             try:
                 db.session.add(user)
                 db.session.commit()
+                flash("注册成功！")
                 pass
-            except InterruptedError :
+            except IntegrityError:
                 db.session.rollback()
-                flash("学号已注册！")
+                flash("该学号已被其他用户注册，请联系管理员！")
                 pass
             return redirect("/login")
             pass
@@ -189,8 +203,16 @@ def studentRegister():
             pass
     else:
         form = RegisterFormStudent()
+        form.college.choices = [(1, '==请选择===')]
+        form.major.choices = [(1, '请先选择学院')]
+        localtime = time.localtime(time.time())
+        if localtime.tm_mon >= 9:
+            first_grade = localtime.tm_year
+        else:
+            first_grade = localtime.tm_year - 1
+        form.grade.choices = [(1, first_grade-3),(2,first_grade-2),(3,first_grade-1),(4,first_grade)]
+        form.classes.choices = [(1, '请先选择专业')]
         return render_template("学生注册页面.html", form=form)
-
 
 
 @app.route("/teacherInfoUpdate", methods=['GET', 'POST'])
@@ -201,3 +223,27 @@ def teacherInfoUpdate():
 @app.route("/studentInfoUpdate", methods=['GET', 'POST'])
 def studentInfoUpdate():
     return redirect("studentInfo")
+
+
+@app.route("/studentRegister/selects", methods=["POST"])
+def studentRegisterSelects():
+    print(request.form)
+    data = {"data": []}
+    if request.form['my_select'] == 'college':
+        colleges = College.query.all()
+        for college in colleges:
+            data["data"].append({"id": college.id, "name": college.name})
+        pass
+    elif request.form['my_select'] == 'major':
+        parent_id = request.form['parent_id']
+        college = College.query.get(parent_id)
+        for major in college.majors:
+            data["data"].append({"id": major.id, "name": major.name})
+        pass
+    else:
+        parent_id = request.form['parent_id']
+        major = Major.query.get(parent_id)
+        for clas in major.classes:
+            data["data"].append({"id": clas.id, "name": clas.name})
+        pass
+    return json.dumps(data)
