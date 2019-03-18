@@ -145,32 +145,30 @@ def logout():
     session.clear()
     return redirect("index")
 
+
 # 浩：教师注册页面==================================================================================
 @app.route("/teacherRegister", methods=['GET', 'POST'])
 def teacherRegister():
-    if request.method=='GET':
-        form=RegisterFormTeacher()
-        return render_template('教师注册页面.html',form=form)
-    else :
+    if request.method == 'GET':
+        form = RegisterFormTeacher()
+        return render_template('教师注册页面.html', form=form)
+    else:
         form = RegisterFormTeacher(request.form)
         if form.validate_on_submit():
             user = Teacher()
-            user.id=form.id.data
-            user.name=form.name.data
+            user.id = form.id.data
+            user.name = form.name.data
             user.setPassword(form.password.data)
             if Teacher.query.get(user.id) is not None:
-                flash("渣渣，此工号已经被注册！！！！")
-                return render_template('教师注册页面.html',form=form)
-            if  form.password.data == form.ensure_password.data:
-                flash("渣渣，输入的两次密码不一致！！！")
-                return render_template('教师注册页面.html',form=form)
+                flash("此工号已经被注册！！！！")
+                return render_template('教师注册页面.html', form=form)
             db.session.add(user)
             db.session.commit()
+
             return redirect('index')
         else:
-            flash("渣渣，输入有误，请重新输入")
+            flash("输入有误，请重新输入")
             return render_template('教师注册页面.html', form=form)
-
 
 
 @app.route("/studentRegister", methods=['GET', 'POST'])
@@ -212,7 +210,7 @@ def studentRegister():
             first_grade = localtime.tm_year
         else:
             first_grade = localtime.tm_year - 1
-        form.grade.choices = [(1, first_grade-3),(2,first_grade-2),(3,first_grade-1),(4,first_grade)]
+        form.grade.choices = [(1, first_grade - 3), (2, first_grade - 2), (3, first_grade - 1), (4, first_grade)]
         form.classes.choices = [(1, '请先选择专业')]
         return render_template("学生注册页面.html", form=form)
 
