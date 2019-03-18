@@ -151,6 +151,7 @@ def teacherRegister():
                 return render_template('教师注册页面.html',form=form)
             db.session.add(user)
             db.session.commit()
+
             return redirect('index')
         else:
             flash("输入有误，请重新输入")
