@@ -2,7 +2,7 @@ from flask import render_template, redirect, flash, url_for, request, json, sess
 from flask_login import login_required, current_user, LoginManager, login_user
 from forms import LoginForm, RegisterFormStudent, RegisterFormTeacher, StudentInfoForm, TeacherInfoForm, TestCreaterForm
 from models import app, Student, Teacher, College, Major, Subject, Plan, Page, Test, Class, TestType, db
-from sqlalchemy.exc import IntegrityError,InternalError
+from sqlalchemy.exc import IntegrityError, InternalError
 import time
 
 
@@ -118,11 +118,48 @@ def teacherInfo():
 @app.route("/studentInfo", methods=['GET', 'POST'])
 def studentInfo():
     form = StudentInfoForm()
-    form.college.choices = [(1, '测试')]
-    form.major.choices = [(1, '测试')]
-    form.grade.choices = [(1, '测试')]
-    form.classes.choices = [(1, '测试')]
-    return render_template("学生信息页面.html", form=form)
+    user = Student.query.get(session["uid"])
+    if request.method == "GET":
+        # 将信息显示出来
+        form.id.data = user.id
+        form.name.data = user.name
+        form.grade.choices = [(2018, user.grade)]
+        college = College.query.get(user.id_college)
+        form.college.choices = [(1, college.name)]
+        major = Major.query.get(user.id_major)
+        form.major.choices = [(1, major.name)]
+        classes = Class.query.get(user.id_class)
+        form.classes.choices = [(1, classes.name)]
+
+        return render_template("学生信息页面.html", form=form)
+    else:
+        name = form.name.data
+        id_college = form.college.data
+        grade = form.grade.data
+        id_class = form.classes.data
+        id_major = form.major.data
+        new_password = form.new_password.data
+        if user.checkPassword(form.pre_password.data):
+            if form.new_password == form.ensure_password:
+                try:
+                    user.update({'name': name})
+                    user.update({'password': new_password})
+                    user.update({'id_college': id_college})
+                    user.update({'grade': 2016})
+                    user.update({'id_class': id_class})
+                    user.update({'id_major': id_major})
+                    db.session.commit()
+                    flash("修改成功！")
+                    return redirect("/login")
+                except InternalError:
+                    db.session.rollback()
+                    flash("信息不完善，请重新输入！")
+                    return render_template('学生信息页面.html', form=form)
+            else:
+                flash("两次密码不一致！")
+        else:
+            flash("密码错误！")
+        return render_template("学生信息页面.html", form=form)
 
 
 @app.route("/testCheck/<int:page_id>")
@@ -225,11 +262,6 @@ def teacherInfoUpdate():
     return redirect("teacherInfo")
 
 
-@app.route("/studentInfoUpdate", methods=['GET', 'POST'])
-def studentInfoUpdate():
-    return redirect("studentInfo")
-
-
 @app.route("/studentRegister/selects", methods=["POST"])
 def studentRegisterSelects():
     print(request.form)
@@ -238,6 +270,7 @@ def studentRegisterSelects():
         colleges = College.query.all()
         for college in colleges:
             data["data"].append({"id": college.id, "name": college.name})
+        # data["val"] =
         pass
     elif request.form['my_select'] == 'major':
         parent_id = request.form['parent_id']
