@@ -1,5 +1,6 @@
 from flask_wtf import FlaskForm
-from wtforms import SelectField, StringField, SubmitField, PasswordField, DateTimeField, BooleanField
+from wtforms import SelectField, StringField, SubmitField, PasswordField, DateTimeField, BooleanField, TimeField, \
+    DateField, SelectMultipleField
 from wtforms.validators import DataRequired, EqualTo
 
 
@@ -59,8 +60,10 @@ class TeacherInfoForm(FlaskForm):
 
 
 class TestCreaterForm(FlaskForm):
-    start_time = DateTimeField(u'开始时间', validators=[DataRequired()])
-    end_time = DateTimeField(u'结束时间', validators=[DataRequired()])
-    subject = SelectField(u'科目')
+    date = DateField(u'日期', validators=[DataRequired()], render_kw={"type": "date"})
+    start_time = TimeField(u'开始时间', validators=[DataRequired()], render_kw={"type": "Time"})
+    end_time = TimeField(u'结束时间', validators=[DataRequired()], render_kw={"type": "Time"})
+    subject = SelectField(u'科目', validators=[DataRequired()], choices=[(1, '1'), (2, '2')])
+    class_ = SelectMultipleField(u'班级', validators=[DataRequired()], choices=[(1, '1'), (2, '2')])
     submit = SubmitField(u'创建')
     pass
