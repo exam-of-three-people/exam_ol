@@ -2,7 +2,7 @@ from flask import render_template, redirect, flash, url_for, request, json, sess
 from flask_login import login_required, current_user, LoginManager, login_user
 from forms import LoginForm, RegisterFormStudent, RegisterFormTeacher, StudentInfoForm, TeacherInfoForm, TestCreaterForm
 from models import app, Student, Teacher, College, Major, Subject, Plan, Page, Test, Class, TestType, db
-from sqlalchemy.exc import IntegrityError
+from sqlalchemy.exc import IntegrityError,InternalError
 import time
 
 
@@ -190,6 +190,7 @@ def teacherRegister():
 @app.route("/studentRegister", methods=['GET', 'POST'])
 def studentRegister():
     if request.method == "POST":
+        form = RegisterFormStudent(request.form)
         id = int(request.form.get("id"))
         name = request.form.get("name")
         college_id = request.form.get("college")
@@ -207,6 +208,10 @@ def studentRegister():
                 db.session.commit()
                 flash("注册成功！")
                 pass
+            except InternalError:
+                db.session.rollback()
+                flash("信息不完善，请重新输入！")
+                return render_template('学生注册页面.html', form=form)
             except IntegrityError:
                 db.session.rollback()
                 flash("该学号已被其他用户注册，请联系管理员！")
@@ -219,7 +224,7 @@ def studentRegister():
             pass
     else:
         form = RegisterFormStudent()
-        form.college.choices = [(1, '==请选择===')]
+        form.college.choices = [(1, '==wadada===')]
         form.major.choices = [(1, '请先选择学院')]
         localtime = time.localtime(time.time())
         if localtime.tm_mon >= 9:
