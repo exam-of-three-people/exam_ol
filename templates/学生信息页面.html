@@ -5,6 +5,9 @@
     <title>学生信息页面</title>
 </head>
 <body>
+{% for msg in get_flashed_messages() %}
+    <p class="login-box-msg">{{ msg }}</p>
+{% endfor %}
 <form action="/studentInfo" method="post">
     {{ form.id.label }}{{ form.id }}
     {{ form.name.label }}{{ form.name }}

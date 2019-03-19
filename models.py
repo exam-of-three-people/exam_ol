@@ -104,6 +104,12 @@ class Subject(db.Model):
     pass
 
 
+classes_plans = db.Table("classes_plans",
+                         db.Column("plan_id", db.Integer, db.ForeignKey("tb_plan.id")),
+                         db.Column("class_id", db.Integer, db.ForeignKey("tb_class.id"))
+                         )
+
+
 class Plan(db.Model):
     __tablename__ = "tb_plan"
     id = db.Column(db.Integer, primary_key=True)
@@ -111,6 +117,9 @@ class Plan(db.Model):
     date = db.Column(db.Date, nullable=False)
     time_start = db.Column(db.Time, nullable=False)
     time_end = db.Column(db.Time, nullable=False)
+    classes = db.relationship('Class',
+                              secondary=classes_plans,
+                              backref=db.backref("tb_plan"))
 
     def __repr__(self):
         return "<Plan %r>" % self.id

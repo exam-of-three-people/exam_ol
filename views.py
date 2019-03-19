@@ -48,8 +48,9 @@ def index():
                 flash("你已经登录，无需重复登录！")
                 return redirect(session["role"] + "Menu")
         except Exception:
-            form = LoginForm()
-            return render_template("登录页面.html", form=form)
+            pass
+    form = LoginForm()
+    return render_template("登录页面.html", form=form)
 
 
 @app.route("/studentMenu", methods=['GET', 'POST'])
@@ -117,10 +118,10 @@ def teacherInfo():
 
 @app.route("/studentInfo", methods=['GET', 'POST'])
 def studentInfo():
-    form = StudentInfoForm()
     user = Student.query.get(session["uid"])
     if request.method == "GET":
         # 将信息显示出来
+        form = StudentInfoForm()
         form.id.data = user.id
         form.name.data = user.name
         form.grade.choices = [(2018, user.grade)]
@@ -133,6 +134,7 @@ def studentInfo():
 
         return render_template("学生信息页面.html", form=form)
     else:
+        form = StudentInfoForm(request.form)
         name = form.name.data
         id_college = form.college.data
         grade = form.grade.data
@@ -140,7 +142,9 @@ def studentInfo():
         id_major = form.major.data
         new_password = form.new_password.data
         if user.checkPassword(form.pre_password.data):
+
             if form.new_password == form.ensure_password:
+
                 try:
                     user.update({'name': name})
                     user.update({'password': new_password})
@@ -158,6 +162,7 @@ def studentInfo():
             else:
                 flash("两次密码不一致！")
         else:
+
             flash("密码错误！")
         return render_template("学生信息页面.html", form=form)
 
@@ -185,7 +190,18 @@ def testCreater():
         form.class_.choices = choices
         return render_template("教师创建考试页面.html", form=form)
     else:
-        pass
+        form = TestCreaterForm(request.form)
+        plan = Plan()
+        plan.id_subject = form.subject.data
+        plan.date = form.date.data
+        plan.time_start = form.start_time.data
+        plan.time_end = form.end_time.data
+        classes = form.class_.data
+        for class_id in classes:
+            plan.classes.append(Class.query.get(class_id))
+        db.session.add(plan)
+        db.session.commit()
+        return redirect("/studentMenu")
 
 
 @app.route("/testList", methods=['GET', 'POST'])
