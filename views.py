@@ -48,8 +48,9 @@ def index():
                 flash("你已经登录，无需重复登录！")
                 return redirect(session["role"] + "Menu")
         except Exception:
-            form = LoginForm()
-            return render_template("登录页面.html", form=form)
+            pass
+    form = LoginForm()
+    return render_template("登录页面.html", form=form)
 
 
 @app.route("/studentMenu", methods=['GET', 'POST'])
@@ -183,19 +184,46 @@ def studentInfo():
             return render_template('学生信息页面.html', form=form)
 
 
-@app.route("/testCheck/<int:page_id>")
+@app.route("/testCheck/<int:page_id>", methods=['GET', 'POST'])
 def testCheck(page_id):
-    return render_template("试卷复查页面.html", methods=['GET', 'POST'])
+    return render_template("试卷复查页面.html")
 
 
-@app.route("/testCreater")
+@app.route("/testCreater", methods=['GET', 'POST'])
 def testCreater():
-    return render_template("教师创建考试页面.html", methods=['GET', 'POST'])
+    if request.method == 'GET':
+        form = TestCreaterForm()
+        # 创建可选择科目数组
+        choices = []
+        subjects = Subject.query.all()
+        for subject in subjects:
+            choices.append((subject.id, subject.name))
+        form.subject.choices = choices
+        # 创建可选择班级数组
+        choices = []
+        classes = Class.query.all()
+        for class_ in classes:
+            choices.append((class_.id, class_.name))
+        form.class_.choices = choices
+        return render_template("教师创建考试页面.html", form=form)
+    else:
+        form = TestCreaterForm(request.form)
+        plan = Plan()
+        plan.id_subject = form.subject.data
+        plan.date = form.date.data
+        plan.time_start = form.start_time.data
+        plan.time_end = form.end_time.data
+        classes = form.class_.data
+        for class_id in classes:
+            plan.classes.append(Class.query.get(class_id))
+        db.session.add(plan)
+        db.session.commit()
+        return redirect("/studentMenu")
 
 
-@app.route("/testList")
+@app.route("/testList", methods=['GET', 'POST'])
 def testList():
-    return render_template("教师考试计划页面.html", methods=['GET', 'POST'])
+    return render_template("教师考试计划页面.html")
 
 
 @app.route("/logout", methods=['GET', 'POST'])
