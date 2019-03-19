@@ -99,16 +99,6 @@ def teacherSignUp():
     return render_template("教师注册页面.html", form=form)
 
 
-@app.route("/studentSignUp", methods=['GET', 'POST'])
-def studentSignUp():
-    form = RegisterFormStudent()
-    form.college.choices = [(1, '测试')]
-    form.major.choices = [(1, '测试')]
-    form.grade.choices = [(1, '测试')]
-    form.classes.choices = [(1, '测试')]
-    return render_template("学生注册页面.html", form=form)
-
-
 @app.route("/teacherInfo", methods=['GET', 'POST'])
 def teacherInfo():
     form = TeacherInfoForm()
@@ -120,17 +110,28 @@ def studentInfo():
     form = StudentInfoForm()
     user = Student.query.get(session["uid"])
     if request.method == "GET":
-        # 将信息显示出来
         form.id.data = user.id
         form.name.data = user.name
-        form.grade.choices = [(2018, user.grade)]
-        college = College.query.get(user.id_college)
-        form.college.choices = [(1, college.name)]
-        major = Major.query.get(user.id_major)
-        form.major.choices = [(1, major.name)]
-        classes = Class.query.get(user.id_class)
-        form.classes.choices = [(1, classes.name)]
+        # 年级列表
+        localtime = time.localtime(time.time())
+        if localtime.tm_mon >= 9:
+            first_grade = localtime.tm_year
+        else:
+            first_grade = localtime.tm_year - 1
+        a = first_grade - user.grade
+        grades = [user.grade+a, user.grade-1+a, user.grade-2+a, user.grade-3+a]
+        del grades[a]
+        form.grade.choices = [(user.grade, user.grade),
+                              (grades[0], grades[0]),
+                              (grades[1], grades[1]),
+                              (grades[2], grades[2])]
 
+        college = College.query.get(user.id_college)
+        form.college.choices = [(college.id, college.name)]
+        major = Major.query.get(user.id_major)
+        form.major.choices = [(major.id, major.name)]
+        classes = Class.query.get(user.id_class)
+        form.classes.choices = [(classes.id, classes.name)]
         return render_template("学生信息页面.html", form=form)
     else:
         name = form.name.data
@@ -139,27 +140,47 @@ def studentInfo():
         id_class = form.classes.data
         id_major = form.major.data
         new_password = form.new_password.data
-        if user.checkPassword(form.pre_password.data):
-            if form.new_password == form.ensure_password:
+        pre_password = form.pre_password.data
+
+        college = College.query.get(id_college)
+        form.college.choices = [(id_college, college.name)]
+        major = Major.query.get(id_major)
+        form.major.choices = [(id_major, major.name)]
+        classes = Class.query.get(id_class)
+        form.classes.choices = [(id_class, classes.name)]
+        form.grade.choices = [(grade, grade)]
+
+        if user.checkPassword(pre_password):
+            if form.new_password.data == form.ensure_password.data:
+                # 改资料
                 try:
-                    user.update({'name': name})
-                    user.update({'password': new_password})
-                    user.update({'id_college': id_college})
-                    user.update({'grade': 2016})
-                    user.update({'id_class': id_class})
-                    user.update({'id_major': id_major})
+                    user.name = name
+                    user.id_college = id_college
+                    user.grade = grade
+                    user.id_class = id_class
+                    user.id_major = id_major
                     db.session.commit()
-                    flash("修改成功！")
-                    return redirect("/login")
                 except InternalError:
                     db.session.rollback()
                     flash("信息不完善，请重新输入！")
                     return render_template('学生信息页面.html', form=form)
+                #不为空，改新密码
+                if new_password:
+                    user.password = new_password
+                    db.session.commit()
+                    flash("修改成功！")
+                    return redirect('/logout')
+                #为空
+                else:
+                    pass
+                flash("修改成功！")
+                return redirect('studentInfo')
             else:
                 flash("两次密码不一致！")
+                return render_template('学生信息页面.html', form=form)
         else:
             flash("密码错误！")
-        return render_template("学生信息页面.html", form=form)
+            return render_template('学生信息页面.html', form=form)
 
 
 @app.route("/testCheck/<int:page_id>")
@@ -252,7 +273,10 @@ def studentRegister():
             first_grade = localtime.tm_year
         else:
             first_grade = localtime.tm_year - 1
-        form.grade.choices = [(1, first_grade - 3), (2, first_grade - 2), (3, first_grade - 1), (4, first_grade)]
+        form.grade.choices = [(first_grade - 3, first_grade - 3),
+                              (first_grade - 2, first_grade - 2),
+                              (first_grade - 1, first_grade - 1),
+                              (first_grade, first_grade)]
         form.classes.choices = [(1, '请先选择专业')]
         return render_template("学生注册页面.html", form=form)
 
@@ -270,7 +294,6 @@ def studentRegisterSelects():
         colleges = College.query.all()
         for college in colleges:
             data["data"].append({"id": college.id, "name": college.name})
-        # data["val"] =
         pass
     elif request.form['my_select'] == 'major':
         parent_id = request.form['parent_id']
