@@ -69,7 +69,7 @@ class College(db.Model):
     majors = db.relationship("Major", backref="tb_college")
 
     def __repr__(self):
-        return "<College %r>" % self.id
+        return "<College %r>" % self.name
 
     pass
 
@@ -84,7 +84,7 @@ class Major(db.Model):
     classes = db.relationship("Class",backref="tb_major")
 
     def __repr__(self):
-        return "<Major %r>" % self.id
+        return "<Major %r>" % self.name
 
     pass
 
@@ -99,9 +99,15 @@ class Subject(db.Model):
     tests = db.relationship("Test", backref="tb_subject")
 
     def __repr__(self):
-        return "<Subject %r>" % self.id
+        return "<Subject %r>" % self.name
 
     pass
+
+
+classes_plans = db.Table("classes_plans",
+                         db.Column("plan_id", db.Integer, db.ForeignKey("tb_plan.id")),
+                         db.Column("class_id", db.Integer, db.ForeignKey("tb_class.id"))
+                         )
 
 
 class Plan(db.Model):
@@ -109,8 +115,11 @@ class Plan(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     id_subject = db.Column(db.Integer, db.ForeignKey('tb_subject.id'), nullable=False)
     date = db.Column(db.Date, nullable=False)
-    time_start = db.Column(db.String(10), nullable=False)
-    time_end = db.Column(db.String(10), nullable=False)
+    time_start = db.Column(db.Time, nullable=False)
+    time_end = db.Column(db.Time, nullable=False)
+    classes = db.relationship('Class',
+                              secondary=classes_plans,
+                              backref=db.backref("tb_plan"))
 
     def __repr__(self):
         return "<Plan %r>" % self.id

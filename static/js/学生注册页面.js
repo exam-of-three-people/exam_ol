@@ -25,9 +25,11 @@ function Bind(str) {
 function collegeBind() {
     //清空下拉数据
     $("#college").html("");
+    $("#major").html("");
+    $("#classes").html("");
 
 
-    var str = "<option>==请选择===</option>";
+    var str = "<option>--请选择--</option>";
     $.ajax({
         type: "POST",
         url: "/studentRegister/selects",
@@ -59,7 +61,7 @@ function majorBind() {
         return;
     }
     $("#major").html("");
-    var str = "<option>==请选择===</option>";
+    var str = "<option>--请选择--</option>";
 
 
     $.ajax({
@@ -93,7 +95,7 @@ function classBind() {
         return;
     }
     $("#classes").html("");
-    var str = "<option>==请选择===</option>";
+    var str = "";
     //将市的ID拿到数据库进行查询，查询出他的下级进行绑定
     $.ajax({
         type: "POST",
