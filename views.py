@@ -108,10 +108,13 @@ def studentSignUp():
     form.classes.choices = [(1, '测试')]
     return render_template("学生注册页面.html", form=form)
 
-
+# ==================浩教师信息页面=============================================
 @app.route("/teacherInfo", methods=['GET', 'POST'])
 def teacherInfo():
     form = TeacherInfoForm()
+    teacher=Teacher.query.get(session["uid"])
+    form.id.data=teacher.id
+    form.name.data=teacher.name
     return render_template("教师信息页面.html", form=form)
 
 
