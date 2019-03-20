@@ -99,14 +99,34 @@ def teacherSignUp():
     form = RegisterFormTeacher()
     return render_template("教师注册页面.html", form=form)
 
-
+#===========================浩教师信息页面======================================
 @app.route("/teacherInfo", methods=['GET', 'POST'])
 def teacherInfo():
-    form = TeacherInfoForm()
-    teacher=Teacher.query.get(session["uid"])
-    form.id.data=teacher.id
-    form.name.data=teacher.name
-    return render_template("教师信息页面.html", form=form)
+    # =======================存储信息======================================
+    if request.method == 'POST':
+        teacher = Teacher.query.get(session["uid"])
+        form = TeacherInfoForm(request.form)
+
+        if teacher.checkPassword(form.pre_password.data):
+            if form.new_password.data == form.ensure_password.data:
+                teacher.name = form.name.data
+                teacher.setPassword(form.new_password.data)
+                db.session.commit()
+                return redirect("logout")
+            else:
+                flash('新密码和确认密码不一致')
+                return render_template("教师信息页面.html", form=form)
+
+        else:
+            flash("原密码错误！")
+            return render_template("教师信息页面.html", form=form)
+
+    else:
+        form = TeacherInfoForm()
+        teacher = Teacher.query.get(session["uid"])
+        form.id.data = teacher.id
+        form.name.data = teacher.name
+        return render_template("教师信息页面.html",form=form)
 
 
 @app.route("/studentInfo", methods=['GET', 'POST'])
