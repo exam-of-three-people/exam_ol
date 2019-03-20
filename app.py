@@ -8,10 +8,12 @@ from wtforms import StringField
 from views import app
 from wtforms.validators import DataRequired, EqualTo
 from flask_bootstrap import Bootstrap
+from flask_session import Session
 
 bootstrap = Bootstrap()
 bootstrap.init_app(app)
 app.config['BOOTSTRAP_SERVE_LOCAL'] = True
+app.config['SESSION_TYPE'] = 'redis'
 
 migrate = Migrate(app, db)
 manager = Manager(app)
@@ -19,6 +21,8 @@ manager.add_command('db', MigrateCommand)
 
 admin = Admin()
 admin.init_app(app)
+
+Session(app)
 
 
 class IdBrandForm(BaseForm):

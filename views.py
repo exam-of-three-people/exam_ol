@@ -43,6 +43,7 @@ def index():
         else:
             pass
     else:
+        # noinspection PyBroadException
         try:
             if session["is_login"]:
                 flash("你已经登录，无需重复登录！")
