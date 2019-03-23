@@ -1,5 +1,4 @@
 from flask import render_template, redirect, flash, url_for, request, json, session
-from flask_login import login_required, current_user, LoginManager, login_user
 from forms import LoginForm, RegisterFormStudent, RegisterFormTeacher, StudentInfoForm, TeacherInfoForm, TestCreaterForm
 from models import app, Student, Teacher, College, Major, Subject, Plan, Page, Test, Class, TestType, db
 from sqlalchemy.exc import IntegrityError, InternalError
