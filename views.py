@@ -1,5 +1,4 @@
 from flask import render_template, redirect, flash, url_for, request, json, session
-from flask_login import login_required, current_user, LoginManager, login_user
 from forms import LoginForm, RegisterFormStudent, RegisterFormTeacher, StudentInfoForm, TeacherInfoForm, TestCreaterForm
 from models import app, Student, Teacher, College, Major, Subject, Plan, Page, Test, Class, TestType, db
 from sqlalchemy.exc import IntegrityError, InternalError
@@ -244,10 +243,24 @@ def testCreater():
         db.session.commit()
         return redirect("/studentMenu")
 
-
-@app.route("/testList", methods=['GET', 'POST'])
+#===============================================浩，教师列表页面（（（（（（（（（（（（=====================================
+@app.route("/testList/", methods=['GET', 'POST'])
 def testList():
-    return render_template("教师考试计划页面.html")
+        if request.method == 'GET':
+            plans=Plan.query.all()
+
+            return render_template('考试列表页面.html',plans=plans)
+        else:
+            return render_template( '教师菜单.html')
+
+
+@app.route("/delete/",methods=['GET', 'POST'])
+def delete():
+    if request.method == 'GET':
+        user=Plan.query.get(request.args['id'])
+        db.session.delete(user)
+        db.session.commit()
+        return redirect('/testList/')
 
 
 @app.route("/logout", methods=['GET', 'POST'])
