@@ -34,7 +34,7 @@ majors = {'计算机科学与工程学院': ['智能科学与技术']}
 persons = []
 
 i = 0
-while (i <= 300):
+while (i <= 3000):
     sex = random.choice(['female', 'male'])
     name = random.choice(last_names) + random.choice(first_names[sex])
     college = random.choice(colleges)
