@@ -5,6 +5,18 @@
     <title>教师考试计划页面</title>
 </head>
 <body>
+{% block content %}
+    <form action="/testCreater" method="post">
+        {{ form.date.label }}{{ form.date }}
+        {{ form.start_time.label }}{{ form.start_time }}
+        {{ form.end_time.label }}{{ form.end_time }}
+        {{ form.subject.label }}{{ form.subject }}
+        {{ form.class_.label }}{{ form.class_ }}
+        {{ form.submit }}
+    </form>
+{% endblock %}
+
+
 
 </body>
 </html>
