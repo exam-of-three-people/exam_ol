@@ -55,7 +55,10 @@ def index():
 
 @app.route("/studentMenu", methods=['GET', 'POST'])
 def studentMenu():
-    return render_template("学生菜单.html")
+    student = Student.query.get(session["uid"])
+    clas = student.id_class
+    plans = Plan.query.filter_by(classes=clas).all()
+    return render_template("学生菜单.html", plans=plans)
 
 
 @app.route("/teacherMenu", methods=['GET', 'POST'])
@@ -188,13 +191,13 @@ def studentInfo():
                     db.session.rollback()
                     flash("信息不完善，请重新输入！")
                     return render_template('学生信息页面.html', form=form)
-                #不为空，改新密码
+                # 不为空，改新密码
                 if new_password:
                     user.password = new_password
                     db.session.commit()
                     flash("修改成功！")
                     return redirect('/logout')
-                #为空
+                # 为空
                 else:
                     pass
                 flash("修改成功！")
