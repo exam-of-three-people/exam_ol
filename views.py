@@ -60,8 +60,6 @@ def studentMenu():
     id_class = student.id_class
     class_ = Class.query.get(id_class)
     plans = Plan.query.all()
-    for plan in plans:
-        print(plan.classes, "aaaaa")
     return render_template("学生菜单.html", plans=plans)
 
 
