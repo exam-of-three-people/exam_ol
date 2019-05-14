@@ -31,7 +31,7 @@
                 <td>{{ plan.date }}</td>
                 <td>{{ plan.time_start }}</td>
                 <td>{{ plan.time_end }}</td>
-                <td><a href="{{ url_for('creatPage',id_plan=plan.id) }}">开始考试</a></td>
+                <td><a href="{{ url_for('createPage', id_plan=plan.id)}}">开始考试</a></td>
             </tr>
         {% endfor %}
     </table>
