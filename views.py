@@ -99,7 +99,7 @@ def teacherSignUp():
     form = RegisterFormTeacher()
     return render_template("教师注册页面.html", form=form)
 
-#===========================浩教师信息页面======================================
+#===========================教师信息页面======================================
 @app.route("/teacherInfo", methods=['GET', 'POST'])
 def teacherInfo():
     # =======================存储信息======================================
@@ -373,3 +373,6 @@ def studentRegisterSelects():
             data["data"].append({"id": clas.id, "name": clas.name})
         pass
     return json.dumps(data)
+
+
+
