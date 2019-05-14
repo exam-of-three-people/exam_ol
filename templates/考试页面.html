@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>考试页面</title>
+</head>
+
+<body>
+<script type="text/javascript" src="./../static/js/考试页面.js">
+</script>
+<form action="/text" method="post">
+    {% for item in  contents%}
+    <textarea readonly="readonly">{{ item.question }}</textarea>
+        <textarea  answer="{{ item.answer }}"></textarea>
+{% endfor %}
+<button type="button" onclick="Submission_results()">提交试卷</button>
+
+
+
+</form>
+
+</body>
+</html>
