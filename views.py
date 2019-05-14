@@ -381,8 +381,8 @@ def studentRegisterSelects():
     return json.dumps(data)
 
 
-@app.route("/creatPage", methods=['POST'])
-def creatPage(id_plan):
+@app.route("/createPage/<int:id_plan>", methods=['GET', 'POST'])
+def createPage(id_plan):
     # id_plan还没用
     test_list = Test.query.order_by(func.rand()).limit(30)
     contents = {"contents": []}
