@@ -14,12 +14,27 @@
 <a href="/studentInfo">学生信息</a>
 <a href="/testQuery">成绩查询</a>
 <a href="/logout">退出登录</a>
+<br>
 <div>
-    <ul>
-        {% for test in tests %}
-            <li><a href="/testPage/" +test.page_id>test.page_name</a></li>
+    <table class="table">
+        <tr class="table_header">
+            <td>name</td>
+            <td>subject</td>
+            <td>date</td>
+            <td>time_start</td>
+            <td>time_end</td>
+        </tr>
+        {% for plan in plans %}
+            <tr class="row1">
+                <td>{{ plan.name }}</td>
+                <td>{{ plan.subject }}</td>
+                <td>{{ plan.date }}</td>
+                <td>{{ plan.time_start }}</td>
+                <td>{{ plan.time_end }}</td>
+                <td><a href="{{ url_for('creatPage',id_plan=plan.id) }}">开始考试</a></td>
+            </tr>
         {% endfor %}
-    </ul>
+    </table>
 </div>
 </body>
 </html>

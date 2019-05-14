@@ -2,6 +2,7 @@ from flask import render_template, redirect, flash, url_for, request, json, sess
 from forms import LoginForm, RegisterFormStudent, RegisterFormTeacher, StudentInfoForm, TeacherInfoForm, TestCreaterForm
 from models import app, Student, Teacher, College, Major, Subject, Plan, Page, Test, Class, TestType, db
 from sqlalchemy.exc import IntegrityError, InternalError
+from sqlalchemy import func
 import time
 
 
@@ -55,7 +56,10 @@ def index():
 
 @app.route("/studentMenu", methods=['GET', 'POST'])
 def studentMenu():
-    return render_template("学生菜单.html")
+    student = Student.query.get(session["uid"])
+    clas = student.id_class
+    plans = Plan.query.filter_by(classes=clas).all()
+    return render_template("学生菜单.html", plans=plans)
 
 
 @app.route("/teacherMenu", methods=['GET', 'POST'])
@@ -99,6 +103,8 @@ def teacherSignUp():
     form = RegisterFormTeacher()
     return render_template("教师注册页面.html", form=form)
 
+
+# ===========================浩教师信息页面======================================
 #===========================教师信息页面======================================
 @app.route("/teacherInfo", methods=['GET', 'POST'])
 def teacherInfo():
@@ -188,13 +194,13 @@ def studentInfo():
                     db.session.rollback()
                     flash("信息不完善，请重新输入！")
                     return render_template('学生信息页面.html', form=form)
-                #不为空，改新密码
+                # 不为空，改新密码
                 if new_password:
                     user.password = new_password
                     db.session.commit()
                     flash("修改成功！")
                     return redirect('/logout')
-                #为空
+                # 为空
                 else:
                     pass
                 flash("修改成功！")
@@ -243,7 +249,8 @@ def testCreater():
         db.session.commit()
         return redirect("/studentMenu")
 
-#===============================================浩，教师列表页面（（（（（（（（（（（（=====================================
+
+# ===============================================浩，教师列表页面（（（（（（（（（（（（=====================================
 @app.route("/testList/", methods=['GET', 'POST'])
 def testList():
         if request.method == 'GET':
@@ -254,7 +261,7 @@ def testList():
             return render_template( '教师菜单.html')
 
 
-@app.route("/delete/",methods=['GET', 'POST'])
+@app.route("/delete/", methods=['GET', 'POST'])
 def delete():
     if request.method == 'GET':
         user=Plan.query.get(request.args['id'])
@@ -375,4 +382,12 @@ def studentRegisterSelects():
     return json.dumps(data)
 
 
+@app.route("/creatPage", methods=['POST'])
+def creatPage(id_plan):
+    # id_plan还没用
+    test_list = Test.query.order_by(func.rand()).limit(30)
+    contents = {"contents": []}
+    for test in test_list:
+        contents["contents"].append({"question": test.question, "answer": test.answer})
+    return render_template('考试答题页面.html', contents=contents)
 
