@@ -81,7 +81,7 @@ class Major(db.Model):
     id_college = db.Column(db.Integer, db.ForeignKey('tb_college.id'), nullable=False)
 
     students = db.relationship("Student", backref="tb_major")
-    classes = db.relationship("Class",backref="tb_major")
+    classes = db.relationship("Class", backref="tb_major")
 
     def __repr__(self):
         return "<Major %r>" % self.name

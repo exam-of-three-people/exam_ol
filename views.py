@@ -2,6 +2,7 @@ from flask import render_template, redirect, flash, url_for, request, json, sess
 from forms import LoginForm, RegisterFormStudent, RegisterFormTeacher, StudentInfoForm, TeacherInfoForm, TestCreaterForm
 from models import app, Student, Teacher, College, Major, Subject, Plan, Page, Test, Class, TestType, db
 from sqlalchemy.exc import IntegrityError, InternalError
+from sqlalchemy import func
 import time
 
 
@@ -102,7 +103,8 @@ def teacherSignUp():
     form = RegisterFormTeacher()
     return render_template("教师注册页面.html", form=form)
 
-#===========================浩教师信息页面======================================
+
+# ===========================浩教师信息页面======================================
 @app.route("/teacherInfo", methods=['GET', 'POST'])
 def teacherInfo():
     # =======================存储信息======================================
@@ -246,7 +248,8 @@ def testCreater():
         db.session.commit()
         return redirect("/studentMenu")
 
-#===============================================浩，教师列表页面（（（（（（（（（（（（=====================================
+
+# ===============================================浩，教师列表页面（（（（（（（（（（（（=====================================
 @app.route("/testList/", methods=['GET', 'POST'])
 def testList():
         if request.method == 'GET':
@@ -257,7 +260,7 @@ def testList():
             return render_template( '教师菜单.html')
 
 
-@app.route("/delete/",methods=['GET', 'POST'])
+@app.route("/delete/", methods=['GET', 'POST'])
 def delete():
     if request.method == 'GET':
         user=Plan.query.get(request.args['id'])
@@ -376,3 +379,14 @@ def studentRegisterSelects():
             data["data"].append({"id": clas.id, "name": clas.name})
         pass
     return json.dumps(data)
+
+
+@app.route("/creatPage", methods=['POST'])
+def creatPage(id_plan):
+    # id_plan还没用
+    test_list = Test.query.order_by(func.rand()).limit(30)
+    contents = {"contents": []}
+    for test in test_list:
+        contents["contents"].append({"question": test.question, "answer": test.answer})
+    return render_template('考试答题页面.html', contents=contents)
+
