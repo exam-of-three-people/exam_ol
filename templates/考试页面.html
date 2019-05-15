@@ -6,18 +6,12 @@
 </head>
 
 <body>
-<script type="text/javascript" src="./../static/js/考试页面.js">
-</script>
-<form action="/text" method="post">
+<form action="/show" method="post">
     {% for item in  contents%}
     <textarea readonly="readonly">{{ item.question }}</textarea>
-        <textarea  answer="{{ item.answer }}"></textarea>
-{% endfor %}
-<button type="button" onclick="Submission_results()">提交试卷</button>
-
-
-
+        <input name="{{ item.id }}" ></input>
+    {% endfor %}
+<submit>提交试卷</submit>
 </form>
-
 </body>
 </html>

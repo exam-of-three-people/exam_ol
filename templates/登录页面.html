@@ -1,11 +1,15 @@
 <!DOCTYPE html>
+{% extends "extends.html" %}
+{% block head %}
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <link href="../static/css/登录页面.css" rel="stylesheet"/>
-    <link href="../static/js/登录页面.js" rel="script"/>
     <title>登录页面</title>
+
 </head>
+{% endblock %}
+
+{% block  body%}
 <body>
 {% for msg in get_flashed_messages() %}
     <p class="login-box-msg">{{ msg }}</p>
@@ -19,4 +23,5 @@
 <a href="/teacherRegister">我是教师</a>
 <a href="/studentRegister">我是学生</a>
 </body>
+{% endblock %}
 </html>
