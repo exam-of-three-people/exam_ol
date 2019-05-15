@@ -12,11 +12,13 @@
 {% block body %}
 <body>
 <form action="/show" method="post">
-    {% for item in  contents%}
+    {% for item in  contents %}
     <textarea readonly="readonly">{{ item.question }}</textarea>
-        <input name="{{ item.id }}" ></input>
+        <br>
+        <input name="{{ item.id }}">
+        <br>
     {% endfor %}
-<submit>提交试卷</submit>
+    <input type="submit" value="交卷">
 </form>
 </body>
 {% endblock %}

@@ -1,6 +1,6 @@
 from flask import render_template, redirect, flash, url_for, request, json, session
 from forms import LoginForm, RegisterFormStudent, RegisterFormTeacher, StudentInfoForm, TeacherInfoForm, TestCreaterForm
-from models import app, Student, Teacher, College, Major, Subject, Plan, Page, Test, Class, TestType, db
+from models import app, Student, Teacher, College, Major, Subject, Plan, Page, Test, Class, TestType, classes_plans, db
 from sqlalchemy.exc import IntegrityError, InternalError
 from sqlalchemy import func
 import time
@@ -57,8 +57,9 @@ def index():
 @app.route("/studentMenu", methods=['GET', 'POST'])
 def studentMenu():
     student = Student.query.get(session["uid"])
-    clas = student.id_class
-    plans = Plan.query.filter_by(classes=clas).all()
+    id_class = student.id_class
+    class_ = Class.query.get(id_class)
+    plans = Plan.query.all()
     return render_template("学生菜单.html", plans=plans)
 
 
@@ -385,9 +386,29 @@ def studentRegisterSelects():
 @app.route("/createPage/<int:id_plan>", methods=['GET', 'POST'])
 def createPage(id_plan):
     # id_plan还没用
+    # plan = Plan.query.get(id_plan)
+    # test_list = Test.query.filter(Test.id_subject == plan.id_subject).order_by(func.rand()).limit(30)
     test_list = Test.query.order_by(func.rand()).limit(30)
-    contents = {"contents": []}
+    contents = []
     for test in test_list:
-        contents["contents"].append({"question": test.question, "answer": test.answer})
+        contents.append({"question": test.question, "answer": test.answer})
     return render_template('考试页面.html', contents=contents)
+
+
+@app.route("/get_score", methods=['GET', 'POST'])
+def get_score():
+    rightnum = 0
+    wronglist = []
+    if len(request.form) != 0:
+        for key in request.form:
+            if Test.query.get(key) == request.form[key]:
+                rightnum += 1
+            else:
+                wronglist.append(key)
+        score = 100 * rightnum / len(request.form)
+        # data = {"score": score, "wronglist": wronglist}
+    else:
+        score = 0
+    return "<h1>分数：%d</h1><br>" % score
+
 
