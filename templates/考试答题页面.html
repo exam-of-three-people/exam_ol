@@ -1,5 +1,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+{% extends "extends.html" %}
 <html>
+{% block head %}
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -34,6 +36,11 @@
     }</style>
     <link rel=stylesheet href="https://img.examcoo.com/1444/themes/metro/v1_l.css" type="text/css">
 </head>
+
+{% endblock %}
+
+
+{% block body %}
 <body>
 <div id="loader">
     <div id="loaderInner">正在载入试卷 ...</div>
@@ -111,4 +118,6 @@
     <iframe src="/error/*.html"></iframe>
 </noscript>
 </body>
+
+{% endblock %}
 </html>

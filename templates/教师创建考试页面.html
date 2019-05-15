@@ -1,12 +1,16 @@
-{% import 'bootstrap/wtf.html' as wtf %}
+{% extends "extends.html" %}
 <!DOCTYPE html>
 <html lang="en">
+{% block head %}
 <head>
     <meta charset="UTF-8">
     <title>教师创建考试页面</title>
 </head>
+{% endblock %}
+
+
+{% block body %}
 <body>
-{% block content %}
     <form action="/testCreater" method="post">
         {{ form.date.label }}{{ form.date }}
         {{ form.start_time.label }}{{ form.start_time }}
@@ -15,6 +19,7 @@
         {{ form.class_.label }}{{ form.class_ }}
         {{ form.submit }}
     </form>
-{% endblock %}
+
 </body>
+{% endblock %}
 </html>

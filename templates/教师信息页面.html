@@ -1,9 +1,14 @@
 <!DOCTYPE html>
+{% extends "extends.html" %}
 <html lang="en">
+{% block head %}
 <head>
     <meta charset="UTF-8">
     <title>教师信息页面</title>
 </head>
+{% endblock %}
+
+{% block body %}
 <body>
 {% for msg in get_flashed_messages() %}
     <p class="login-box-msg">{{ msg }}</p>
@@ -18,4 +23,5 @@
     {{ form.submit }}
 </form>
 </body>
+{% endblock %}
 </html>

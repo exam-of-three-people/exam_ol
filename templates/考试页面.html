@@ -1,10 +1,15 @@
 <!DOCTYPE html>
+{% extends "extends.html" %}
 <html lang="en">
+{% block head %}
 <head>
     <meta charset="UTF-8">
     <title>考试页面</title>
 </head>
+{% endblock %}
 
+
+{% block body %}
 <body>
 <form action="/show" method="post">
     {% for item in  contents%}
@@ -14,4 +19,5 @@
 <submit>提交试卷</submit>
 </form>
 </body>
+{% endblock %}
 </html>

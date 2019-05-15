@@ -1,9 +1,15 @@
 <!DOCTYPE html>
+{% extends "extends.html" %}
 <html lang="en">
+{% block head %}
 <head>
     <meta charset="UTF-8">
     <title>学生注册页面</title>
 </head>
+{% endblock %}
+
+
+{% block body %}
 <body>
 {% macro render_field(field) %}
     {{ field(**kwargs)|safe }}
@@ -33,4 +39,5 @@
 </body>
 <script src="../static/js/jquery.js" type="text/javascript"></script>
 <script src="../static/js/学生注册页面.js" type="text/javascript"></script>
+{% endblock %}
 </html>

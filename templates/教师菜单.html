@@ -1,11 +1,17 @@
 <!DOCTYPE html>
+{% endblock %}
 <html lang="en">
+{% block head %}
 <head>
     <meta charset="UTF-8">
     <link href="../static/css/教师菜单.css" rel="stylesheet"/>
     <link href="../static/js/教师菜单.js" rel="script"/>
     <title>教师菜单</title>
 </head>
+{% endblock %}
+
+
+{% block body %}
 <body>
 {% for msg in get_flashed_messages() %}
     <p class="login-box-msg">{{ msg }}</p>
@@ -15,4 +21,5 @@
 <a href="/teacherInfo">个人信息</a>
 <a href="/logout">退出登录</a>
 </body>
+{% endblock %}
 </html>

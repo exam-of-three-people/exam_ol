@@ -1,11 +1,16 @@
 <!DOCTYPE html>
+{% extends "extends.html" %}
 <html lang="en">
+{% block head %}
 <head>
     <meta charset="UTF-8">
     <link href="../static/css/学生菜单.css" rel="stylesheet"/>
     <link href="../static/js/学生菜单.js" rel="script"/>
     <title>学生菜单</title>
 </head>
+{% endblock %}
+
+{% block body %}
 <body>
 {% for msg in get_flashed_messages() %}
     <p class="login-box-msg">{{ msg }}</p>
@@ -37,4 +42,5 @@
     </table>
 </div>
 </body>
+{% endblock %}
 </html>

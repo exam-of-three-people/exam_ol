@@ -17,7 +17,7 @@
 <form action="/login" method="post">
     {{ form.id.label }}{{ form.id }}{{ form.role }}<br>
     {{ form.password.label }}{{ form.csrf_token }}{{ form.password }}{{ form.remember_me }}{{ form.remember_me.label }}<br>
-    <a onclick="signUp()">注册</a>
+    <a onclick="signUp()" class="text-primary" >注册</a>
     {{ form.login }}
 </form>
 <a href="/teacherRegister">我是教师</a>
