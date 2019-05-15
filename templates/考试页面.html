@@ -11,7 +11,7 @@
 
 {% block body %}
 <body>
-<form action="/show" method="post">
+<form action="/get_score" method="post">
     {% for item in  contents %}
     <textarea readonly="readonly">{{ item.question }}</textarea>
         <br>

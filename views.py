@@ -391,7 +391,7 @@ def createPage(id_plan):
     test_list = Test.query.order_by(func.rand()).limit(30)
     contents = []
     for test in test_list:
-        contents.append({"question": test.question, "answer": test.answer})
+        contents.append({"question": test.question, "id": test.id})
     return render_template('考试页面.html', contents=contents)
 
 
@@ -399,9 +399,11 @@ def createPage(id_plan):
 def get_score():
     rightnum = 0
     wronglist = []
+    print(request.form)
     if len(request.form) != 0:
         for key in request.form:
-            if Test.query.get(key) == request.form[key]:
+            test = Test.query.get(key)
+            if test.answer == request.form[key]:
                 rightnum += 1
             else:
                 wronglist.append(key)
