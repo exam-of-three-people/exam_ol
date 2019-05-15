@@ -1,6 +1,6 @@
 from flask import render_template, redirect, flash, url_for, request, json, session
 from forms import LoginForm, RegisterFormStudent, RegisterFormTeacher, StudentInfoForm, TeacherInfoForm, TestCreaterForm
-from models import app, Student, Teacher, College, Major, Subject, Plan, Page, Test, Class, TestType, db
+from models import app, Student, Teacher, College, Major, Subject, Plan, Page, Test, Class, TestType, classes_plans, db
 from sqlalchemy.exc import IntegrityError, InternalError
 from sqlalchemy import func
 import time
@@ -57,8 +57,9 @@ def index():
 @app.route("/studentMenu", methods=['GET', 'POST'])
 def studentMenu():
     student = Student.query.get(session["uid"])
-    clas = student.id_class
-    plans = Plan.query.filter_by(classes=clas).all()
+    id_class = student.id_class
+    class_ = Class.query.get(id_class)
+    plans = Plan.query.all()
     return render_template("学生菜单.html", plans=plans)
 
 
@@ -105,6 +106,7 @@ def teacherSignUp():
 
 
 # ===========================浩教师信息页面======================================
+#===========================教师信息页面======================================
 @app.route("/teacherInfo", methods=['GET', 'POST'])
 def teacherInfo():
     # =======================存储信息======================================
@@ -387,10 +389,10 @@ def createPage(id_plan):
     # plan = Plan.query.get(id_plan)
     # test_list = Test.query.filter(Test.id_subject == plan.id_subject).order_by(func.rand()).limit(30)
     test_list = Test.query.order_by(func.rand()).limit(30)
-    contents = {"contents": []}
+    contents = []
     for test in test_list:
-        contents["contents"].append({"question": test.question, "answer": test.answer})
-    return render_template('考试答题页面.html', contents=contents)
+        contents.append({"question": test.question, "answer": test.answer})
+    return render_template('考试页面.html', contents=contents)
 
 
 @app.route("/get_score", methods=['GET', 'POST'])

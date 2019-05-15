@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>考试页面</title>
+</head>
+
+<body>
+<form action="/show" method="post">
+    {% for item in  contents %}
+    <textarea readonly="readonly">{{ item.question }}</textarea>
+        <br>
+        <input name="{{ item.id }}">
+        <br>
+    {% endfor %}
+    <input type="submit" value="交卷">
+</form>
+</body>
+</html>
