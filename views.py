@@ -387,8 +387,8 @@ def studentRegisterSelects():
 def createPage(id_plan):
     # id_plan还没用
     test_list = Test.query.order_by(func.rand()).limit(30)
-    contents = {"contents": []}
+    contents = []
     for test in test_list:
-        contents["contents"].append({"question": test.question, "answer": test.answer})
+        contents.append({"question": test.question, "answer": test.answer})
     return render_template('考试页面.html', contents=contents)
 
