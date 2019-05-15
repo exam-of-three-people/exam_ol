@@ -106,6 +106,7 @@ def teacherSignUp():
 
 
 # ===========================浩教师信息页面======================================
+#===========================教师信息页面======================================
 @app.route("/teacherInfo", methods=['GET', 'POST'])
 def teacherInfo():
     # =======================存储信息======================================
@@ -389,5 +390,5 @@ def createPage(id_plan):
     contents = {"contents": []}
     for test in test_list:
         contents["contents"].append({"question": test.question, "answer": test.answer})
-    return render_template('考试答题页面.html', contents=contents)
+    return render_template('考试页面.html', contents=contents)
 
