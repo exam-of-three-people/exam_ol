@@ -16,7 +16,7 @@
 {% endfor %}
 <form action="/login" method="post" class="form-horizontal">
     <div class="form-group">{{ form.id.label(class_="col-sm-1 control-label glyphicon glyphicon glyphicon-user") }}<div class="col-sm-4">{{ form.id(class_="form-control") }}</div>{{ form.role }}</div>
-    <div class="form-group ">{{ form.password.label(class_="glyphicon glyphicon-tree-conifer col-sm-1 control-label ") }}<div class="col-sm-4">{{ form.csrf_token(class_="form-control") }}{{ form.password }}</div></div>
+    <div class="form-group ">{{ form.password.label(class_="glyphicon glyphicon-tree-conifer col-sm-1 control-label ") }}<div class="col-sm-4">{{ form.csrf_token(class_="form-control") }}{{ form.password(class_="col-sm-12") }}</div></div>
     <div class="form-group">{{ form.remember_me }}{{ form.remember_me.label(class_="col-sm-1 control-label") }}</div>
     <button onclick="signUp()" style="margin-left: 30px" >注册</button>
     {{ form.login(type_="button") }}

@@ -16,10 +16,42 @@
 {% for msg in get_flashed_messages() %}
     <p class="login-box-msg">{{ msg }}</p>
 {% endfor %}
-<a href="/testCreater">创建考试</a>
-<a href="/testList">考试列表</a>
-<a href="/teacherInfo">个人信息</a>
-<a href="/logout">退出登录</a>
+
+<div id="myCarousel" class="carousel slide">
+	<!-- 轮播（Carousel）指标 -->
+	<ol class="carousel-indicators">
+		<li data-target="#myCarousel" data-slide-to="0" class="active"></li>
+		<li data-target="#myCarousel" data-slide-to="1"></li>
+		<li data-target="#myCarousel" data-slide-to="2"></li>
+	</ol>
+	<!-- 轮播（Carousel）项目 -->
+	<div class="carousel-inner">
+		<div class="item active">
+            <a href="/testCreater"><img src="../static/image/1.png"></a>
+		</div>
+		<div class="item">
+            <a href="/testList"><img src="../static/image/2.png"></a>
+		</div>
+		<div class="item">
+            <a href="/teacherInfo"><img src="../static/image/3.png"></a>
+		</div>
+        <div class="item">
+            <a href="/logout"><img src="../static/image/4.png"></a>
+		</div>
+
+
+	</div>
+	<!-- 轮播（Carousel）导航 -->
+	<a class="left carousel-control" href="#myCarousel" role="button" data-slide="prev">
+		<span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
+		<span class="sr-only">Previous</span>
+	</a>
+	<a class="right carousel-control" href="#myCarousel" role="button" data-slide="next">
+		<span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+
+	</a>
+</div>
+
 </body>
 {% endblock %}
 </html>
