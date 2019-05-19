@@ -1,5 +1,6 @@
-<!DOCTYPE html>
+<!DOCTYPE html
 {% extends "base.html" %}
+{% import 'bootstrap/wtf.html' as wtf %}
 <html lang="en">
 {% block head %}
 <head>
@@ -15,18 +16,19 @@
 {% for msg in get_flashed_messages() %}
     <p class="login-box-msg">{{ msg }}</p>
 {% endfor %}
-<form action="/studentInfo" method="post">
-    {{ form.id.label }}{{ form.id }}
-    {{ form.name.label }}{{ form.name }}
-    {{ form.college.label }}{{ form.college }}
-    {{ form.major.label }}{{ form.major }}
-    {{ form.grade.label }}{{ form.grade }}
-    {{ form.classes.label }}{{ form.classes }}
-    {{ form.csrf_token }}
-    {{ form.pre_password.label }}{{ form.pre_password }}
-    {{ form.new_password.label }}{{ form.new_password }}
-    {{ form.ensure_password.label }}{{ form.ensure_password }}
-    {{ form.submit }}
+{{ wtf.quick_form(form,url_for('studentInfo'), form_type="horizontal",horizontal_columns=('lg', 1, 5)) }}
+{#<form action="/studentInfo" method="post">#}
+{#    {{ form.id.label }}{{ form.id }}#}
+{#    {{ form.name.label }}{{ form.name }}#}
+{#    {{ form.college.label }}{{ form.college }}#}
+{#    {{ form.major.label }}{{ form.major }}#}
+{#    {{ form.grade.label }}{{ form.grade }}#}
+{#    {{ form.classes.label }}{{ form.classes }}#}
+{#    {{ form.csrf_token }}#}
+{#    {{ form.pre_password.label }}{{ form.pre_password }}#}
+{#    {{ form.new_password.label }}{{ form.new_password }}#}
+{#    {{ form.ensure_password.label }}{{ form.ensure_password }}#}
+{#    {{ form.submit }}#}
 </form>
 <a href="/studentMenu">返回</a>
 </body>
