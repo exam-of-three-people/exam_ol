@@ -131,6 +131,15 @@ class Plan(db.Model):
     pass
 
 
+class PageStructure(db.Model):
+    __tablename__ = "tb_page_structure"
+    id = db.Column(db.Integer, primary_key=True)
+    choice_question_number = db.Column(db.Integer, default=0)
+    fill_blank_question_number = db.Column(db.Integer, default=0)
+    true_false_question_number = db.Column(db.Integer, default=0)
+    free_response_question_number = db.Column(db.Integer, default=0)
+
+
 class Page(db.Model):
     __tablename__ = "tb_page"
     id = db.Column(db.Integer, primary_key=True)
