@@ -238,9 +238,11 @@ def testCreater():
         return render_template("教师创建考试页面.html", form=form)
     else:
         form = TestCreaterForm(request.form)
-        structure = Structure()
-        structure.
-
+        PageStructure = PageStructure()
+        PageStructure.choice_question_number = form.choice_question_number.data
+        PageStructure.fill_blank_question_number = form.fill_blank_question_number.data
+        PageStructure.true_false_question_number = form.true_false_question_number.data
+        PageStructure.free_response_question_number = form.free_response_question_number.data
 
         plan = Plan()
         plan.id_subject = form.subject.data
