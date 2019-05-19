@@ -1,6 +1,6 @@
 from flask import render_template, redirect, flash, url_for, request, json, session
 from forms import LoginForm, RegisterFormStudent, RegisterFormTeacher, StudentInfoForm, TeacherInfoForm, TestCreaterForm
-from models import app, Student, Teacher, College, Major, Subject, Plan, Page, Test, Class, TestType, classes_plans, db
+from models import app, Student, Teacher, College, Major, Subject, Plan, Page, PageStructure, Test, Class, TestType, classes_plans, db
 from sqlalchemy.exc import IntegrityError, InternalError
 from sqlalchemy import func
 import time
@@ -238,27 +238,26 @@ def testCreater():
         return render_template("教师创建考试页面.html", form=form)
     else:
         form = TestCreaterForm(request.form)
-        PageStructure = PageStructure()
-        PageStructure.choice_question_number = form.choice_question_number.data
-        PageStructure.fill_blank_question_number = form.fill_blank_question_number.data
-        PageStructure.true_false_question_number = form.true_false_question_number.data
-        PageStructure.free_response_question_number = form.free_response_question_number.data
+        pageStructure = PageStructure()
+        pageStructure.choice_question_number = form.choice_question_number.data
+        pageStructure.fill_blank_question_number = form.fill_blank_question_number.data
+        pageStructure.true_false_question_number = form.true_false_question_number.data
+        pageStructure.free_response_question_number = form.free_response_question_number.data
+        db.session.add(pageStructure)
+        db.session.commit()
 
         plan = Plan()
         plan.id_subject = form.subject.data
+        plan.id_page_structure = pageStructure.id
         plan.date = form.date.data
         plan.time_start = form.start_time.data
         plan.time_end = form.end_time.data
-
-        # 命名待修改
         plan.level = form.level.data
 
         classes = form.class_.data
         for class_id in classes:
             plan.classes.append(Class.query.get(class_id))
         db.session.add(plan)
-
-
         db.session.commit()
         return redirect("/teacherMenu")
 

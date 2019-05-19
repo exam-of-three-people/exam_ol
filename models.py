@@ -95,7 +95,6 @@ class Subject(db.Model):
     name = db.Column(db.String(16), nullable=False)
 
     plans = db.relationship("Plan", backref="tb_subject")
-    pages = db.relationship("Page", backref="tb_subject")
     tests = db.relationship("Test", backref="tb_subject")
 
     def __repr__(self):
@@ -118,7 +117,6 @@ class Plan(db.Model):
     date = db.Column(db.Date, nullable=False)
     time_start = db.Column(db.Time, nullable=False)
     time_end = db.Column(db.Time, nullable=False)
-
     pages = db.relationship('Page', backref="tb_plan")
     classes = db.relationship('Class',
                               secondary=classes_plans,
@@ -126,7 +124,6 @@ class Plan(db.Model):
 
     def __repr__(self):
         return "<Plan %r>" % self.id
-
     pass
 
 

@@ -1,7 +1,7 @@
 from flask_script import Manager
 from flask_admin import Admin
 from flask_admin.contrib.sqla import ModelView
-from models import Student, Teacher, College, Major, Subject, Plan, Page, Test, Class, TestType, db
+from models import Student, Teacher, College, Major, Subject, Plan, Page, Test, Class, TestType, PageStructure, db
 from flask_migrate import Migrate, MigrateCommand
 from flask_admin.form import BaseForm
 from wtforms import StringField
@@ -37,9 +37,11 @@ admin.add_view(ModelView(Major, db.session))
 admin.add_view(ModelView(Subject, db.session))
 admin.add_view(ModelView(Plan, db.session))
 admin.add_view(ModelView(Page, db.session))
+admin.add_view(ModelView(PageStructure, db.session))
 admin.add_view(ModelView(Test, db.session))
 admin.add_view(ModelView(Class, db.session))
 admin.add_view(ModelView(TestType, db.session))
+
 
 if __name__ == '__main__':
     manager.run()
