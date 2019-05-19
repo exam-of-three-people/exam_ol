@@ -157,7 +157,7 @@ class Test(db.Model):
     __tablename__ = "tb_test"
     id = db.Column(db.Integer, primary_key=True)
     id_subject = db.Column(db.Integer, db.ForeignKey('tb_subject.id'), nullable=False)
-    type = db.Column(db.Integer, db.ForeignKey('tb_testType.id'), nullable=False)
+    type = db.Column(db.Integer, db.ForeignKey('tb_test_type.id'), nullable=False)
     question = db.Column(db.VARCHAR(1000), nullable=False)
     answer = db.Column(db.VARCHAR(1000), nullable=False)
     level = db.Column(db.Integer, nullable=False)
@@ -183,11 +183,11 @@ class Class(db.Model):
 
 
 class TestType(db.Model):
-    __tablename__ = "tb_testType"
+    __tablename__ = "tb_test_type"
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(10), nullable=False)
 
-    tests = db.relationship("Test", backref="tb_testType")
+    tests = db.relationship("Test", backref="tb_test_type")
 
     def __repr__(self):
         return "<TestType %r>" % self.id
