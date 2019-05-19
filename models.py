@@ -95,7 +95,6 @@ class Subject(db.Model):
     name = db.Column(db.String(16), nullable=False)
 
     plans = db.relationship("Plan", backref="tb_subject")
-    pages = db.relationship("Page", backref="tb_subject")
     tests = db.relationship("Test", backref="tb_subject")
 
     def __repr__(self):
@@ -114,9 +113,14 @@ class Plan(db.Model):
     __tablename__ = "tb_plan"
     id = db.Column(db.Integer, primary_key=True)
     id_subject = db.Column(db.Integer, db.ForeignKey('tb_subject.id'), nullable=False)
+    #
+
+
     date = db.Column(db.Date, nullable=False)
     time_start = db.Column(db.Time, nullable=False)
     time_end = db.Column(db.Time, nullable=False)
+
+    pages = db.relationship('Page', backref="tb_plan")
     classes = db.relationship('Class',
                               secondary=classes_plans,
                               backref=db.backref("tb_plan"))
@@ -130,11 +134,11 @@ class Plan(db.Model):
 class Page(db.Model):
     __tablename__ = "tb_page"
     id = db.Column(db.Integer, primary_key=True)
-    id_subject = db.Column(db.Integer, db.ForeignKey('tb_subject.id'), nullable=False)
+    id_plan = db.Column(db.Integer, db.ForeignKey('tb_plan.id'), nullable=False)
     id_student = db.Column(db.Integer, db.ForeignKey('tb_student.id'), nullable=False)
     content = db.Column(db.String(500), nullable=False)
-    answer = db.Column(db.Text, nullable=False)
-    code = db.Column(db.Integer, nullable=False)
+    answer = db.Column(db.Text, nullable=True)
+    code = db.Column(db.Integer, nullable=True)
 
     def __repr__(self):
         return "<Page %r>" % self.id

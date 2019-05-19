@@ -238,17 +238,27 @@ def testCreater():
         return render_template("教师创建考试页面.html", form=form)
     else:
         form = TestCreaterForm(request.form)
+        structure = Structure()
+        structure.
+
+
         plan = Plan()
         plan.id_subject = form.subject.data
         plan.date = form.date.data
         plan.time_start = form.start_time.data
         plan.time_end = form.end_time.data
+
+        # 命名待修改
+        plan.level = form.level.data
+
         classes = form.class_.data
         for class_id in classes:
             plan.classes.append(Class.query.get(class_id))
         db.session.add(plan)
+
+
         db.session.commit()
-        return redirect("/studentMenu")
+        return redirect("/teacherMenu")
 
 
 # ===============================================浩，教师列表页面（（（（（（（（（（（（=====================================
@@ -389,6 +399,12 @@ def createPage(id_plan):
     # plan = Plan.query.get(id_plan)
     # test_list = Test.query.filter(Test.id_subject == plan.id_subject).order_by(func.rand()).limit(30)
     test_list = Test.query.order_by(func.rand()).limit(30)
+    # 用page
+
+
+
+
+
     contents = []
     for test in test_list:
         contents.append({"question": test.question, "id": test.id})
