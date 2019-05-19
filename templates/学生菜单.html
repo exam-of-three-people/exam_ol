@@ -15,6 +15,71 @@
 {% for msg in get_flashed_messages() %}
     <p class="login-box-msg">{{ msg }}</p>
 {% endfor %}
+<div class="container">
+	<div class="row clearfix">
+		<div class="col-md-12 column">
+			 <a class="btn btn-lg btn-primary btn-block active" type="button" onclick="startTest()">开始考试</a>
+		</div>
+	</div>
+	<div class="row clearfix">
+		<div class="col-md-12 column">
+			<div class="alert alert-success alert-dismissable">
+				 <button class="close" aria-hidden="true" type="button" data-dismiss="alert">×</button>
+				<h4>
+					注意!
+				</h4> <strong>Warning!</strong> Best check yo self, you're not looking too good. <a class="alert-link" href="#">alert link</a>
+			</div>
+		</div>
+	</div>
+	<div class="row clearfix">
+		<div class="col-md-12 column">
+			 <a class="btn btn-block btn-success btn-lg active" type="button" href="/studentInfo">学生信息</a>
+		</div>
+	</div>
+	<div class="row clearfix">
+		<div class="col-md-12 column">
+			<div class="alert alert-success alert-dismissable">
+				 <button class="close" aria-hidden="true" type="button" data-dismiss="alert">×</button>
+				<h4>
+					注意!
+				</h4> <strong>Warning!</strong> Best check yo self, you're not looking too good. <a class="alert-link" href="#">alert link</a>
+			</div>
+		</div>
+	</div>
+	<div class="row clearfix">
+		<div class="col-md-12 column">
+			 <a class="btn btn-warning btn-lg btn-block active" type="button" href="/testQuery">成绩查询</a>
+		</div>
+	</div>
+	<div class="row clearfix">
+		<div class="col-md-12 column">
+			<div class="alert alert-success alert-dismissable">
+				 <button class="close" aria-hidden="true" type="button" data-dismiss="alert">×</button>
+				<h4>
+					注意!
+				</h4> <strong>Warning!</strong> Best check yo self, you're not looking too good. <a class="alert-link" href="#">alert link</a>
+			</div>
+		</div>
+	</div>
+	<div class="row clearfix">
+		<div class="col-md-12 column">
+			 <a class="btn btn-danger btn-lg btn-block active" type="button" href="logout">退出登录</a>
+		</div>
+	</div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
 <a onclick="startTest()">开始考试</a>
 <a href="/studentInfo">学生信息</a>
 <a href="/testQuery">成绩查询</a>

@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 {% extends "base.html" %}
+{% import 'bootstrap/wtf.html' as wtf %}
 <html lang="en">
 {% block head %}
 <head>
@@ -11,14 +12,15 @@
 
 {% block body %}
 <body>
-    <form action="/testCreater" method="post">
-        {{ form.date.label }}{{ form.date }}
-        {{ form.start_time.label }}{{ form.start_time }}
-        {{ form.end_time.label }}{{ form.end_time }}
-        {{ form.subject.label }}{{ form.subject }}
-        {{ form.class_.label }}{{ form.class_ }}
-        {{ form.submit }}
-    </form>
+{{ wtf.quick_form(form,url_for('testCreater'), form_type="horizontal",horizontal_columns=('lg', 1, 5)) }}
+{#    <form action="/testCreater" method="post">#}
+{#        {{ form.date.label }}{{ form.date }}#}
+{#        {{ form.start_time.label }}{{ form.start_time }}#}
+{#        {{ form.end_time.label }}{{ form.end_time }}#}
+{#        {{ form.subject.label }}{{ form.subject }}#}
+{#        {{ form.class_.label }}{{ form.class_ }}#}
+{#        {{ form.submit }}#}
+{#   </form>#}
 
 
 

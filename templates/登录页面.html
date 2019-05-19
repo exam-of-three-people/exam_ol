@@ -14,24 +14,24 @@
 <body>
 <div class="container">
 	<div class="row clearfix">
-		<div class="col-md-5 column">
+		<div class="col-md-7 column">
 			<h1 class="text-right text-info">
 				智能考试系统
 			</h1>
 		</div>
-		<div class="col-md-7 column">
+		<div class="col-md-5 column" >
 			<div class="panel-group" id="panel-338214">
 				<div class="panel panel-default">
-					<div class="panel-heading">
-						 <a class="panel-title collapsed" href="#panel-element-846427" data-toggle="collapse" data-parent="#panel-338214">登录和注册</a>
-					</div>
+
+						 <button   class="panel-title collapsed" href="#panel-element-846427" data-toggle="collapse" data-parent="#panel-338214 ">登录和注册</button>
+
 					<div class="panel-collapse collapse" id="panel-element-846427">
 						<div class="panel-body">
 							{% for msg in get_flashed_messages() %}
     <p class="login-box-msg">{{ msg }}</p>
 {% endfor %}
 <form action="/login" method="post" class="form-horizontal">
-    <div class="form-group">{{ form.id.label(class_="col-sm-1 control-label glyphicon glyphicon glyphicon-user") }}<div class="col-sm-4">{{ form.id(class_="form-control") }}</div>{{ form.role }}</div>
+    <div class="form-group ">{{ form.id.label(class_="col-sm-3 control-label glyphicon glyphicon glyphicon-user") }}<div class="col-sm-6">{{ form.id(class_="form-control",style="margain-left") }}</div>{{ form.role(style="margain-left") }}</div>
     <div class="form-group ">{{ form.password.label(class_="glyphicon glyphicon-tree-conifer col-sm-1 control-label ") }}<div class="col-sm-4">{{ form.csrf_token(class_="form-control") }}{{ form.password(class_="col-sm-12") }}</div></div>
     <div class="form-group">{{ form.remember_me }}{{ form.remember_me.label(class_="col-sm-1 control-label") }}</div>
 
@@ -88,7 +88,7 @@
 				</ol>
 				<div class="carousel-inner">
 					<div class="item active">
-						<img alt="" src="../static/image/default.jpg" />
+						<img alt="" src="../static/image/登录界面图片8.jpg" />
 						<div class="carousel-caption">
 							<h1>
 								智能考试系统制作人：曾宪法
@@ -97,7 +97,7 @@
 						</div>
 					</div>
 					<div class="item">
-						<img alt="" src="../static/image/default1.jpg" />
+						<img alt="" src="../static/image/登录界面图片7.jpg" />
 						<div class="carousel-caption">
 							<h1>
 								智能考试系统制作人：王正
@@ -106,7 +106,7 @@
 						</div>
 					</div>
 					<div class="item">
-						<img alt="" src="../static/image/default2.jpg" />
+						<img alt="" src="../static/image/登录界面图片6.jpg" />
 						<div class="carousel-caption">
 							<h1>
 								智能考试系统制作人：刘浩
@@ -132,7 +132,7 @@
 	</div>
 	<div class="row clearfix">
 		<div class="col-md-4 column">
-			<img alt="410*208" src="../static/image/timg.jpg" />
+			<img alt="410*208" src="../static/image/登录界面图片4.jpg" />
 			<dl>
 				<dt>
 					考试不及格？不怕，努力就有希望！
@@ -162,7 +162,7 @@
 			</dl>
 		</div>
 		<div class="col-md-4 column">
-			<img alt="340*400" src="../static/image/0.jpg" />
+			<img alt="340*400" src="../static/image/登录界面图片1.jpg" />
 			<dl>
 				<dt>
 					勤奋是成功之母，懒惰乃万恶之源。
@@ -194,7 +194,7 @@
 			</dl>
 		</div>
 		<div class="col-md-4 column">
-			<img alt="140x140" src="../static/image/3.jpg" />
+			<img alt="140x140" src="../static/image/登录界面图片5.jpg" />
 			<dl>
 				<dt>
 					不经历风雨，怎能见彩虹？
