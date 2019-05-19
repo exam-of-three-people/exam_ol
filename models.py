@@ -114,6 +114,7 @@ class Plan(db.Model):
     __tablename__ = "tb_plan"
     id = db.Column(db.Integer, primary_key=True)
     id_subject = db.Column(db.Integer, db.ForeignKey('tb_subject.id'), nullable=False)
+    id_page_structure = db.Column(db.Integer, db.ForeignKey("tb_page_structure.id"), nullable=False)
     date = db.Column(db.Date, nullable=False)
     time_start = db.Column(db.Time, nullable=False)
     time_end = db.Column(db.Time, nullable=False)
@@ -134,6 +135,7 @@ class PageStructure(db.Model):
     fill_blank_question_number = db.Column(db.Integer, default=0)
     true_false_question_number = db.Column(db.Integer, default=0)
     free_response_question_number = db.Column(db.Integer, default=0)
+    plans = db.relationship('Plan', backref='tb_page_structure')
 
 
 class Page(db.Model):
