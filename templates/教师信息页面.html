@@ -13,11 +13,11 @@
 {% for msg in get_flashed_messages() %}
     <p class="login-box-msg">{{ msg }}</p>
 {% endfor %}
-<form action="/teacherInfo" method="post">
-    {{ form.id.label }}{{ form.id }}
-    {{ form.name.label }}{{ form.name }}
-    {{ form.csrf_token }}
-    {{ form.pre_password.label }}{{ form.pre_password }}
+<form action="/teacherInfo" method="post" class="form-horizontal" role="form">
+    <div class="form-group">{{ form.id.label }}{{ form.id }}</div>
+    <div class="form-group">{{ form.name.label }}{{ form.name }}</div>
+    <div class="form-group">{{ form.csrf_token }}
+        {{ form.pre_password.label }}{{ form.pre_password }}</div>
     {{ form.new_password.label }}{{ form.new_password }}
     {{ form.ensure_password.label }}{{ form.ensure_password }}
     {{ form.submit }}

@@ -114,6 +114,7 @@ class Plan(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     id_subject = db.Column(db.Integer, db.ForeignKey('tb_subject.id'), nullable=False)
     id_page_structure = db.Column(db.Integer, db.ForeignKey("tb_page_structure.id"), nullable=False)
+    level = db.Column(db.Integer, default=5)
     date = db.Column(db.Date, nullable=False)
     time_start = db.Column(db.Time, nullable=False)
     time_end = db.Column(db.Time, nullable=False)

@@ -5,7 +5,8 @@
 <head>
     <meta charset="UTF-8">
     <title>登录页面</title>
-
+  <script src="../static/js/jquery.js" type="text/javascript"></script>
+<script src="../static/js/登录页面.js" type="text/javascript"></script>
 </head>
 {% endblock %}
 
@@ -14,14 +15,14 @@
 {% for msg in get_flashed_messages() %}
     <p class="login-box-msg">{{ msg }}</p>
 {% endfor %}
-<form action="/login" method="post">
-    {{ form.id.label }}{{ form.id }}{{ form.role }}<br>
-    {{ form.password.label }}{{ form.csrf_token }}{{ form.password }}{{ form.remember_me }}{{ form.remember_me.label }}<br>
-    <a onclick="signUp()" class="btn btn-dark" >注册</a>
-    {{ form.login }}
-</form>
-<a href="/teacherRegister">我是教师</a>
-<a href="/studentRegister">我是学生</a>
+<form action="/login" method="post" class="form-horizontal">
+    <div class="form-group">{{ form.id.label(class_="col-sm-1 control-label glyphicon glyphicon glyphicon-user") }}<div class="col-sm-4">{{ form.id(class_="form-control") }}</div>{{ form.role }}</div>
+    <div class="form-group ">{{ form.password.label(class_="glyphicon glyphicon-tree-conifer col-sm-1 control-label ") }}<div class="col-sm-4">{{ form.csrf_token(class_="form-control") }}{{ form.password(class_="col-sm-12") }}</div></div>
+    <div class="form-group">{{ form.remember_me }}{{ form.remember_me.label(class_="col-sm-1 control-label") }}</div>
+
+    {{ form.login(type_="button") }}
+</form><button onclick="signUp()" style="margin-left: 30px" >注册</button>
+
 </body>
 {% endblock %}
 </html>

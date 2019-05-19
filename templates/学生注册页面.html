@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 {% extends "base.html" %}
+{% import 'bootstrap/wtf.html' as wtf %}
 <html lang="en">
 {% block head %}
 <head>
@@ -24,18 +25,19 @@
 {% for msg in get_flashed_messages() %}
     <p class="login-box-msg">{{ msg }}</p>
 {% endfor %}
-<form action="/studentRegister" method="post">
-    {{ form.id.label }}{{ form.id }}
-    {{ form.name.label }}{{ form.name }}
-    {{ form.college.label }}{{ render_field(form.college, id='college') }}
-    {{ form.major.label }}{{ render_field(form.major, id='major') }}
-    {{ form.grade.label }}{{ render_field(form.grade, id='grade') }}
-    {{ form.classes.label }}{{ render_field(form.classes, id='classes') }}
-    {{ form.csrf_token }}
-    {{ form.password.label }}{{ form.password }}
-    {{ form.ensure_password.label }}{{ form.ensure_password }}
-    {{ form.submit }}
-</form>
+{{ wtf.quick_form(form,url_for('studentRegister'), form_type="horizontal",horizontal_columns=('lg', 1, 5)) }}
+{#<form action="/studentRegister" method="post">#}
+{#    {{ form.id.label }}{{ form.id }}#}
+{#    {{ form.name.label }}{{ form.name }}#}
+{#    {{ form.college.label }}{{ render_field(form.college, id='college') }}#}
+{#    {{ form.major.label }}{{ render_field(form.major, id='major') }}#}
+{#    {{ form.grade.label }}{{ render_field(form.grade, id='grade') }}#}
+{#    {{ form.classes.label }}{{ render_field(form.classes, id='classes') }}#}
+{#    {{ form.csrf_token }}#}
+{#    {{ form.password.label }}{{ form.password }}#}
+{#    {{ form.ensure_password.label }}{{ form.ensure_password }}#}
+{#    {{ form.submit }}#}
+{#</form>#}
 </body>
 <script src="../static/js/jquery.js" type="text/javascript"></script>
 <script src="../static/js/学生注册页面.js" type="text/javascript"></script>
