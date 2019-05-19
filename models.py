@@ -113,7 +113,7 @@ class Plan(db.Model):
     __tablename__ = "tb_plan"
     id = db.Column(db.Integer, primary_key=True)
     id_subject = db.Column(db.Integer, db.ForeignKey('tb_subject.id'), nullable=False)
-    id_page_structure = db.Column(db.Integer, db.ForeignKey("tb_page_structure.id"), nullable=False)
+    page_structure = db.Column(db.String(128), nullable=False)
     level = db.Column(db.Integer, default=5)
     date = db.Column(db.Date, nullable=False)
     time_start = db.Column(db.Time, nullable=False)
@@ -128,22 +128,12 @@ class Plan(db.Model):
     pass
 
 
-class PageStructure(db.Model):
-    __tablename__ = "tb_page_structure"
-    id = db.Column(db.Integer, primary_key=True)
-    choice_question_number = db.Column(db.Integer, default=0)
-    fill_blank_question_number = db.Column(db.Integer, default=0)
-    true_false_question_number = db.Column(db.Integer, default=0)
-    free_response_question_number = db.Column(db.Integer, default=0)
-    plans = db.relationship('Plan', backref='tb_page_structure')
-
-
 class Page(db.Model):
     __tablename__ = "tb_page"
     id = db.Column(db.Integer, primary_key=True)
     id_plan = db.Column(db.Integer, db.ForeignKey('tb_plan.id'), nullable=False)
     id_student = db.Column(db.Integer, db.ForeignKey('tb_student.id'), nullable=False)
-    content = db.Column(db.String(500), nullable=False)
+    content = db.Column(db.String(1024), nullable=False)
     answer = db.Column(db.Text, nullable=True)
     code = db.Column(db.Integer, nullable=True)
 
@@ -158,7 +148,7 @@ class Test(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     id_subject = db.Column(db.Integer, db.ForeignKey('tb_subject.id'), nullable=False)
     type = db.Column(db.Integer, db.ForeignKey('tb_test_type.id'), nullable=False)
-    question = db.Column(db.VARCHAR(1000), nullable=False)
+    question = db.Column(db.VARCHAR(1024), nullable=False)
     answer = db.Column(db.VARCHAR(1000), nullable=False)
     level = db.Column(db.Integer, nullable=False)
 
@@ -171,7 +161,7 @@ class Test(db.Model):
 class Class(db.Model):
     __tablename__ = "tb_class"
     id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(10), nullable=False)
+    name = db.Column(db.String(32), nullable=False)
     id_major = db.Column(db.Integer, db.ForeignKey('tb_major.id'), nullable=False)
 
     students = db.relationship("Student", backref="tb_class")
@@ -185,9 +175,9 @@ class Class(db.Model):
 class TestType(db.Model):
     __tablename__ = "tb_test_type"
     id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(10), nullable=False)
+    name = db.Column(db.String(32), nullable=False)
 
     tests = db.relationship("Test", backref="tb_test_type")
 
     def __repr__(self):
-        return "<TestType %r>" % self.id
+        return "<TestType %r>" % self.name

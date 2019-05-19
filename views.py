@@ -1,9 +1,9 @@
 from flask import render_template, redirect, flash, url_for, request, json, session
 from forms import LoginForm, RegisterFormStudent, RegisterFormTeacher, StudentInfoForm, TeacherInfoForm, TestCreaterForm
-from models import app, Student, Teacher, College, Major, Subject, Plan, Page, PageStructure, Test, Class, TestType, classes_plans, db
+from models import app, Student, Teacher, College, Major, Subject, Plan, Page, Test, Class, TestType, classes_plans, db
 from sqlalchemy.exc import IntegrityError, InternalError
 from sqlalchemy import func
-import time
+import time, json
 
 
 @app.route("/", methods=['GET', 'POST'])
@@ -238,21 +238,19 @@ def testCreater():
         return render_template("教师创建考试页面.html", form=form)
     else:
         form = TestCreaterForm(request.form)
-        pageStructure = PageStructure()
-        pageStructure.choice_question_number = form.choice_question_number.data
-        pageStructure.fill_blank_question_number = form.fill_blank_question_number.data
-        pageStructure.true_false_question_number = form.true_false_question_number.data
-        pageStructure.free_response_question_number = form.free_response_question_number.data
-        db.session.add(pageStructure)
-        db.session.commit()
+        pageStructure = {}
+        pageStructure["choice_question"] = form.choice_question_number.data
+        pageStructure["fill_blank_question"] = form.fill_blank_question_number.data
+        pageStructure["true_false_question"] = form.true_false_question_number.data
+        pageStructure["free_response_question"] = form.free_response_question_number.data
 
         plan = Plan()
         plan.id_subject = form.subject.data
-        plan.id_page_structure = pageStructure.id
         plan.date = form.date.data
         plan.time_start = form.start_time.data
         plan.time_end = form.end_time.data
         plan.level = form.level.data
+        plan.page_structure = json.dumps(pageStructure)
 
         classes = form.class_.data
         for class_id in classes:
@@ -396,19 +394,46 @@ def studentRegisterSelects():
 
 @app.route("/createPage/<int:id_plan>", methods=['GET', 'POST'])
 def createPage(id_plan):
-    # id_plan还没用
-    # plan = Plan.query.get(id_plan)
-    # test_list = Test.query.filter(Test.id_subject == plan.id_subject).order_by(func.rand()).limit(30)
-    test_list = Test.query.order_by(func.rand()).limit(30)
-    # 用page
+    plan = Plan.query.get(id_plan)
+    page_structure_detail = {"choice_question":[],"fill_blank_question":[],"true_false_question":[],"free_response_question":[]}
+    page_structure = json.loads(plan.page_structure)
+    test_list = {"choice_question":[],"fill_blank_question":[],"true_false_question":[],"free_response_question":[]}
+    for key in page_structure_detail.keys():
+        if plan.level == 1:
+            page_structure_detail[key][1] = int(page_structure[key+"_number"]*0.3)
+            page_structure_detail[key][2] = int(page_structure[key+"_number"]*0.1)
+            page_structure_detail[key][0] = int(page_structure[key+"_number"]-page_structure_detail[key][1]-page_structure_detail[key][2])
+        if plan.level == 2:
+            page_structure_detail[key][1] = int(page_structure[key+"_number"]*0.6)
+            page_structure_detail[key][2] = int(page_structure[key+"_number"]*0.2)
+            page_structure_detail[key][0] = int(page_structure[key+"_number"]-page_structure_detail[key][1]-page_structure_detail[key][2])
+        if plan.level == 3:
+            page_structure_detail[key][1] = int(page_structure[key+"_number"]*0.4)
+            page_structure_detail[key][2] = int(page_structure[key+"_number"]*0.4)
+            page_structure_detail[key][0] = int(page_structure[key+"_number"]-page_structure_detail[key][1]-page_structure_detail[key][2])
+    for key in test_list.keys():
+        test_type_id = TestType.query.filter(TestType.name == key).first()
+        for i in range(3):
+            test_list_list=Test.query.filter(Test.id_subject == plan.id_subject).filter(Test.type == test_type_id ).filter(Test.level == i+1).order_by(func.rand()).limit(page_structure_detail[key][i])
+            for test in test_list_list:
+                test_list[key].append(test)
 
+    contents = {"choice_question":[],"fill_blank_question":[],"true_false_question":[],"free_response_question":[]}
+    id_list = {"choice_question":[],"fill_blank_question":[],"true_false_question":[],"free_response_question":[]}
+    for key in contents.keys():
+        for test in test_list[key]:
+            contents[key].append({"question": test.question, "id": test.id})
+            id_list[key].append(test.id)
 
+    page = Page()
+    page.content = json.dumps(id_list)
+    page.id_plan = id_plan
+    page.id_student = session["uid"]
+    db.session.add(page)
+    db.session.commit()
 
+    session["id_page"] = page.id
 
-
-    contents = []
-    for test in test_list:
-        contents.append({"question": test.question, "id": test.id})
     return render_template('考试页面.html', contents=contents)
 
 

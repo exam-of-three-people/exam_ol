@@ -12,12 +12,15 @@
 {% block body %}
 <body>
 <form action="/get_score" method="post">
-    {% for item in  contents %}
+    {% for key in contents.keys() %}
+        {{ key }}
+        {% for item in contents[key]  %}
     <textarea readonly="readonly">{{ item.question }}</textarea>
         <br>
         <input name="{{ item.id }}">
         <br>
     {% endfor %}
+{% endfor %}
     <input type="submit" value="交卷">
 </form>
 </body>
