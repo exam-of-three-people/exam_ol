@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 {% extends "base.html" %}
+{% import 'bootstrap/wtf.html' as wtf %}
 {% block head %}
 <html lang="en">
 <head>
@@ -12,10 +13,10 @@
 
 {% block  body%}
 <body>
-<div class="container">
+<div class="container ">
 	<div class="row clearfix">
 		<div class="col-md-7 column">
-			<h1 class="text-right text-info">
+			<h1 class="text-right text-info" style="margin-top: -2px">
 				智能考试系统
 			</h1>
 		</div>
@@ -23,26 +24,26 @@
 			<div class="panel-group" id="panel-338214">
 				<div class="panel panel-default">
 
-						 <button   class="panel-title collapsed" href="#panel-element-846427" data-toggle="collapse" data-parent="#panel-338214 ">登录和注册</button>
+						 <button   class="  col-md-12 panel-title collapsed" href="#panel-element-846427" data-toggle="collapse" data-parent="#panel-338214 ">登录和注册</button>
 
 					<div class="panel-collapse collapse" id="panel-element-846427">
 						<div class="panel-body">
 							{% for msg in get_flashed_messages() %}
     <p class="login-box-msg">{{ msg }}</p>
 {% endfor %}
-<form action="/login" method="post" class="form-horizontal">
-    <div class="form-group ">{{ form.id.label(class_="col-sm-3 control-label glyphicon glyphicon glyphicon-user") }}<div class="col-sm-6">{{ form.id(class_="form-control",style="margain-left") }}</div>{{ form.role(style="margain-left") }}</div>
-    <div class="form-group ">{{ form.password.label(class_="glyphicon glyphicon-tree-conifer col-sm-1 control-label ") }}<div class="col-sm-4">{{ form.csrf_token(class_="form-control") }}{{ form.password(class_="col-sm-12") }}</div></div>
-    <div class="form-group">{{ form.remember_me }}{{ form.remember_me.label(class_="col-sm-1 control-label") }}</div>
+                        {{ wtf.quick_form(form,url_for('index'), form_type="horizontal",horizontal_columns=('lg', 3, 7)) }}
+{#<form action="/login" method="post" class="form-horizontal">#}
+{#{{ form.id }}#}
+{#  {{ form.password(class_="form-control")}}{{ form.password.label }}#}
+{#{{ form.remember_me.label }}{{ form.remember_me }}#}
+{#    {{ form.login(style='margin-left:15px',type_="button") }}#}
+{##}
+{#</form>#}
 
-    {{ form.login(style='margin-left:15px',type_="button") }}
-</form>
-
-
-         <div class="container">
+         <div class="container position-absolute">
 	<div class="row clearfix">
 		<div class="col-md-4 column">
-			 <button  role="button" href="#modal-container-557207" data-toggle="modal" >注册</button>
+			 <button  role="button" href="#modal-container-557207" data-toggle="modal" class="btn btn-primary col-sm-8" style="margin-left: 97px; margin-top:-49px">注册</button>
 			<div class="modal fade" id="modal-container-557207" role="dialog" aria-hidden="true" aria-labelledby="myModalLabel">
 				<div class="modal-dialog">
 					<div class="modal-content">
