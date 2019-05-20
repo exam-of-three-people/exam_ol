@@ -400,17 +400,17 @@ def createPage(id_plan):
     test_list = {"choice_question":[],"fill_blank_question":[],"true_false_question":[],"free_response_question":[]}
     for key in page_structure_detail.keys():
         if plan.level == 1:
-            page_structure_detail[key][1] = int(page_structure[key+"_number"]*0.3)
-            page_structure_detail[key][2] = int(page_structure[key+"_number"]*0.1)
-            page_structure_detail[key][0] = int(page_structure[key+"_number"]-page_structure_detail[key][1]-page_structure_detail[key][2])
+            page_structure_detail[key][1] = int(page_structure[key]*0.3)
+            page_structure_detail[key][2] = int(page_structure[key]*0.1)
+            page_structure_detail[key][0] = int(page_structure[key]-page_structure_detail[key][1]-page_structure_detail[key][2])
         if plan.level == 2:
-            page_structure_detail[key][1] = int(page_structure[key+"_number"]*0.6)
-            page_structure_detail[key][2] = int(page_structure[key+"_number"]*0.2)
-            page_structure_detail[key][0] = int(page_structure[key+"_number"]-page_structure_detail[key][1]-page_structure_detail[key][2])
+            page_structure_detail[key][1] = int(page_structure[key]*0.6)
+            page_structure_detail[key][2] = int(page_structure[key]*0.2)
+            page_structure_detail[key][0] = int(page_structure[key]-page_structure_detail[key][1]-page_structure_detail[key][2])
         if plan.level == 3:
-            page_structure_detail[key][1] = int(page_structure[key+"_number"]*0.4)
-            page_structure_detail[key][2] = int(page_structure[key+"_number"]*0.4)
-            page_structure_detail[key][0] = int(page_structure[key+"_number"]-page_structure_detail[key][1]-page_structure_detail[key][2])
+            page_structure_detail[key][1] = int(page_structure[key]*0.4)
+            page_structure_detail[key][2] = int(page_structure[key]*0.4)
+            page_structure_detail[key][0] = int(page_structure[key]-page_structure_detail[key][1]-page_structure_detail[key][2])
     for key in test_list.keys():
         test_type_id = TestType.query.filter(TestType.name == key).first()
         for i in range(3):
