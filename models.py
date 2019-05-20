@@ -36,7 +36,7 @@ class Student(db.Model):
         return check_password_hash(self.password_hash, password)
 
     def __repr__(self):
-        return ("<Student %r>" % self.id)
+        return ("[学生 %r]" % self.id)
 
     pass
 
@@ -56,7 +56,7 @@ class Teacher(db.Model):
         self.password_hash = generate_password_hash(password)
 
     def __repr__(self):
-        return "<Teacher %r>" % self.id
+        return "[%r老师]" % self.name
 
     pass
 
@@ -70,7 +70,7 @@ class College(db.Model):
     majors = db.relationship("Major", backref="tb_college")
 
     def __repr__(self):
-        return "<College %r>" % self.name
+        return "[学院 %r]" % self.name
 
     pass
 
@@ -85,7 +85,7 @@ class Major(db.Model):
     classes = db.relationship("Class", backref="tb_major")
 
     def __repr__(self):
-        return "<Major %r>" % self.name
+        return "[专业 %r]" % self.name
 
     pass
 
@@ -99,7 +99,7 @@ class Subject(db.Model):
     tests = db.relationship("Test", backref="tb_subject")
 
     def __repr__(self):
-        return "<Subject %r>" % self.name
+        return "[学科 %r]" % self.name
 
     pass
 
@@ -125,7 +125,7 @@ class Plan(db.Model):
                               backref=db.backref("tb_plan"))
 
     def __repr__(self):
-        return "<Plan %r>" % self.id
+        return "[考试计划 %r]" % self.id
     pass
 
 
@@ -140,7 +140,7 @@ class Page(db.Model):
     code = db.Column(db.Integer, nullable=True)
 
     def __repr__(self):
-        return "<Page %r>" % self.id
+        return "[试卷 %r]" % self.id
 
     pass
 
@@ -155,7 +155,7 @@ class Test(db.Model):
     level = db.Column(db.Integer, nullable=False)
 
     def __repr__(self):
-        return "<Test %r>" % self.id
+        return "[试题 %r]" % self.id
 
     pass
 
@@ -169,7 +169,7 @@ class Class(db.Model):
     students = db.relationship("Student", backref="tb_class")
 
     def __repr__(self):
-        return "<Class %r>" % self.id
+        return "[%r]" % self.id
 
     pass
 
@@ -182,4 +182,4 @@ class TestType(db.Model):
     tests = db.relationship("Test", backref="tb_test_type")
 
     def __repr__(self):
-        return "<TestType %r>" % self.name
+        return "[%r]" % self.name
