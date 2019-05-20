@@ -169,7 +169,7 @@ class Class(db.Model):
     students = db.relationship("Student", backref="tb_class")
 
     def __repr__(self):
-        return "[%r]" % self.id
+        return "[%r]" % self.name
 
     pass
 
