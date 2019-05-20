@@ -12,10 +12,28 @@
 
 {% block body %}
 <body>
-{% for msg in get_flashed_messages() %}
+<div class="container">
+	<div class="row clearfix">
+		<div class="col-md-2 column">
+		</div>
+		<div class="col-md-8 column">
+            {% for msg in get_flashed_messages() %}
     <p class="login-box-msg">{{ msg }}</p>
 {% endfor %}
-{{ wtf.quick_form(form,url_for('teacherRegister'), form_type="horizontal",horizontal_columns=('lg', 1, 5)) }}
+        <br>
+        <br>
+{{ wtf.quick_form(form,url_for('teacherRegister'), form_type="horizontal") }}
+		</div>
+		<div class="col-md-2 column">
+		</div>
+	</div>
+</div>
+
+
+
+
+
+
 {#<form action="/teacherRegister" method="post">#}
 {#    {{ form.id.label }}{{ form.id }}#}
 {#    {{ form.name.label }}{{ form.name }}#}

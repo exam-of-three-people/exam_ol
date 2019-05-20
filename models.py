@@ -20,6 +20,7 @@ class Student(db.Model):
     id_major = db.Column(db.Integer, db.ForeignKey('tb_major.id'), nullable=False)
     grade = db.Column(db.Integer, nullable=False)
     id_class = db.Column(db.Integer, db.ForeignKey('tb_class.id'), nullable=False)
+    current_page_id = db.Column(db.Integer, nullable=True, default=None)
 
     pages = db.relationship("Page", backref="tb_student")
 
@@ -135,6 +136,7 @@ class Page(db.Model):
     id_student = db.Column(db.Integer, db.ForeignKey('tb_student.id'), nullable=False)
     content = db.Column(db.String(1024), nullable=False)
     answer = db.Column(db.Text, nullable=True)
+    rest_time = db.Column(db.Interval, nullable=True)
     code = db.Column(db.Integer, nullable=True)
 
     def __repr__(self):

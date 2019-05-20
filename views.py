@@ -3,7 +3,7 @@ from forms import LoginForm, RegisterFormStudent, RegisterFormTeacher, StudentIn
 from models import app, Student, Teacher, College, Major, Subject, Plan, Page, Test, Class, TestType, classes_plans, db
 from sqlalchemy.exc import IntegrityError, InternalError
 from sqlalchemy import func
-import time, json
+import time, json, datetime
 
 
 @app.route("/", methods=['GET', 'POST'])

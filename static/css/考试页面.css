@@ -1,0 +1,9 @@
+.body{
+    background: url(../image/考试页面背景边框.jpg) no-repeat;
+    background-size: 100% 100%;
+}
+textarea{
+    text-align: center;
+    width: 10%;
+
+}

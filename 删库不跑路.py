@@ -18,7 +18,7 @@ classes = []
 for i in range(1,9):
     colleges.append("学院"+str(i))
     majors.append("专业"+str(i))
-    classes.append(str(i) + "班")
+    classes.append("_"+str(i) + "班")
     subjects.append("学科"+str(i))
 
 for college_name in colleges:
