@@ -10,7 +10,7 @@ level_random = [1, 2, 3]
 question_random = "qwertyuiopasdfghjklzxcvbnm"
 type_names = ["choice_question", "fill_blank_question", "true_false_question", "free_response_question"]
 subjects = [1]
-types = [3,4,5,6]
+types = [1,2,3,4]
 for answer in answer_random:
     for level in level_random:
         for type in types:
