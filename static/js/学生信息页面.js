@@ -17,7 +17,6 @@ function Bind(str) {
     alert($("#college").html());
     $("#college").val(str);
 
-
 }
 
 function collegeBind() {

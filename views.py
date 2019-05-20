@@ -446,18 +446,18 @@ def get_score():
     if len(request.form) != 0:
         for key in request.form:
             test = Test.query.get(key)
-
+            answer.append({key: request.form[key]})
             if test.answer == request.form[key]:
                 rightnum += 1
             else:
                 pass
         score = 100 * rightnum / len(request.form)
-        # data = {"score": score, "wronglist": wronglist}
     else:
         score = 0
 
     page = Page.query.get(session["id_page"])
     page.code = score
+    page.answer = json.dumps(answer)
     db.session.add(page)
     db.session.commit()
     return "<h1>分数：%d</h1><br>" % score
