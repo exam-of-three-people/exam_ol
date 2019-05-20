@@ -1,29 +1,44 @@
 <!DOCTYPE html>
-{% extends "base.html" %}
-<html lang="en">
-{% block head %}
-<head>
+<html>
+
+<head></head>
+
+<body>{% extends "base.html" %} {% block head %}
     <meta charset="UTF-8">
-    <title>考试页面</title>
-</head>
+    <title>welcome to 考试页面</title>
+    <link rel="stylesheet" type="text/css" href="../static/css/考试页面.css"> {% endblock %} {% block body %}
+    <div class="container">
+        <div class="col-md-2 column">
+        </div>
+        <div class="col-md-8 column ">
+            <form action="/get_score" method="post">
+                <p>{% for key in contents.keys() %}</p>
+
+                    <span class="label label-default col-sm-2">{{ key }}</span> {% for item in contents[key] %}
+                        <textarea id="text" readonly="readonly" class="col-md-12 column " contenteditable="true"
+                                  style="resize: none;border-color: moccasin">{{ item.question }}</textarea>
+                        <br>
+                        {% if key=='choice_question' %}
+                            <dd>
+                                <label><input type="radio" name={{ item.id }}   value="A">A</label>
+                                <label><input type="radio" name={{ item.id }}   value="B">B</label>
+                                <label><input type="radio" name={{ item.id }}  value="C">C</label>
+                                <label><input type="radio" name={{ item.id }}  value="D">D</label>
+                            </dd>
+                        {% elif key == 'true_false_question' %}
+                            <label><input type="radio" name={{ item.id }}   value="0">√</label>
+                            <label><input type="radio" name={{ item.id }}   value="1">×</label>
+                        {% else %}
+                            <input name="{{ item.id }}" style="border-top:0px ;">
+                        {% endif %}
+                        <br> {% endfor %} {% endfor %} <input type="submit" value="交卷">
+
+            </form>
+        </div>
+        <div class="col-md-2 column">
+        </div>
+    </div>
 {% endblock %}
-
-
-{% block body %}
-<body> * Running on http://127.0.0.1:5000/ (Press CTRL+C to quit)
-
-<form action="/get_score" method="post">
-    {% for key in contents.keys() %}
-        {{ key }}
-        {% for item in contents[key]  %}
-    <textarea readonly="readonly">{{ item.question }}</textarea>
-        <br>
-        <input name="{{ item.id }}">
-        <br>
-    {% endfor %}
-{% endfor %}
-    <input type="submit" value="交卷">
-</form>
 </body>
-{% endblock %}
+
 </html>
