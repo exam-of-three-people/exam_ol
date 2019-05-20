@@ -394,48 +394,75 @@ def studentRegisterSelects():
 
 @app.route("/createPage/<int:id_plan>", methods=['GET', 'POST'])
 def createPage(id_plan):
-    plan = Plan.query.get(id_plan)
-    page_structure_detail = {"choice_question":[0,0,0],"fill_blank_question":[0,0,0],"true_false_question":[0,0,0],"free_response_question":[0,0,0]}
-    page_structure = json.loads(plan.page_structure)
-    print(page_structure)
-    test_list = {"choice_question":[],"fill_blank_question":[],"true_false_question":[],"free_response_question":[]}
-    for key in page_structure_detail.keys():
-        if plan.level == 1:
-            page_structure_detail[key][1] = int(page_structure[key]*0.3)
-            page_structure_detail[key][2] = int(page_structure[key]*0.1)
-            page_structure_detail[key][0] = int(page_structure[key]-page_structure_detail[key][1]-page_structure_detail[key][2])
-        if plan.level == 2:
-            page_structure_detail[key][1] = int(page_structure[key]*0.6)
-            page_structure_detail[key][2] = int(page_structure[key]*0.2)
-            page_structure_detail[key][0] = int(page_structure[key]-page_structure_detail[key][1]-page_structure_detail[key][2])
-        if plan.level == 3:
-            page_structure_detail[key][1] = int(page_structure[key]*0.4)
-            page_structure_detail[key][2] = int(page_structure[key]*0.4)
-            page_structure_detail[key][0] = int(page_structure[key]-page_structure_detail[key][1]-page_structure_detail[key][2])
-    for key in test_list.keys():
-        test_type = TestType.query.filter(TestType.name == key).first()
-        for i in range(3):
-            test_list_list=Test.query.filter(Test.id_subject == plan.id_subject).filter(Test.type == test_type.id).filter(Test.level == i+1).order_by(func.rand()).limit(page_structure_detail[key][i])
-            for test in test_list_list:
-                test_list[key].append(test)
+    student = Student.query.get(session["uid"])
+    current_page_id = None
+    # print(type(student.current_page_id))
+    # if student.current_page_id is None:
+    if current_page_id is None:
+        plan = Plan.query.get(id_plan)
+        page_structure_detail = {"choice_question": [0, 0, 0], "fill_blank_question": [0, 0, 0],
+                                 "true_false_question": [0, 0, 0], "free_response_question": [0, 0, 0]}
+        page_structure = json.loads(plan.page_structure)
+        print(page_structure)
+        test_list = {"choice_question": [], "fill_blank_question": [], "true_false_question": [],
+                     "free_response_question": []}
+        for key in page_structure_detail.keys():
+            if plan.level == 1:
+                page_structure_detail[key][1] = int(page_structure[key] * 0.3)
+                page_structure_detail[key][2] = int(page_structure[key] * 0.1)
+                page_structure_detail[key][0] = int(
+                    page_structure[key] - page_structure_detail[key][1] - page_structure_detail[key][2])
+            if plan.level == 2:
+                page_structure_detail[key][1] = int(page_structure[key] * 0.6)
+                page_structure_detail[key][2] = int(page_structure[key] * 0.2)
+                page_structure_detail[key][0] = int(
+                    page_structure[key] - page_structure_detail[key][1] - page_structure_detail[key][2])
+            if plan.level == 3:
+                page_structure_detail[key][1] = int(page_structure[key] * 0.4)
+                page_structure_detail[key][2] = int(page_structure[key] * 0.4)
+                page_structure_detail[key][0] = int(
+                    page_structure[key] - page_structure_detail[key][1] - page_structure_detail[key][2])
+        for key in test_list.keys():
+            test_type = TestType.query.filter(TestType.name == key).first()
+            for i in range(3):
+                test_list_list = Test.query.filter(Test.id_subject == plan.id_subject).filter(
+                    Test.type == test_type.id).filter(Test.level == i + 1).order_by(func.rand()).limit(
+                    page_structure_detail[key][i])
+                for test in test_list_list:
+                    test_list[key].append(test)
 
-    contents = {"choice_question":[],"fill_blank_question":[],"true_false_question":[],"free_response_question":[]}
-    id_list = {"choice_question":[],"fill_blank_question":[],"true_false_question":[],"free_response_question":[]}
-    for key in contents.keys():
-        for test in test_list[key]:
-            contents[key].append({"question": test.question, "id": test.id})
-            id_list[key].append(test.id)
+        id_list = {"choice_question": [], "fill_blank_question": [], "true_false_question": [],
+                   "free_response_question": []}
+        for key in id_list.keys():
+            for test in test_list[key]:
+                id_list[key].append(test.id)
 
-    page = Page()
-    page.content = json.dumps(id_list)
-    page.id_plan = id_plan
-    page.id_student = session["uid"]
-    db.session.add(page)
-    db.session.commit()
+        page = Page()
+        page.content = json.dumps(id_list)
+        page.id_plan = id_plan
+        page.id_student = session["uid"]
+        # page.rest_time = plan.time_end - plan.time_start
+        page.rest_time = 0
+        db.session.add(page)
+        db.session.commit()
 
-    session["id_page"] = page.id
+        # student.current_page_id = page.id
+        # db.session.commit()
 
-    return render_template('考试页面.html', contents=contents)
+    else:
+        page = Page.query.get(student.current_page_id)
+        id_list = json.loads(page.content)
+        pass
+
+    contents = {"choice_question": [], "fill_blank_question": [], "true_false_question": [],
+                "free_response_question": []}
+    # answer = json.loads(page.answer)
+    for type in id_list:
+        for id in id_list[type]:
+            test = Test.query.get(id)
+            contents[type].append({"id": test.id, "question": test.question, "answer": json.loads(page.answer)[id] if page.answer else ""})
+
+    return render_template('考试页面.html', contents=contents, rest_time=page.rest_time)
 
 
 @app.route("/get_score", methods=['GET', 'POST'])
