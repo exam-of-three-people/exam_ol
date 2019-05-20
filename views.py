@@ -3,7 +3,7 @@ from forms import LoginForm, RegisterFormStudent, RegisterFormTeacher, StudentIn
 from models import app, Student, Teacher, College, Major, Subject, Plan, Page, Test, Class, TestType, classes_plans, db
 from sqlalchemy.exc import IntegrityError, InternalError
 from sqlalchemy import func
-import time, json
+import time, json, datetime
 
 
 @app.route("/", methods=['GET', 'POST'])
@@ -430,12 +430,13 @@ def createPage(id_plan):
     page.content = json.dumps(id_list)
     page.id_plan = id_plan
     page.id_student = session["uid"]
+    page.rest_time = plan.time_end - plan.time_start
     db.session.add(page)
     db.session.commit()
 
     session["id_page"] = page.id
 
-    return render_template('考试页面.html', contents=contents)
+    return render_template('考试页面.html', contents=contents, rest_time=page.rest_time)
 
 
 @app.route("/get_score", methods=['GET', 'POST'])
