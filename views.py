@@ -395,8 +395,9 @@ def studentRegisterSelects():
 @app.route("/createPage/<int:id_plan>", methods=['GET', 'POST'])
 def createPage(id_plan):
     plan = Plan.query.get(id_plan)
-    page_structure_detail = {"choice_question":[],"fill_blank_question":[],"true_false_question":[],"free_response_question":[]}
+    page_structure_detail = {"choice_question":[0,0,0],"fill_blank_question":[0,0,0],"true_false_question":[0,0,0],"free_response_question":[0,0,0]}
     page_structure = json.loads(plan.page_structure)
+    print(page_structure)
     test_list = {"choice_question":[],"fill_blank_question":[],"true_false_question":[],"free_response_question":[]}
     for key in page_structure_detail.keys():
         if plan.level == 1:
@@ -412,9 +413,9 @@ def createPage(id_plan):
             page_structure_detail[key][2] = int(page_structure[key]*0.4)
             page_structure_detail[key][0] = int(page_structure[key]-page_structure_detail[key][1]-page_structure_detail[key][2])
     for key in test_list.keys():
-        test_type_id = TestType.query.filter(TestType.name == key).first()
+        test_type = TestType.query.filter(TestType.name == key).first()
         for i in range(3):
-            test_list_list=Test.query.filter(Test.id_subject == plan.id_subject).filter(Test.type == test_type_id ).filter(Test.level == i+1).order_by(func.rand()).limit(page_structure_detail[key][i])
+            test_list_list=Test.query.filter(Test.id_subject == plan.id_subject).filter(Test.type == test_type.id).filter(Test.level == i+1).order_by(func.rand()).limit(page_structure_detail[key][i])
             for test in test_list_list:
                 test_list[key].append(test)
 
@@ -440,19 +441,25 @@ def createPage(id_plan):
 @app.route("/get_score", methods=['GET', 'POST'])
 def get_score():
     rightnum = 0
-    wronglist = []
-    print(request.form)
+    answer = []
+
     if len(request.form) != 0:
         for key in request.form:
             test = Test.query.get(key)
+
             if test.answer == request.form[key]:
                 rightnum += 1
             else:
-                wronglist.append(key)
+                pass
         score = 100 * rightnum / len(request.form)
         # data = {"score": score, "wronglist": wronglist}
     else:
         score = 0
+
+    page = Page.query.get(session["id_page"])
+    page.code = score
+    db.session.add(page)
+    db.session.commit()
     return "<h1>分数：%d</h1><br>" % score
 
 
