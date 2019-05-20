@@ -6,7 +6,7 @@ from wtforms.validators import DataRequired, EqualTo, InputRequired
 
 class LoginForm(FlaskForm):
     id = StringField(label="学工号", validators=[DataRequired(message="id is None")])
-    role = SelectField(coerce=int, choices=[(1, '学生'), (2, '教师')])
+    role = SelectField(label="身份",coerce=int, choices=[(1, '学生'), (2, '教师')])
     remember_me = BooleanField(label="记住密码", default=False)
     password = PasswordField(label='密码', validators=[DataRequired(message="password is None")])
     login = SubmitField(label="登录")
