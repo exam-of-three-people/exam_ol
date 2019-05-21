@@ -132,7 +132,7 @@ for answer in ['0', '1', '0', '1']:
     for level in range(1, 3+1):
         for subject in subjects:
             for ch in question_random:
-                question = "☆" * level + answer + "是这题的答案，" + ch + "是个随机字母。" + "题型是判断题"+ "0代表错误，1代表正确"
+                question = "☆" * level + answer + "是这题的答案，" + ch + "是个随机字母。" + "题型是判断题。"+ "0代表错误，1代表正确"
                 test = Test()
                 test.type = 3
                 test.question = question
@@ -147,7 +147,7 @@ for answer in ['A', 'B', 'C', 'D']:
     for level in range(1, 3+1):
         for subject in subjects:
             for ch in question_random:
-                question = "☆" * level + answer + "是这题的答案，" + ch + "是个随机字母。" + "题型是选择题"
+                question = "☆" * level + answer + "是这题的答案，" + ch + "是个随机字母。" + "题型是解答题"
                 test = Test()
                 test.type = 4
                 test.question = question
