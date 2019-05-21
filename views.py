@@ -51,7 +51,7 @@ def index():
         except Exception:
             pass
     form = LoginForm()
-    return render_template("登录页面.html", form=form)
+    return render_template("登录页面_B.html", form=form)
 
 
 @app.route("/studentMenu", methods=['GET', 'POST'])
@@ -60,7 +60,7 @@ def studentMenu():
     id_class = student.id_class
     class_ = Class.query.get(id_class)
     plans = Plan.query.all()
-    return render_template("学生菜单.html", plans=plans)
+    return render_template("学生菜单_B.html", plans=plans)
 
 
 @app.route("/teacherMenu", methods=['GET', 'POST'])
@@ -395,10 +395,8 @@ def studentRegisterSelects():
 @app.route("/createPage/<int:id_plan>", methods=['GET', 'POST'])
 def createPage(id_plan):
     student = Student.query.get(session["uid"])
-    current_page_id = None
     # print(type(student.current_page_id))
-    # if student.current_page_id is None:
-    if current_page_id is None:
+    if student.current_page_id is None:
         plan = Plan.query.get(id_plan)
         page_structure_detail = {"choice_question": [0, 0, 0], "fill_blank_question": [0, 0, 0],
                                  "true_false_question": [0, 0, 0], "free_response_question": [0, 0, 0]}
@@ -441,13 +439,12 @@ def createPage(id_plan):
         page.content = json.dumps(id_list)
         page.id_plan = id_plan
         page.id_student = session["uid"]
-        # page.rest_time = plan.time_end - plan.time_start
-        page.rest_time = 0
+        page.rest_time = plan.time_end - plan.time_start
         db.session.add(page)
         db.session.commit()
 
-        # student.current_page_id = page.id
-        # db.session.commit()
+        student.current_page_id = page.id
+        db.session.commit()
 
     else:
         page = Page.query.get(student.current_page_id)
@@ -456,7 +453,6 @@ def createPage(id_plan):
 
     contents = {"choice_question": [], "fill_blank_question": [], "true_false_question": [],
                 "free_response_question": []}
-    # answer = json.loads(page.answer)
     for type in id_list:
         for id in id_list[type]:
             test = Test.query.get(id)
@@ -482,7 +478,8 @@ def get_score():
     else:
         score = 0
 
-    page = Page.query.get(session["id_page"])
+    student = Student.query.get(session["uid"])
+    page = Page.query.get(student.current_page_id)
     page.code = score
     page.answer = json.dumps(answer)
     db.session.add(page)

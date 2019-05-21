@@ -9,7 +9,7 @@ class LoginForm(FlaskForm):
     role = SelectField(label="身份",coerce=int, choices=[(1, '学生'), (2, '教师')])
     remember_me = BooleanField(label="记住密码", default=False)
     password = PasswordField(label='密码', validators=[DataRequired(message="password is None")])
-    login = SubmitField(label="登录")
+    login = SubmitField(u'登　　录', render_kw={"style": "width:137%"})
     pass
 
 
