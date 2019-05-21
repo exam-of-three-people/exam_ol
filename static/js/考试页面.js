@@ -14,6 +14,11 @@ function Submission_results() {
     alert('你的成绩为' + str(lv))
 }
 
+function hg() {
+    alert('你的成绩是' + str(lv))
+
+}
+
 // ####################################################################
 
 function settime(remainTime) {
