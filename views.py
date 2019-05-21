@@ -51,7 +51,7 @@ def index():
         except Exception:
             pass
     form = LoginForm()
-    return render_template("登录页面_B.html", form=form)
+    return render_template("登录页面.html", form=form)
 
 
 @app.route("/studentMenu", methods=['GET', 'POST'])
@@ -59,7 +59,8 @@ def studentMenu():
     student = Student.query.get(session["uid"])
     id_class = student.id_class
     class_ = Class.query.get(id_class)
-    plans = Plan.query.all()
+    now = datetime.datetime.now()
+    plans = Plan.query.filter(Plan.time_end > now).all()
     return render_template("学生菜单.html", plans=plans)
 
 
@@ -106,7 +107,7 @@ def teacherSignUp():
 
 
 # ===========================浩教师信息页面======================================
-#===========================教师信息页面======================================
+# ===========================教师信息页面======================================
 @app.route("/teacherInfo", methods=['GET', 'POST'])
 def teacherInfo():
     # =======================存储信息======================================
@@ -133,7 +134,7 @@ def teacherInfo():
         teacher = Teacher.query.get(session["uid"])
         form.id.data = teacher.id
         form.name.data = teacher.name
-        return render_template("教师信息页面.html",form=form)
+        return render_template("教师信息页面.html", form=form)
 
 
 @app.route("/studentInfo", methods=['GET', 'POST'])
@@ -150,7 +151,7 @@ def studentInfo():
         else:
             first_grade = localtime.tm_year - 1
         a = first_grade - user.grade
-        grades = [user.grade+a, user.grade-1+a, user.grade-2+a, user.grade-3+a]
+        grades = [user.grade + a, user.grade - 1 + a, user.grade - 2 + a, user.grade - 3 + a]
         del grades[a]
         form.grade.choices = [(user.grade, user.grade),
                               (grades[0], grades[0]),
@@ -263,18 +264,18 @@ def testCreater():
 # ===============================================浩，教师列表页面（（（（（（（（（（（（=====================================
 @app.route("/testList/", methods=['GET', 'POST'])
 def testList():
-        if request.method == 'GET':
-            plans=Plan.query.all()
+    if request.method == 'GET':
+        plans = Plan.query.all()
 
-            return render_template('考试列表页面.html',plans=plans)
-        else:
-            return render_template( '教师菜单.html')
+        return render_template('考试列表页面.html', plans=plans)
+    else:
+        return render_template('教师菜单.html')
 
 
 @app.route("/delete/", methods=['GET', 'POST'])
 def delete():
     if request.method == 'GET':
-        user=Plan.query.get(request.args['id'])
+        user = Plan.query.get(request.args['id'])
         db.session.delete(user)
         db.session.commit()
         return redirect('/testList/')
@@ -395,13 +396,19 @@ def studentRegisterSelects():
 @app.route("/createPage/<int:id_plan>", methods=['GET', 'POST'])
 def createPage(id_plan):
     student = Student.query.get(session["uid"])
-    # print(type(student.current_page_id))
     if student.current_page_id is None:
         plan = Plan.query.get(id_plan)
+        for tested_student in plan.tested_students:
+            if student.id == tested_student.id:
+                flash("你已经参加过这场考试了")
+                return redirect("/studentMenu")
+        plan.tested_students.append(student)
+        if datetime.datetime.now() > plan.time_end:
+            flash("这场考试已经结束了")
+            return redirect("/studentMenu")
         page_structure_detail = {"choice_question": [0, 0, 0], "fill_blank_question": [0, 0, 0],
                                  "true_false_question": [0, 0, 0], "free_response_question": [0, 0, 0]}
         page_structure = json.loads(plan.page_structure)
-        print(page_structure)
         test_list = {"choice_question": [], "fill_blank_question": [], "true_false_question": [],
                      "free_response_question": []}
         for key in page_structure_detail.keys():
@@ -453,17 +460,18 @@ def createPage(id_plan):
 
     contents = {"choice_question": [], "fill_blank_question": [], "true_false_question": [],
                 "free_response_question": []}
-    for type in id_list:
-        for id in id_list[type]:
-            test = Test.query.get(id)
-            contents[type].append({"id": test.id, "question": test.question, "answer": json.loads(page.answer)[id] if page.answer else ""})
+    for type_ in id_list:
+        for id_ in id_list[type_]:
+            test = Test.query.get(id_)
+            contents[type_].append({"id": test.id, "question": test.question,
+                                    "answer": json.loads(page.answer)[id] if page.answer else ""})
 
     return render_template('考试页面.html', contents=contents, rest_time=page.rest_time)
 
 
 @app.route("/get_score", methods=['GET', 'POST'])
 def get_score():
-    rightnum = 0
+    right_num = 0
     answer = []
 
     if len(request.form) != 0:
@@ -471,19 +479,18 @@ def get_score():
             test = Test.query.get(key)
             answer.append({key: request.form[key]})
             if test.answer == request.form[key]:
-                rightnum += 1
+                right_num += 1
             else:
                 pass
-        score = 100 * rightnum / len(request.form)
+        score = 100 * right_num / len(request.form)
     else:
         score = 0
 
     student = Student.query.get(session["uid"])
     page = Page.query.get(student.current_page_id)
+    student.current_page_id = None
     page.code = score
     page.answer = json.dumps(answer)
     db.session.add(page)
     db.session.commit()
     return "<h1>分数：%d</h1><br>" % score
-
-

@@ -109,6 +109,11 @@ classes_plans = db.Table("classes_plans",
                          db.Column("class_id", db.Integer, db.ForeignKey("tb_class.id"))
                          )
 
+students_plans = db.Table("students_plans",
+                          db.Column("plan_id", db.Integer, db.ForeignKey("tb_plan.id")),
+                          db.Column("student_id", db.Integer, db.ForeignKey("tb_student.id"))
+                          )
+
 
 class Plan(db.Model):
     __tablename__ = "tb_plan"
@@ -122,9 +127,13 @@ class Plan(db.Model):
     classes = db.relationship('Class',
                               secondary=classes_plans,
                               backref=db.backref("tb_plan"))
+    tested_students = db.relationship('Student',
+                                      secondary=students_plans,
+                                      backref=db.backref("tb_plan"))
 
     def __repr__(self):
         return "[考试计划 %r]" % self.id
+
     pass
 
 
