@@ -441,7 +441,8 @@ def createPage(id_plan):
         page.content = json.dumps(id_list)
         page.id_plan = id_plan
         page.id_student = session["uid"]
-        page.rest_time = plan.time_end - plan.time_start
+        print(plan.time_start,plan.time_end)
+        # page.rest_time = plan.time_end.second
         page.rest_time = 0
         db.session.add(page)
         db.session.commit()
