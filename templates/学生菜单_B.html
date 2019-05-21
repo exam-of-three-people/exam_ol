@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+{% extends "base.html" %}
+<html lang="en">
+{% block head %}
+<head>
+    <meta charset="UTF-8">
+    <link href="../static/css/学生菜单.css" rel="stylesheet"/>
+    <link href="../static/js/学生菜单.js" rel="script"/>
+    <title>学生菜单</title>
+</head>
+{% endblock %}
+
+{% block body %}
+<body>
+{% for msg in get_flashed_messages() %}
+    <p class="login-box-msg">{{ msg }}</p>
+{% endfor %}<div class="container">
+	<div class="row clearfix">
+		<div class="col-md-12 column">
+			<nav class="navbar navbar-default" role="navigation">
+				<div class="navbar-header">
+					 <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1"> <span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button> <a class="navbar-brand" href="#">Brand</a>
+				</div>
+
+				<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+					<ul class="nav navbar-nav">
+						<li class="active">
+							 <a href="#">Link</a>
+						</li>
+						<li>
+							 <a href="#">Link</a>
+						</li>
+						<li class="dropdown">
+							 <a href="#" class="dropdown-toggle" data-toggle="dropdown">Dropdown<strong class="caret"></strong></a>
+							<ul class="dropdown-menu">
+								<li>
+									 <a href="#">Action</a>
+								</li>
+								<li>
+									 <a href="#">Another action</a>
+								</li>
+								<li>
+									 <a href="#">Something else here</a>
+								</li>
+								<li class="divider">
+								</li>
+								<li>
+									 <a href="#">Separated link</a>
+								</li>
+								<li class="divider">
+								</li>
+								<li>
+									 <a href="#">One more separated link</a>
+								</li>
+							</ul>
+						</li>
+					</ul>
+					<form class="navbar-form navbar-left" role="search">
+						<div class="form-group">
+							<input type="text" class="form-control" />
+						</div> <button type="submit" class="btn btn-default">Submit</button>
+					</form>
+					<ul class="nav navbar-nav navbar-right">
+						<li>
+							 <a href="#">Link</a>
+						</li>
+						<li class="dropdown">
+							 <a href="#" class="dropdown-toggle" data-toggle="dropdown">Dropdown<strong class="caret"></strong></a>
+							<ul class="dropdown-menu">
+								<li>
+									 <a href="#">Action</a>
+								</li>
+								<li>
+									 <a href="#">Another action</a>
+								</li>
+								<li>
+									 <a href="#">Something else here</a>
+								</li>
+								<li class="divider">
+								</li>
+								<li>
+									 <a href="#">Separated link</a>
+								</li>
+							</ul>
+						</li>
+					</ul>
+				</div>
+
+			</nav>
+		</div>
+	</div>
+
+
+	<div class="row clearfix">
+        <div class="col-md-3 column">
+			<div class="row clearfix">
+				<div class="col-md-9 column">
+
+                    <a class="btn btn-lg btn-block active" type="button"style="height:33%;width:100%;border-radius:5px;" href="studentMenu"><div style="margin-top:70%;">考试列表</div></a><br>
+                    <a class="btn btn-lg btn-block active" type="button"style="height:33%;width:100%;border-radius:5px;" href="studentInfo"><div style="margin-top:70%;">学生信息</div></a><br>
+                    <a class="btn btn-lg btn-block active" type="button"style="height:33%;width:100%;border-radius:5px;" href='testQuery'><div  class='text' style="margin-top:70%"  size="">成绩查询</div></a><br>
+                    <a class="btn btn-lg btn-block active" type="button"style="height:33%;width:100%;border-radius:5px;" href="logout"><div style="margin-top:70%">退出登录</div></a>
+
+				</div>
+				<div class="col-md-3 column">
+				</div>
+			</div>
+		</div>
+		<div class="col-md-9 column">
+			<div class="row clearfix">
+				<div class="col-md-1 column">
+				</div>
+				<div class="col-md-10 column">
+
+                <br>
+                    <table class="table">
+                        <tr class="table_header">
+                            <td>name</td>
+                            <td>subject</td>
+                            <td>date</td>
+                            <td>time_start</td>
+                            <td>time_end</td>
+                        </tr>
+                        {% for plan in plans %}
+                            <tr class="row1">
+                                <td>{{ plan.name }}</td>
+                                <td>{{ plan.subject }}</td>
+                                <td>{{ plan.date }}</td>
+                                <td>{{ plan.time_start }}</td>
+                                <td>{{ plan.time_end }}</td>
+                                <td><a href="{{ url_for('createPage', id_plan=plan.id) }}">开始考试</a></td>
+                            </tr>
+                        {% endfor %}
+                    </table>
+
+
+                    <div class="row clearfix">
+						<div class="col-md-2 column">
+						</div>
+						<div class="col-md-8 column">
+						</div>
+						<div class="col-md-2 column">
+						</div>
+					</div>
+				</div>
+				<div class="col-md-1 column">
+				</div>
+			</div>
+		</div>
+
+	</div>
+</div>
+
+{##}
+{#<div>#}
+{#    <table class="table">#}
+{#        <tr class="table_header">#}
+{#            <td>name</td>#}
+{#            <td>subject</td>#}
+{#            <td>date</td>#}
+{#            <td>time_start</td>#}
+{#            <td>time_end</td>#}
+{#        </tr>#}
+{#        {% for plan in plans %}#}
+{#            <tr class="row1">#}
+{#                <td>{{ plan.name }}</td>#}
+{#                <td>{{ plan.subject }}</td>#}
+{#                <td>{{ plan.date }}</td>#}
+{#                <td>{{ plan.time_start }}</td>#}
+{#                <td>{{ plan.time_end }}</td>#}
+{#                <td><a href="{{ url_for('createPage', id_plan=plan.id)}}">开始考试</a></td>#}
+{#            </tr>#}
+{#        {% endfor %}#}
+{#    </table>#}
+{#</div>#}
+</body>
+{% endblock %}
+</html>

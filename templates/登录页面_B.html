@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+{% extends "base_B.html" %}
+{% import 'bootstrap/wtf.html' as wtf %}
+{% block head %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>登录页面</title>
+  <script src="../static/js/jquery.js" type="text/javascript"></script>
+<script src="../static/js/登录页面.js" type="text/javascript"></script>
+</head>
+{% endblock %}
+
+{% block  body%}
+<body>
+<div class="container">
+	<div class="row clearfix">
+		<div class="col-md-4 column">
+		</div>
+		<div class="col-md-4 column" >
+            <h1 class="text-center text-info"><br><br>智能考试系统<br><br></h1>
+
+            {% for msg in get_flashed_messages() %}
+            <p class="alert alert-dismissable alert-info">{{ msg }}</p>
+            {% endfor %}
+
+{#            <form role="form">#}
+{#				<div class="form-group">#}
+{#					 <label for="id">{{ form.id.label }}</label> <input type="text" class="form-control" id={{ form.id }}/>#}
+{#				</div>#}
+{#                <div class="form-group">#}
+{#					 {{ form.role }}#}
+{#				</div>#}
+{#				<div class="form-group">#}
+{#					 <label for="password">{{ form.password.label }}</label>{{ form.csrf_token }}<input type="password" class="form-control" id={{ form.password }} />#}
+{#				</div>#}
+{#				<div class="checkbox">#}
+{#                  <label><input id={{ form.remember_me }} type="checkbox">{{ form.remember_me.label }}</label>#}
+{#                </div>#}
+{#				<button class="btn btn-default" type="submit">Submit</button>#}
+{#			</form>#}
+{#        </div>#}
+
+            {{ wtf.quick_form(form,url_for('index'), form_type="horizontal",horizontal_columns=('lg', 3, 9)) }}
+			 <button role="button" href="#modal-container-557207" data-toggle="modal" class="btn btn-default" style="width:100%">注　　册</button>
+            <div class="modal fade" id="modal-container-557207" role="dialog" aria-hidden="true" aria-labelledby="myModalLabel">
+				<div class="modal-dialog">
+					<div class="modal-content">
+						<div class="modal-header">
+							 <button class="close" aria-hidden="true" type="button" data-dismiss="modal">X</button>
+							<h4 class="modal-title" id="myModalLabel">
+								注册
+							</h4>
+						</div>
+						<div class="modal-footer">
+							 <button class="btn btn-default" type="button" onclick="teacherRegister()">老师注册</button>　　
+                             <button class="btn btn-primary" type="button" onclick="studentRegister()">学生注册</button>
+						</div>
+					</div>
+				</div>
+			</div>
+
+        <div class="col-md-4 column">
+		</div>
+</body>
+{% endblock %}
+</html>
