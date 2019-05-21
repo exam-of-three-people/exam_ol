@@ -4,8 +4,8 @@
 {% block head %}
     <head>
         <meta charset="UTF-8">
-        <link href="../static/css/学生菜单.css" rel="stylesheet"/>
-        <link href="../static/js/学生菜单.js" rel="script"/>
+          <script src="../static/js/jquery.js" type="text/javascript"></script>
+<script src="../static/js/学生菜单.js" type="text/javascript"></script>
         <title>学生菜单</title>
     </head>
 {% endblock %}
@@ -13,7 +13,7 @@
 {% block body %}
     <body>
     {% for msg in get_flashed_messages() %}
-        <p class="login-box-msg">{{ msg }}</p>
+        <p class="alert alert-dark">{{ msg }}</p>
     {% endfor %}
 
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
@@ -35,7 +35,7 @@
         padding: 100px 0;
         text-align: center;
         color: #fff;
-        background: url(http://www.xiandanke.cn/Image/intro-bg.jpg) no-repeat bottom center;
+
         background-color: #000;
         background-size: cover;
     }
@@ -100,8 +100,7 @@
                 <div class="col-md-3 column"></div>
                 <div class="col-md-3 column">
                     <a class="btn btn-block btn-lg  active   btn-primary " type="button"
-                       style="height: 240px ;width: 240px;float:right;margin-bottom: 10px;margin-right: 0%;border-top-right-radius:60px;border-bottom-left-radius: 60px "
-                       onclick="startTest()">
+                       style="height: 240px ;width: 240px;float:right;margin-bottom: 10px;margin-right: 0%;border-top-right-radius:60px;border-bottom-left-radius: 60px " onclick="wc()">
                         <div style="margin-top: 120px">开始考试</div>
                     </a>
                 </div>
