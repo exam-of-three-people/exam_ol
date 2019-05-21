@@ -250,7 +250,8 @@ def testCreater():
         plan.id_subject = form.subject.data
         plan.date = form.date.data
         plan.time_start = form.start_time.data
-        plan.time_length = form.time_length.data
+        minute_num = form.time_length.data
+        plan.time_length = datetime.timedelta(minutes=minute_num)
         plan.level = form.level.data
         plan.page_structure = json.dumps(pageStructure)
 
@@ -447,7 +448,7 @@ def createPage(id_plan):
         page.content = json.dumps(id_list)
         page.id_plan = id_plan
         page.id_student = session["uid"]
-        page.rest_time = plan.time_end - plan.time_start
+        page.rest_time = plan.time_length
         db.session.add(page)
         db.session.commit()
 
