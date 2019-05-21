@@ -61,8 +61,9 @@ class TeacherInfoForm(FlaskForm):
 
 
 class TestCreaterForm(FlaskForm):
-    start_time = DateTimeField(u'开始时间', validators=[DataRequired()], render_kw={"type": "datetime-local"})
-    end_time = DateTimeField(u'结束时间', validators=[DataRequired()], render_kw={"type": "datetime-local"})
+    date = DateField(u'日期', validators=[DataRequired()], render_kw={"type": "date"})
+    start_time = TimeField(u'开始时间', validators=[DataRequired()], render_kw={"type": "time"})
+    time_length = TimeField(u'持续时间', validators=[DataRequired()], render_kw={"type": "time"})
     subject = SelectField(u'科目', validators=[DataRequired()], choices=[(1, '1'), (2, '2')])
     class_ = SelectMultipleField(u'班级', validators=[DataRequired()], choices=[(1, '1'), (2, '2')])
     choice_question_number = IntegerField(u'选择题个数', validators=[InputRequired()],
