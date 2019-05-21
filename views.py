@@ -41,6 +41,7 @@ def index():
                 pass
             pass
         else:
+
             pass
     else:
         # noinspection PyBroadException
@@ -51,7 +52,7 @@ def index():
         except Exception:
             pass
     form = LoginForm()
-    return render_template("登录页面.html", form=form)
+    return render_template("登录页面_B.html", form=form)
 
 
 @app.route("/studentMenu", methods=['GET', 'POST'])
@@ -60,13 +61,13 @@ def studentMenu():
     id_class = student.id_class
     class_ = Class.query.get(id_class)
     now = datetime.datetime.now()
-    plans = Plan.query.filter(Plan.time_end > now).all()
+    plans = Plan.query.filter(Plan.date >= now.date()).with_parent(class_).all()
     return render_template("学生菜单.html", plans=plans)
 
 
 @app.route("/teacherMenu", methods=['GET', 'POST'])
 def teacherMenu():
-    return render_template("教师菜单.html")
+    return render_template("教师菜单_B.html")
 
 
 @app.route("/adminMenu", methods=['GET', 'POST'])
@@ -123,18 +124,18 @@ def teacherInfo():
                 return redirect("logout")
             else:
                 flash('新密码和确认密码不一致')
-                return render_template("教师信息页面.html", form=form)
+                return render_template("教师信息页面_B.html", form=form)
 
         else:
             flash("原密码错误！")
-            return render_template("教师信息页面.html", form=form)
+            return render_template("教师信息页面_B.html", form=form)
 
     else:
         form = TeacherInfoForm()
         teacher = Teacher.query.get(session["uid"])
         form.id.data = teacher.id
         form.name.data = teacher.name
-        return render_template("教师信息页面.html", form=form)
+        return render_template("教师信息页面_B.html", form=form)
 
 
 @app.route("/studentInfo", methods=['GET', 'POST'])
@@ -236,7 +237,7 @@ def testCreater():
         for class_ in classes:
             choices.append((class_.id, class_.name))
         form.class_.choices = choices
-        return render_template("教师创建考试页面.html", form=form)
+        return render_template("教师创建考试页面_B.html", form=form)
     else:
         form = TestCreaterForm(request.form)
         pageStructure = {}
@@ -267,7 +268,7 @@ def testList():
     if request.method == 'GET':
         plans = Plan.query.all()
 
-        return render_template('考试列表页面.html', plans=plans)
+        return render_template('考试列表页面_B.html', plans=plans)
     else:
         return render_template('教师菜单.html')
 
@@ -403,7 +404,7 @@ def createPage(id_plan):
                 flash("你已经参加过这场考试了")
                 return redirect("/studentMenu")
         plan.tested_students.append(student)
-        if datetime.datetime.now() > plan.time_end:
+        if datetime.datetime.now().date() >= plan.time_date:
             flash("这场考试已经结束了")
             return redirect("/studentMenu")
         page_structure_detail = {"choice_question": [0, 0, 0], "fill_blank_question": [0, 0, 0],

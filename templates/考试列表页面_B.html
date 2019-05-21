@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+{% extends "base_for_teacher.html" %}
+{% import 'bootstrap/wtf.html' as wtf %}
+
+{% block head %}
+<head>
+    <meta charset="UTF-8">
+    <title>考试列表</title>
+</head>
+{% endblock %}
+
+
+{% block main_windows %}
+    <div id="wrap">
+			<div id="top_content">
+				<div id="header">
+					<div id="rightheader">
+
+					</div>
+
+					<div id="navigation">
+					</div>
+				</div>
+
+				<div id="content">
+					<p id="whereami">
+					</p>
+
+					<table class="table">
+						<tr class="table_header">
+
+							<td>
+								日期
+							</td>
+							<td>
+                                开始时间
+
+							</td>
+							<td>
+								结束时间
+							</td>
+							<td>
+								科目
+							</td>
+                            <td>
+                                班级
+							</td>
+						</tr>
+                        {% for item in plans %}
+						<tr class="row1">
+							<td>
+                                <a href="/look/?username={{ item.date }}">{{ item.date }}</a>
+							</td>
+							<td>
+								{{item.time_start }}
+							</td>
+							<td>
+								{{ item.time_end }}
+							</td>
+                            <td>
+                                {{ item.id_subject }}
+                            </td>
+                            <td>
+                                {{ item.classes }}
+                            </td>
+							<td>
+								<a href="/delete/?id={{ item.id }}">删除</a>
+								<a href="/change/?id={{ item.id }}">修改</a>
+							</td>
+
+						</tr>
+                         {% endfor %}
+					</table>
+
+				</div>
+			</div>
+
+		</div>
+{% endblock %}
