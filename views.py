@@ -250,7 +250,7 @@ def testCreater():
         plan.id_subject = form.subject.data
         plan.date = form.date.data
         plan.time_start = form.start_time.data
-        plan.time_end = form.end_time.data
+        plan.time_length = form.time_length.data
         plan.level = form.level.data
         plan.page_structure = json.dumps(pageStructure)
 
