@@ -121,8 +121,9 @@ class Plan(db.Model):
     id_subject = db.Column(db.Integer, db.ForeignKey('tb_subject.id'), nullable=False)
     page_structure = db.Column(db.String(128), nullable=False)
     level = db.Column(db.Integer, default=5)
-    time_start = db.Column(db.DateTime, nullable=False)
-    time_end = db.Column(db.DateTime, nullable=False)
+    date = db.Column(db.Date, nullable=False)
+    time_start = db.Column(db.Time, nullable=False)
+    time_length = db.Column(db.Time, nullable=False)
     pages = db.relationship('Page', backref="tb_plan")
     classes = db.relationship('Class',
                               secondary=classes_plans,

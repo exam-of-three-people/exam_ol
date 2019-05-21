@@ -60,7 +60,7 @@ def studentMenu():
     id_class = student.id_class
     class_ = Class.query.get(id_class)
     now = datetime.datetime.now()
-    plans = Plan.query.filter(Plan.time_end > now).all()
+    plans = Plan.query.filter(Plan.date >= now.date()).with_parent(class_).all()
     return render_template("学生菜单.html", plans=plans)
 
 
@@ -403,7 +403,7 @@ def createPage(id_plan):
                 flash("你已经参加过这场考试了")
                 return redirect("/studentMenu")
         plan.tested_students.append(student)
-        if datetime.datetime.now() > plan.time_end:
+        if datetime.datetime.now().date() >= plan.time_date:
             flash("这场考试已经结束了")
             return redirect("/studentMenu")
         page_structure_detail = {"choice_question": [0, 0, 0], "fill_blank_question": [0, 0, 0],
