@@ -2,106 +2,186 @@
 {% extends "base.html" %}
 <html lang="en">
 {% block head %}
-<head>
-    <meta charset="UTF-8">
-    <link href="../static/css/学生菜单.css" rel="stylesheet"/>
-    <link href="../static/js/学生菜单.js" rel="script"/>
-    <title>学生菜单</title>
-</head>
+    <head>
+        <meta charset="UTF-8">
+        <link href="../static/css/学生菜单.css" rel="stylesheet"/>
+        <link href="../static/js/学生菜单.js" rel="script"/>
+        <title>学生菜单</title>
+    </head>
 {% endblock %}
 
 {% block body %}
-<body>
-{% for msg in get_flashed_messages() %}
-    <p class="login-box-msg">{{ msg }}</p>
-{% endfor %}
-<div class="container">
-	<div class="row clearfix">
-		<div class="col-md-12 column">
-			 <a class="btn btn-lg btn-primary btn-block active" type="button" onclick="startTest()">开始考试</a>
-		</div>
-	</div>
-	<div class="row clearfix">
-		<div class="col-md-12 column">
-			<div class="alert alert-success alert-dismissable">
-				 <button class="close" aria-hidden="true" type="button" data-dismiss="alert">×</button>
-				<h4>
-					注意!
-				</h4> <strong>考生你好！</strong>当确认开始考试后，将准备开始考试 <a class="alert-link" href="#"> 请勿中途退出！</a>
-			</div>
-		</div>
-	</div>
-	<div class="row clearfix">
-		<div class="col-md-12 column">
-			 <a class="btn btn-block btn-success btn-lg active" type="button" href="/studentInfo">学生信息</a>
-		</div>
-	</div>
-	<div class="row clearfix">
-		<div class="col-md-12 column">
-			<div class="alert alert-success alert-dismissable">
-				 <button class="close" aria-hidden="true" type="button" data-dismiss="alert">×</button>
-				<h4>
-					注意!
-				</h4> <strong>学生你好!</strong> 你可以查看和修改自己的个人信息 <a class="alert-link" href="#">请勿透露！</a>
-			</div>
-		</div>
-	</div>
-	<div class="row clearfix">
-		<div class="col-md-12 column">
-			 <a class="btn btn-warning btn-lg btn-block active" type="button" href="/testQuery">成绩查询</a>
-		</div>
-	</div>
-	<div class="row clearfix">
-		<div class="col-md-12 column">
-			<div class="alert alert-success alert-dismissable">
-				 <button class="close" aria-hidden="true" type="button" data-dismiss="alert">×</button>
-				<h4>
-					注意!
-				</h4> <strong>学生你好!</strong>你可以查询你的成绩 <a class="alert-link" href="#">但是不允许修改</a>
-			</div>
-		</div>
-	</div>
-	<div class="row clearfix">
-		<div class="col-md-12 column">
-			 <a class="btn btn-danger btn-lg btn-block active" type="button" href="logout">退出登录</a>
-		</div>
-	</div>
-</div>
+    <body>
+    {% for msg in get_flashed_messages() %}
+        <p class="login-box-msg">{{ msg }}</p>
+    {% endfor %}
+
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title></title>
+    <meta charset="utf-8"/>
+    <link rel="stylesheet" href="http://cdn.static.runoob.com/libs/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="http://cdn.static.runoob.com/libs/jquery/2.1.1/jquery.min.js"></script>
+    <script src="http://cdn.static.runoob.com/libs/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <style type="text/css">        html, body {
+        width: 100%;
+        height: 100%;
+    }
+
+    /*非常重要的样式让背景图片100%适应整个屏幕*/
+    .bg {
+        display: table;
+        width: 100%;
+        height: 100%;
+        padding: 100px 0;
+        text-align: center;
+        color: #fff;
+        background: url(http://www.xiandanke.cn/Image/intro-bg.jpg) no-repeat bottom center;
+        background-color: #000;
+        background-size: cover;
+    }
+
+    .my-navbar {
+        padding: 20px 0;
+        transition: background 0.5s ease-in-out, padding 0.5s ease-in-out;
+    }
+
+    .my-navbar a {
+        background: transparent !important;
+        color: #fff !important
+    }
+
+    .my-navbar a:hover {
+        color: #45bcf9 !important;
+        background: transparent;
+        outline: 0
+    }
+
+    .my-navbar a {
+        transition: color 0.5s ease-in-out;
+    }
+
+    /*-webkit-transition ;-moz-transition*/
+    .top-nav {
+        padding: 0;
+        background: #000;
+    }
+
+    button.navbar-toggle {
+        background-color: #fbfbfb;
+    }
+
+    /*整个背景都是transparent透明的，会看不到，所以再次覆盖一下*/
+    button.navbar-toggle > span.icon-bar {
+        background-color: #dedede
+    }    </style>
+    </head>
+
+    <nav class="navbar navbar-fixed-top my-navbar" role="navigation">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse"
+                        data-target="#example-navbar-collapse"><span class="sr-only">切换导航</span> <span
+                        class="icon-bar"></span> <span class="icon-bar"></span> <span class="icon-bar"></span></button>
+                <a class="navbar-brand" href="#">智能考试系统</a></div>
+            <div class="collapse navbar-collapse" id="example-navbar-collapse">
+                <ul class="nav navbar-nav">
+                    <li class="active"><a href="#">个人信息</a></li>
+                    <li><a href="#">成绩查询</a></li>
+                    <li><a href="#">登出</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <div class="bg">
 
 
+        <div class="container">
+            <div class="row clearfix">
+                <div class="col-md-3 column"></div>
+                <div class="col-md-3 column">
+                    <a class="btn btn-block btn-lg  active   btn-primary " type="button"
+                       style="height: 240px ;width: 240px;float:right;margin-bottom: 10px;margin-right: 0%;border-top-right-radius:60px;border-bottom-left-radius: 60px "
+                       onclick="startTest()">
+                        <div style="margin-top: 120px">开始考试</div>
+                    </a>
+                </div>
+                <div class="col-md-3 column">
+                    <a class="btn btn-lg btn-block active btn-success" type="button"
+                           style="height: 240px ;width: 240px;float:left; border-top-left-radius:60px;margin-bottom:10px;margin-left:0%;border-bottom-right-radius: 60px; "
+                       href="studentInfo">
+                        <div style="margin-top: 120px">学生信息</div>
+                    </a>
+                </div>
+                <div class="col-md-3 column"></div>
+            </div>
+            <div class="row clearfix">
+                <div class="col-md-3 column"></div>
+                <div class="col-md-3 column">
+                    <a class="btn btn-lg btn-block btn-warning" type="button"
+                       style="height: 240px ;width: 240px;float:right;border-top-left-radius:60px;margin-top:18px  ;margin-right: 0%;border-bottom-right-radius: 60px"
+                       href='testQuery'>
+                        <div class='text' style="margin-top: 120px" size="">成绩查询</div>
+                    </a>
+                </div>
+                <div class="col-md-3 column">
+                    <a class="btn btn-danger btn-lg btn-block active" type="button"
+                       style="height: 240px ;width: 240px;float:left;border-top-right-radius:60px;margin-top:18px;border-bottom-left-radius: 60px;margin-left: 0%"
+                       href="logout">
+                        <div style="margin-top: 120px">退出登录</div>
+                    </a>
+                </div>
+                <div class="col-md-3 column"></div>
+            </div>
+        </div>
 
 
+    </div>
+    <br/><br/><br/><br/><br/><br/><br/>
+    <script>        $(window).scroll(function () {
+        if ($(".navbar").offset().top > 50) {
+            $(".navbar-fixed-top").addClass("top-nav");
+        } else {
+            $(".navbar-fixed-top").removeClass("top-nav");
+        }
+    })</script>
 
 
+    {#			 <a class="btn btn-lg btn-primary btn-block active" type="button" onclick="startTest()">开始考试</a>#}
+    {##}
+    {##}
+    {#			 <a class="btn btn-block btn-success btn-lg active" type="button" href="/studentInfo">学生信息</a>#}
+    {##}
+    {##}
+    {#			 <a class="btn btn-warning btn-lg btn-block active" type="button" href="/testQuery">成绩查询</a>#}
+    {##}
+    {##}
+    {#			 <a class="btn btn-danger btn-lg btn-block active" type="button" href="logout">退出登录</a>#}
 
 
-
-
-
-
-
-<br>
-<div>
-    <table class="table">
-        <tr class="table_header">
-            <td>name</td>
-            <td>subject</td>
-            <td>date</td>
-            <td>time_start</td>
-            <td>time_end</td>
-        </tr>
-        {% for plan in plans %}
-            <tr class="row1">
-                <td>{{ plan.name }}</td>
-                <td>{{ plan.subject }}</td>
-                <td>{{ plan.date }}</td>
-                <td>{{ plan.time_start }}</td>
-                <td>{{ plan.time_end }}</td>
-                <td><a href="{{ url_for('createPage', id_plan=plan.id)}}">开始考试</a></td>
+    <br>
+    <div>
+        <table class="table">
+            <tr class="table_header">
+                <td>name</td>
+                <td>subject</td>
+                <td>date</td>
+                <td>time_start</td>
+                <td>time_end</td>
             </tr>
-        {% endfor %}
-    </table>
-</div>
-</body>
+            {% for plan in plans %}
+                <tr class="row1">
+                    <td>{{ plan.name }}</td>
+                    <td>{{ plan.subject }}</td>
+                    <td>{{ plan.date }}</td>
+                    <td>{{ plan.time_start }}</td>
+                    <td>{{ plan.time_end }}</td>
+                    <td><a href="{{ url_for('createPage', id_plan=plan.id) }}">开始考试</a></td>
+                </tr>
+            {% endfor %}
+        </table>
+    </div>
+
+
+    </body>
 {% endblock %}
 </html>
