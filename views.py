@@ -51,7 +51,7 @@ def index():
         except Exception:
             pass
     form = LoginForm()
-    return render_template("登录页面_B.html", form=form)
+    return render_template("登录页面.html", form=form)
 
 
 @app.route("/studentMenu", methods=['GET', 'POST'])
@@ -60,7 +60,7 @@ def studentMenu():
     id_class = student.id_class
     class_ = Class.query.get(id_class)
     plans = Plan.query.all()
-    return render_template("学生菜单_B.html", plans=plans)
+    return render_template("学生菜单.html", plans=plans)
 
 
 @app.route("/teacherMenu", methods=['GET', 'POST'])
