@@ -73,7 +73,35 @@
     /*整个背景都是transparent透明的，会看不到，所以再次覆盖一下*/
     button.navbar-toggle > span.icon-bar {
         background-color: #dedede
-    }    </style>
+    }
+
+    /*===================新写的css连不上，放在这里试试===================*/
+    /*遮光布*/
+    #show {
+        width: 100%;
+        height: 100%;
+        /*三原色：最后参数是透明度：0表示完全透明，1表示不透明*/
+        background: rgba(50, 0, 200, 0.7);
+        /*绝对布局:重新定义坐标位置，根据坐标定义开始参考点的位置*/
+        position: absolute;
+        left: 0px;
+        top: 0px;
+        display: none;
+    }
+
+    #show_test_plan {
+        width: 800px;
+        height: 600px;
+        background: rgba(240, 240, 255, 0.7);
+        position: absolute;
+        top: 0px;
+        left: 50%;
+        margin-left: -400px;
+        margin-top: 100px;
+        display: none;
+    }
+
+    </style>
     </head>
 
     <nav class="navbar navbar-fixed-top my-navbar" role="navigation">
@@ -101,8 +129,8 @@
                 <div class="col-md-3 column">
                     <a class="btn btn-block btn-lg  active   btn-primary " type="button"
                        style="height: 240px ;width: 240px;float:right;margin-bottom: 10px;margin-right: 0%;border-top-right-radius:60px;border-bottom-left-radius: 60px "
-                       onclick="startTest()">
-                        <div style="margin-top: 120px">开始考试</div>
+                       >
+                        <div id="start_exam" style="margin-top: 120px">开始考试</div>
                     </a>
                 </div>
                 <div class="col-md-3 column">
@@ -143,7 +171,26 @@
         } else {
             $(".navbar-fixed-top").removeClass("top-nav");
         }
-    })</script>
+    })
+
+    {#=============新写的js也连不上，放在这里应该能用==========#}
+    //弹窗效果
+    $("#start_exam").click(function () {
+        //让遮光布显示出来
+        //	$("#show").show();
+        //渐入效果 ;时间单位：毫秒 1000 = 1秒
+        $("#show").fadeIn(800);
+        $("#show_test_plan").fadeIn(800);
+    });
+
+    //退出效果
+    $("#show").click(function () {
+        //渐入效果 ;时间单位：毫秒 1000 = 1秒
+        $("#show_test_plan").fadeOut(500);
+        $("#show").fadeOut(500);
+    });
+
+    </script>
 
 
     {#			 <a class="btn btn-lg btn-primary btn-block active" type="button" onclick="startTest()">开始考试</a>#}
@@ -159,7 +206,10 @@
 
 
     <br>
-    <div>
+    <!--遮光布-->
+    <div id="show"></div>
+    <!--考试列表-->
+    <div id="show_test_plan">
         <table class="table">
             <tr class="table_header">
                 <td>name</td>

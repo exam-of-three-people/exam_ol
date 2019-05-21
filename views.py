@@ -51,7 +51,7 @@ def index():
         except Exception:
             pass
     form = LoginForm()
-    return render_template("登录页面.html", form=form)
+    return render_template("登录页面_B.html", form=form)
 
 
 @app.route("/studentMenu", methods=['GET', 'POST'])
