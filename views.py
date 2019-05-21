@@ -441,14 +441,12 @@ def createPage(id_plan):
         page.content = json.dumps(id_list)
         page.id_plan = id_plan
         page.id_student = session["uid"]
-        print(plan.time_start,plan.time_end)
-        # page.rest_time = plan.time_end.second
-        page.rest_time = 0
+        page.rest_time = plan.time_end-plan.time_start
         db.session.add(page)
         db.session.commit()
 
-        # student.current_page_id = page.id
-        # db.session.commit()
+        student.current_page_id = page.id
+        db.session.commit()
 
     else:
         page = Page.query.get(student.current_page_id)
