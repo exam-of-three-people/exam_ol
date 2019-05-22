@@ -61,8 +61,9 @@ class TeacherInfoForm(FlaskForm):
 
 
 class TestCreaterForm(FlaskForm):
-    start_time = DateTimeField(u'开始时间', validators=[DataRequired()], render_kw={"type": "datetime-local"})
-    end_time = DateTimeField(u'结束时间', validators=[DataRequired()], render_kw={"type": "datetime-local"})
+    date = DateField(u'日期', validators=[DataRequired()], render_kw={"type": "date"})
+    start_time = TimeField(u'开始时间', validators=[DataRequired()], render_kw={"type": "time"})
+    time_length = IntegerField(u'持续时间', validators=[DataRequired()], render_kw={"type": "number", "min": "1", "max": "600"})
     subject = SelectField(u'科目', validators=[DataRequired()], choices=[(1, '1'), (2, '2')])
     class_ = SelectMultipleField(u'班级', validators=[DataRequired()], choices=[(1, '1'), (2, '2')])
     choice_question_number = IntegerField(u'选择题个数', validators=[InputRequired()],
@@ -74,5 +75,5 @@ class TestCreaterForm(FlaskForm):
     free_response_question_number = IntegerField(u'大题个数', validators=[DataRequired()],
                                                  render_kw={"type": "number", "min": "0", "max": "1000"})
     level = IntegerField(u'考试难度', validators=[DataRequired], render_kw={"type": "number", "min": "1", "max": "3"})
-    submit = SubmitField(u'创建')
+    submit = SubmitField(u'创建', render_kw={"style": "position:center;width:50%;margin-left:40%"})
     pass

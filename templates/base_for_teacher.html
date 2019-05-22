@@ -27,9 +27,9 @@
         height: 100%;
         padding: 100px 0;
         text-align: center;
-        color: #fff;
-        background: url(http://www.xiandanke.cn/Image/intro-bg.jpg) no-repeat bottom center;
-        background-color: rgba(111, 125, 183, 0.72);
+        color: black;
+        background: url("../static/image/教师创建页面背景图片.jpg") no-repeat bottom center;
+
         background-size: cover;
     }
 
@@ -56,7 +56,7 @@
     /*-webkit-transition ;-moz-transition*/
     .top-nav {
         padding: 0;
-        background: rgba(65, 27, 153, 0.81);
+        background: #000;
     }
 
     button.navbar-toggle {
@@ -86,14 +86,8 @@
                 <button type="button" class="navbar-toggle" data-toggle="collapse"
                         data-target="#example-navbar-collapse"><span class="sr-only">切换导航</span> <span
                         class="icon-bar"></span> <span class="icon-bar"></span> <span class="icon-bar"></span></button>
-                <a class="navbar-brand" href="#">智能考试系统</a></div>
-            <div class="collapse navbar-collapse" id="example-navbar-collapse">
-                <ul class="nav navbar-nav">
-                    <li class="active"><a href="#">个人信息</a></li>
-                    <li><a href="#">成绩查询</a></li>
-                    <li><a href="#">登出</a></li>
-                </ul>
-            </div>
+                <a class="navbar-brand" style="position: relative;margin-left: 75px">智能考试系统</a></div>
+
         </div>
     </nav>
 
@@ -108,20 +102,29 @@
                         <div class="col-md-9 column">
 
                             <a class="btn btn-lg btn-block active" type="button"
-                               style="height:33%;width:100%;border-radius:5px;color: #3c763d;background-color: " href="/testCreater">
-                                <div style="margin-top:60%;">创建考试</div>
+                               style="height:200px;width:200px;border-radius:5px;border:3px solid paleturquoise"
+                               href="/testCreater">
+                                <div style="position: center; margin-left:4%;margin-top: 25%;font-size: 40px">创建<br>考试
+                                </div>
                             </a><br>
                             <a class="btn btn-lg btn-block active" type="button"
-                               style="height:33%;width:100%;border-radius:5px;" href="/testList">
-                                <div style="margin-top:70%;">考试列表</div>
+                               style="height:200px;width:200px;border-radius:5px;border:3px solid paleturquoise"
+                               href="/testList">
+                                <div style="position: center; margin-left:4%;margin-top: 25%;font-size: 40px">考试<br>列表
+                                </div>
                             </a><br>
                             <a class="btn btn-lg btn-block active" type="button"
-                               style="height:33%;width:100%;border-radius:5px;" href="/teacherInfo">
-                                <div class='text' style="margin-top:70%" size="">个人信息</div>
+                               style="height:200px;width:200px;border-radius:5px;border:3px solid paleturquoise"
+                               href="/teacherInfo">
+                                <div class='text'
+                                     style="position: center; margin-left:4%;margin-top: 25%;font-size: 40px">个人<br>信息
+                                </div>
                             </a><br>
                             <a class="btn btn-lg btn-block active" type="button"
-                               style="height:33%;width:100%;border-radius:5px;" href="/logout">
-                                <div style="margin-top:70%">退出登录</div>
+                               style="height:200px;width:200px;border-radius:5px;border:3px solid paleturquoise"
+                               href="/logout">
+                                <div style="position: center; margin-left:4%;margin-top: 25%;font-size: 40px">退出<br>登录
+                                </div>
                             </a>
 
                         </div>
@@ -135,7 +138,6 @@
                         <div class="col-md-1 column">
                         </div>
                         <div class="col-md-10 column">
-
                             <!-- 除去顶部和左边按钮的页面主体 -->
                             {% block main_windows %}
 

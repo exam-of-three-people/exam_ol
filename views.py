@@ -250,7 +250,8 @@ def testCreater():
         plan.id_subject = form.subject.data
         plan.date = form.date.data
         plan.time_start = form.start_time.data
-        plan.time_end = form.end_time.data
+        minute_num = form.time_length.data
+        plan.time_length = datetime.timedelta(minutes=minute_num)
         plan.level = form.level.data
         plan.page_structure = json.dumps(pageStructure)
 
@@ -268,7 +269,7 @@ def testList():
     if request.method == 'GET':
         plans = Plan.query.all()
 
-        return render_template('考试列表页面_B.html', plans=plans)
+        return render_template('考试列表页面_B.html', plans=plans, Subject=Subject)
     else:
         return render_template('教师菜单.html')
 
@@ -276,9 +277,13 @@ def testList():
 @app.route("/delete/", methods=['GET', 'POST'])
 def delete():
     if request.method == 'GET':
-        user = Plan.query.get(request.args['id'])
-        db.session.delete(user)
-        db.session.commit()
+        plan = Plan.query.get(request.args['id'])
+        try:
+            db.session.delete(plan)
+            db.session.commit()
+        except IntegrityError:
+            db.session.rollback()
+            flash("已经开始的考试不可随意删除")
         return redirect('/testList/')
 
 
@@ -404,8 +409,11 @@ def createPage(id_plan):
                 flash("你已经参加过这场考试了")
                 return redirect("/studentMenu")
         plan.tested_students.append(student)
-        if datetime.datetime.now().date() >= plan.time_date:
+        if datetime.datetime.now().date() > plan.date:
             flash("这场考试已经结束了")
+            return redirect("/studentMenu")
+        if (datetime.datetime.now()+datetime.timedelta(minutes=10)).date() <= plan.date and (datetime.datetime.now()+datetime.timedelta(minutes=10)).time() <= plan.time_start:
+            flash("这场考试还没开始")
             return redirect("/studentMenu")
         page_structure_detail = {"choice_question": [0, 0, 0], "fill_blank_question": [0, 0, 0],
                                  "true_false_question": [0, 0, 0], "free_response_question": [0, 0, 0]}
@@ -447,7 +455,7 @@ def createPage(id_plan):
         page.content = json.dumps(id_list)
         page.id_plan = id_plan
         page.id_student = session["uid"]
-        page.rest_time = plan.time_end - plan.time_start
+        page.rest_time = plan.time_length
         db.session.add(page)
         db.session.commit()
 
@@ -465,7 +473,7 @@ def createPage(id_plan):
         for id_ in id_list[type_]:
             test = Test.query.get(id_)
             contents[type_].append({"id": test.id, "question": test.question,
-                                    "answer": json.loads(page.answer)[id] if page.answer else ""})
+                                    "answer": json.loads(page.answer)[id_] if page.answer else ""})
 
     return render_template('考试页面.html', contents=contents, rest_time=page.rest_time)
 
@@ -495,3 +503,22 @@ def get_score():
     db.session.add(page)
     db.session.commit()
     return "<h1>分数：%d</h1><br>" % score
+
+
+@app.route("/auto_save", methods=['GET', 'POST'])
+def auto_save():
+    answer ={}
+    if len(request.form) != 0:
+        for key in request.form:
+            if key == "rest_time":
+                rest_time = int(request.form[key])
+            else:
+                answer[key] = request.form[key]
+        student = Student.query.filter(Student.id == session["uid"])
+        page = Page.query.get(student.current_page_id)
+        page.rest_time = datetime.timedelta(seconds= rest_time)
+        page.answer = answer
+        db.session.commit()
+    else:
+        pass
+    return rest_time
