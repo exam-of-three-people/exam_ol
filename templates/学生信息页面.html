@@ -11,12 +11,15 @@
 
 
 {% block body %}
-    <body>
+    <body style="background:navajowhite">
     <div class="container">
         <div class="row clearfix">
             <div class="col-md-2 column">
             </div>
-            <div class="col-md-8 column">
+            <br>
+            <br>
+            <div class="col-md-8 column"
+                 style="background:url(../static/image/考试页面背景图片.jpg);position: relative;margin-left: 200px">
                 {% for msg in get_flashed_messages() %}
                     <p class="login-box-msg">{{ msg }}</p>
                 {% endfor %}

@@ -16,9 +16,8 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
     <title></title>
     <meta charset="utf-8"/>
-    <link rel="stylesheet" href="http://cdn.static.runoob.com/libs/bootstrap/3.3.7/css/bootstrap.min.css">
-    <script src="http://cdn.static.runoob.com/libs/jquery/2.1.1/jquery.min.js"></script>
-    <script src="http://cdn.static.runoob.com/libs/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="../static/翻转特效/css/bootstrap.css">
+    <link href="../static/翻转特效/css/component.css" rel="stylesheet">
     <style type="text/css">        html, body {
         width: 100%;
         height: 100%;
@@ -207,7 +206,35 @@
     </div>
 
 
+    <div style="width:1000px; height:500px; padding-left:450px;">
+        <td><a href="javascript:;" class="md-trigger btn btn-primary btn-sm" data-modal="modal-13">Show Me</a></td>
+
+
+        <div class="md-modal md-effect-13" id="modal-13">
+            <div class="md-content">
+                <h3>Modal Dialog</h3>
+                <div>
+
+
+                    hhhhhhh
+
+
+                </div>
+            </div>
+        </div>
+
+        <div class="md-overlay"></div>
+        <!-- the overlay element -->
+    </div>
+
+
     </body>
+    <script src="../static/翻转特效/js/classie.js"></script>
+    <script src="../static/翻转特效/js/modalEffects.js"></script>
+
+
+
+
     <script>        $(window).scroll(function () {
         if ($(".navbar").offset().top > 50) {
             $(".navbar-fixed-top").addClass("top-nav");
@@ -236,4 +263,6 @@
 
     </script>
 {% endblock %}
+
+
 </html>

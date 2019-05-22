@@ -46,7 +46,7 @@ class StudentInfoForm(FlaskForm):
     pre_password = PasswordField(u'原密码')
     new_password = PasswordField(u'新密码')
     ensure_password = PasswordField(u'确认密码', validators=[EqualTo('password', message=u'两次输入密码不一致！')])
-    submit = SubmitField(u'保存')
+    submit = SubmitField(u'保存', render_kw={"style": "width:50%; position:center;margin-left:40%"})
     pass
 
 
