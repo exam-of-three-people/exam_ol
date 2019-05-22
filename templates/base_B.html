@@ -1,4 +1,6 @@
 <!DOCTYPE html>
+
+
 <html lang="en">
 <link href="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
 <!-- jQuery文件。务必在bootstrap.min.js 之前引入 -->
@@ -17,9 +19,7 @@
 
 
 {% block msg %}
-    {% for msg in get_flashed_messages() %}
-        <p class="login-box-msg">{{ msg }}</p>
-    {% endfor %}
+
 {% endblock %}
 
 
@@ -30,11 +30,6 @@
 
 
 <!--返回按钮-->
-{% block btn_back %}
-<button type="button" class="btn btn-default btn-lg" style="color:brown">
-  <a href="/"> <span class="glyphicon glyphicon-log-out"></span></a>
-</button>
-{% endblock %}
 
 
 </html>
