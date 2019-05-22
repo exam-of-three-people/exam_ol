@@ -11,19 +11,19 @@
 
 
 {% block body %}
-    <body style="background:navajowhite">
+    <body style="background: url(../static/image/背景/创意学习桌面办公环境摆拍图片_彼岸图网.jpg)  no-repeat ; background-size: 100%">
     <div class="container">
         <div class="row clearfix">
             <div class="col-md-2 column">
             </div>
             <br>
             <br>
-            <div class="col-md-8 column"
-                 style="background:url(../static/image/考试页面背景图片.jpg);position: relative;margin-left: 200px">
+            <div class="col-md-8 column">
                 {% for msg in get_flashed_messages() %}
                     <p class="login-box-msg">{{ msg }}</p>
                 {% endfor %}
-                {{ wtf.quick_form(form,url_for('studentInfo'), form_type="horizontal") }}
+                <div style="margin-left: 40%">                {{ wtf.quick_form(form,url_for('studentInfo'), form_type="horizontal") }}
+                </div>
 
             </div>
             <div class="col-md-2 column">

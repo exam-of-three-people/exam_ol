@@ -67,7 +67,7 @@ def studentMenu():
 
 @app.route("/teacherMenu", methods=['GET', 'POST'])
 def teacherMenu():
-    return render_template("教师菜单_B.html")
+    return redirect('/testCreater')
 
 
 @app.route("/adminMenu", methods=['GET', 'POST'])
@@ -165,7 +165,7 @@ def studentInfo():
         form.major.choices = [(major.id, major.name)]
         classes = Class.query.get(user.id_class)
         form.classes.choices = [(classes.id, classes.name)]
-        return render_template("学生信息页面_B.html", form=form)
+        return render_template("学生信息页面.html", form=form)
     else:
         name = form.name.data
         id_college = form.college.data
@@ -196,7 +196,7 @@ def studentInfo():
                 except InternalError:
                     db.session.rollback()
                     flash("信息不完善，请重新输入！")
-                    return render_template('学生信息页面_B.html', form=form)
+                    return render_template('学生信息页面.html', form=form)
                 # 不为空，改新密码
                 if new_password:
                     user.password = new_password
@@ -210,10 +210,10 @@ def studentInfo():
                 return redirect('studentInfo')
             else:
                 flash("两次密码不一致！")
-                return render_template('学生信息页面_B.html', form=form)
+                return render_template('学生信息页面.html', form=form)
         else:
             flash("密码错误！")
-            return render_template('学生信息页面_B.html', form=form)
+            return render_template('学生信息页面.html', form=form)
 
 
 @app.route("/testCheck/<int:page_id>", methods=['GET', 'POST'])
@@ -271,7 +271,7 @@ def testList():
 
         return render_template('考试列表页面_B.html', plans=plans, Subject=Subject)
     else:
-        return render_template('教师菜单.html')
+        return redirect("/teacherMenu")
 
 
 @app.route("/delete/", methods=['GET', 'POST'])
