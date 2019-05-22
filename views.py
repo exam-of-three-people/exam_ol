@@ -476,7 +476,8 @@ def createPage(id_plan):
             contents[type_].append({"id": test.id, "question": test.question})
     rest_seconds = page.rest_time
 
-    return render_template('考试页面.html', contents=contents, rest_time=rest_seconds, answer=json.loads(page.answer))
+    return render_template('考试页面.html', contents=contents, rest_time=rest_seconds,
+                           answer=json.loads(page.answer) if page.answer else "")
 
 
 @app.route("/get_score", methods=['GET', 'POST'])
