@@ -97,8 +97,9 @@ def testPage(page_id):
 
 @app.route("/testQuery", methods=['GET', 'POST'])
 def testQuery():
-    tests = [{"第一次考试": 1}, {"第二次考试": 2}]
-    return render_template("考试查询页面.html", tests=tests)
+    student = Student.query.get(session["uid"])
+    pages = student.pages
+    return render_template("考试查询页面.html", pages=pages, Plan=Plan, Subject=Subject)
 
 
 @app.route("/teacherSignUp", methods=['GET', 'POST'])

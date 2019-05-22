@@ -1,18 +1,68 @@
 <!DOCTYPE html>
-{% extends "base.html" %}
+{% extends "base_B.html" %}
 <html lang="en">
 {% block head %}
-<head>
-    <meta charset="UTF-8">
-    <title>考试查询页面</title>
-     <link href="C:/Users/Administrator/Desktop/bootstrap/bootstrap-4.3.1-dist/css" rel="stylesheet">
+    <head>
+        <meta charset="UTF-8">
+        <title>考试查询页面</title>
+        <link href="C:/Users/Administrator/Desktop/bootstrap/bootstrap-4.3.1-dist/css" rel="stylesheet">
 
-</head>
+    </head>
 {% endblock %}
 
 {% block body %}
-<body>
+    <div id="wrap">
+        <div id="top_content">
+            <div id="header">
+                <div id="rightheader">
 
-</body>
+                </div>
+
+                <div id="navigation">
+                </div>
+            </div>
+
+            <div id="content">
+                <p id="whereami">
+                </p>
+                <table class="table">
+                    <tr class="table_header">
+
+                        <td>
+                            日期
+                        </td>
+                        <td>
+                            开始时间
+
+                        </td>
+                        <td>
+                            科目
+                        </td>
+                        <td>
+                            分数
+                        </td>
+                    </tr>
+                    {% for page in pages %}
+                        <tr class="row1">
+                            <td>
+                                <a href="">{{ Plan.query.get(page.id_plan).date }}</a>
+                            </td>
+                            <td>
+                                {{ Plan.query.get(page.id_plan).time_start }}
+                            </td>
+                            <td>
+                                {{ Subject.query.get(item.id_subject).name }}
+                            </td>
+                            <td>
+                                {{ page.code }}
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </table>
+
+            </div>
+        </div>
+
+    </div>
 {% endblock %}
 </html>
