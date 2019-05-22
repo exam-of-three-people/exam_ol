@@ -123,7 +123,7 @@ class Plan(db.Model):
     level = db.Column(db.Integer, default=5)
     date = db.Column(db.Date, nullable=False)
     time_start = db.Column(db.Time, nullable=False)
-    time_length = db.Column(db.Time, nullable=False)
+    time_length = db.Column(db.Interval, nullable=False)
     pages = db.relationship('Page', backref="tb_plan")
     classes = db.relationship('Class',
                               secondary=classes_plans,

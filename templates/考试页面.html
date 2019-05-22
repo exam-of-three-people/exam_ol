@@ -1,16 +1,13 @@
-<!DOCTYPE html>
-<html>
+{% extends "base.html" %}
 
-<head>
-
-</head>
-
-<body>{% extends "base.html" %} {% block head %}
+{% block head %}
     <meta charset="UTF-8">
     <title>welcome to 考试页面</title>
     <link rel="stylesheet" type="text/css" href="../static/css/考试页面.css">
-    <script src="../static/js/考试页面.js" type="text/javascript"></script>
-{% endblock %} {% block body %}
+{% endblock %}
+
+{% block body %}
+    <body>
     <div class="container">
         <div class="col-md-2 column">
         </div>
@@ -40,9 +37,9 @@
             </form>
         </div>
         <div class="col-md-2 column">
+            <button class="time btnQR">发送验证码</button>
         </div>
     </div>
+    </body>
+    <script src="../static/js/考试页面.js" type="text/javascript"></script>
 {% endblock %}
-</body>
-
-</html>
