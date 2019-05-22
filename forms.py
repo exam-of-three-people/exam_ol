@@ -75,5 +75,5 @@ class TestCreaterForm(FlaskForm):
     free_response_question_number = IntegerField(u'大题个数', validators=[DataRequired()],
                                                  render_kw={"type": "number", "min": "0", "max": "1000"})
     level = IntegerField(u'考试难度', validators=[DataRequired], render_kw={"type": "number", "min": "1", "max": "3"})
-    submit = SubmitField(u'创建')
+    submit = SubmitField(u'创建', render_kw={"style": "position:center;width:50%;margin-left:40%"})
     pass
