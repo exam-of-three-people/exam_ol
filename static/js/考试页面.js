@@ -20,8 +20,9 @@ function hg() {
 
 // ####################################################################
 
-function settime(remainTime) {
-    let _countdown = parseInt(rest_time) / 1000;
+function settime(remainTime,rest_time_) {
+    console.log(rest_time_)
+    let _countdown = parseInt(rest_time_);
 
     if (_countdown <= 0) {
         warn("提示!", "考试时间到！");
@@ -36,9 +37,9 @@ function settime(remainTime) {
             _second = "0" + _second.toString();
         if (_minute < 10)
             _minute = "0" + _minute.toString();
-        remainTime.html(_hour + ":" + _minute + ":" + _second);
-        _countdown -= 10;
-        let send_data = $("#form").serializeJson('rest_time:' + _countdown.toString())
+        remainTime.html("<p style='color:green'>"+_hour + ":" + _minute + ":" + _second +"</p>");
+        _countdown --;
+        let send_data = $("#form").serializeJson("rest_time:" + _countdown.toString()+";")
         $.ajax({
             type: "POST",
             url: "/auto_save",
@@ -46,14 +47,14 @@ function settime(remainTime) {
             dataType: "JSON",
             async: false,
             success: function (data) {
-                rest_time = parseInt(data)
+                rest_time_ = parseInt(data)
             }
         });
     }
     //每1000毫秒执行一次
     setTimeout(function () {
-        settime(remainTime);
-    }, 10000);
+        settime(remainTime,rest_time_);
+    }, 1000);
 };
 
 // 结束考试
@@ -145,5 +146,11 @@ $.fn.setForm = function (jsonValue) {
         }
     })
 }
+
+let rest_time_value = $("#data_").attr("data-rest_time")
+this.settime($("#rest_time"),rest_time_value)
+let form_data = JSON.parse($("#data_").attr("data-answer").replace(/'/g, '"'));
+console.log(form_data)
+$("#form").setForm(form_data)
 
 

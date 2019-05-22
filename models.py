@@ -123,7 +123,7 @@ class Plan(db.Model):
     level = db.Column(db.Integer, default=5)
     date = db.Column(db.Date, nullable=False)
     time_start = db.Column(db.Time, nullable=False)
-    time_length = db.Column(db.Interval, nullable=False)
+    time_length = db.Column(db.Integer, nullable=False)
     pages = db.relationship('Page', backref="tb_plan")
     classes = db.relationship('Class',
                               secondary=classes_plans,
@@ -145,7 +145,7 @@ class Page(db.Model):
     id_student = db.Column(db.Integer, db.ForeignKey('tb_student.id'), nullable=False)
     content = db.Column(db.String(1024), nullable=False)
     answer = db.Column(db.Text, nullable=True)
-    rest_time = db.Column(db.Interval, nullable=True)
+    rest_time = db.Column(db.Integer, nullable=True)
     code = db.Column(db.Integer, nullable=True)
 
     def __repr__(self):
