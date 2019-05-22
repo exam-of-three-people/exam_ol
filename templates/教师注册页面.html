@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-{% extends "base.html" %}
+{% extends "base_B.html" %}
 {% import 'bootstrap/wtf.html' as wtf %}
 <html lang="en">
 {% block head %}
@@ -18,10 +18,16 @@
 		</div>
 		<div class="col-md-8 column">
             {% for msg in get_flashed_messages() %}
-    <p class="login-box-msg">{{ msg }}</p>
-{% endfor %}
+            <p class="alert alert-dismissable alert-info">{{ msg }}</p>
+            {% endfor %}
         <br>
         <br>
+
+{% for msg in get_flashed_messages() %}
+                <div class="alert alert-danger fade in" style="   width:100%;height: 46px">
+                    <button type="button" class="close" data-dismiss="alert">&times;</button>
+                    <strong class="login-box-msg">{{ msg }}</strong></div>
+            {% endfor %}
 {{ wtf.quick_form(form,url_for('teacherRegister'), form_type="horizontal") }}
 		</div>
 		<div class="col-md-2 column">

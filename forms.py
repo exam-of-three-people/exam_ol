@@ -10,7 +10,7 @@ class LoginForm(FlaskForm):
     role = SelectField(label="身份", coerce=int, choices=[(1, '学生'), (2, '教师')])
     remember_me = BooleanField(label="记住密码", default=False)
     password = PasswordField(label='密码', validators=[DataRequired(message="password is None")])
-    login = SubmitField(label="登　　录",render_kw={"style": "width:137%"})
+    login = SubmitField(label="登　　录", render_kw={"style": "width:137%"})
     pass
 
 
@@ -23,7 +23,7 @@ class RegisterFormStudent(FlaskForm):
     classes = SelectField(u'班级', validators=[DataRequired()])
     password = PasswordField(u'密码', validators=[DataRequired()])
     ensure_password = PasswordField(u'确认密码', validators=[DataRequired(), EqualTo('password', message=u'两次输入密码不一致！')])
-    submit = SubmitField(u'提交')
+    submit = SubmitField(u'提交', render_kw={"style": "position:center;width:50%;margin-left:45%"})
     pass
 
 
@@ -32,7 +32,7 @@ class RegisterFormTeacher(FlaskForm):
     name = StringField(u'姓名', validators=[DataRequired()])
     password = PasswordField(u'密码', validators=[DataRequired()])
     ensure_password = PasswordField(u'确认密码', validators=[DataRequired(), EqualTo('password', message=u'两次输入密码不一致！')])
-    submit = SubmitField(u'提交')
+    submit = SubmitField(u'提交', render_kw={"style": "position:center;width:50%;margin-left:45%"})
     pass
 
 
@@ -46,7 +46,7 @@ class StudentInfoForm(FlaskForm):
     pre_password = PasswordField(u'原密码')
     new_password = PasswordField(u'新密码')
     ensure_password = PasswordField(u'确认密码', validators=[EqualTo('password', message=u'两次输入密码不一致！')])
-    submit = SubmitField(u'保存')
+    submit = SubmitField(u'保存', render_kw={"style": "position:center;width:50%;margin-left:45%"})
     pass
 
 
@@ -56,7 +56,7 @@ class TeacherInfoForm(FlaskForm):
     pre_password = PasswordField(u'原密码')
     new_password = PasswordField(u'新密码')
     ensure_password = PasswordField(u'确认密码')
-    submit = SubmitField(u'保存')
+    submit = SubmitField(u'保存', render_kw={"style": "position:center;width:50%;margin-left:40%"})
     pass
 
 
@@ -75,5 +75,5 @@ class TestCreaterForm(FlaskForm):
     free_response_question_number = IntegerField(u'大题个数', validators=[DataRequired()],
                                                  render_kw={"type": "number", "min": "0", "max": "1000"})
     level = IntegerField(u'考试难度', validators=[DataRequired], render_kw={"type": "number", "min": "1", "max": "3"})
-    submit = SubmitField(u'创建')
+    submit = SubmitField(u'创建', render_kw={"style": "position:center;width:50%;margin-left:40%"})
     pass

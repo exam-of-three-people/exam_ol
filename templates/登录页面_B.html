@@ -20,8 +20,10 @@
 		<div class="col-md-4 column" >
             <h1 class="text-center text-info"><br><br>智能考试系统<br><br></h1>
 
-            {% for msg in get_flashed_messages() %}
-            <p class="alert alert-dismissable alert-info">{{ msg }}</p>
+{% for msg in get_flashed_messages() %}
+                <div class="alert alert-danger fade in" style="   width:100%;height: 46px">
+                    <button type="button" class="close" data-dismiss="alert">&times;</button>
+                    <strong class="login-box-msg">{{ msg }}</strong></div>
             {% endfor %}
 
 {#            <form role="form">#}
@@ -42,12 +44,14 @@
 {#        </div>#}
 
             {{ wtf.quick_form(form,url_for('index'), form_type="horizontal",horizontal_columns=('lg', 3, 9)) }}
-			 <button role="button" href="#modal-container-557207" data-toggle="modal" class="btn btn-default" style="width:100%">注　　册</button>
+            <button role="button" href="#modal-container-557207" data-toggle="modal" class="btn btn-default"
+                    style="width:100%; ">注　　册
+            </button>
             <div class="modal fade" id="modal-container-557207" role="dialog" aria-hidden="true" aria-labelledby="myModalLabel">
 				<div class="modal-dialog">
 					<div class="modal-content">
 						<div class="modal-header">
-							 <button class="close" aria-hidden="true" type="button" data-dismiss="modal">X</button>
+                            <button class="close" aria-hidden="true" type="button;" data-dismiss="modal">X</button>
 							<h4 class="modal-title" id="myModalLabel">
 								注册
 							</h4>

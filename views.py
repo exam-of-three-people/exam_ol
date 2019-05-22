@@ -62,7 +62,7 @@ def studentMenu():
     class_ = Class.query.get(id_class)
     now = datetime.datetime.now()
     plans = Plan.query.filter(Plan.date >= now.date()).with_parent(class_).all()
-    return render_template("学生菜单.html", plans=plans)
+    return render_template("学生菜单_B.html", plans=plans)
 
 
 @app.route("/teacherMenu", methods=['GET', 'POST'])
@@ -165,7 +165,7 @@ def studentInfo():
         form.major.choices = [(major.id, major.name)]
         classes = Class.query.get(user.id_class)
         form.classes.choices = [(classes.id, classes.name)]
-        return render_template("学生信息页面.html", form=form)
+        return render_template("学生信息页面_B.html", form=form)
     else:
         name = form.name.data
         id_college = form.college.data
@@ -196,7 +196,7 @@ def studentInfo():
                 except InternalError:
                     db.session.rollback()
                     flash("信息不完善，请重新输入！")
-                    return render_template('学生信息页面.html', form=form)
+                    return render_template('学生信息页面_B.html', form=form)
                 # 不为空，改新密码
                 if new_password:
                     user.password = new_password
@@ -210,10 +210,10 @@ def studentInfo():
                 return redirect('studentInfo')
             else:
                 flash("两次密码不一致！")
-                return render_template('学生信息页面.html', form=form)
+                return render_template('学生信息页面_B.html', form=form)
         else:
             flash("密码错误！")
-            return render_template('学生信息页面.html', form=form)
+            return render_template('学生信息页面_B.html', form=form)
 
 
 @app.route("/testCheck/<int:page_id>", methods=['GET', 'POST'])

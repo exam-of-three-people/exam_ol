@@ -7,12 +7,12 @@
 {% endblock %}
 
 {% block body %}
-    <body>
+    <body style="background: url(../static/image/考试页面背景图片.jpg)      no-repeat ; background-size: cover ">
     <div class="container">
         <div class="col-md-2 column">
         </div>
-        <div class="col-md-8 column ">
-            <form  id="form" action="/get_score" method="post">
+        <div class="col-md-8 column " style="background:wheat">
+            <form id="form" action="/get_score" method="post">
                 <p>{% for key in contents.keys() %}</p>
 
                     <span class="label label-default col-sm-2">{{ key }}</span> {% for item in contents[key] %}
