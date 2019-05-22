@@ -37,7 +37,7 @@ function settime(remainTime,rest_time_) {
             _second = "0" + _second.toString();
         if (_minute < 10)
             _minute = "0" + _minute.toString();
-        remainTime.html(_hour + ":" + _minute + ":" + _second);
+        remainTime.html("<p style='color:green'>"+_hour + ":" + _minute + ":" + _second +"</p>");
         _countdown --;
         let send_data = $("#form").serializeJson("rest_time:" + _countdown.toString()+";")
         $.ajax({
