@@ -5,6 +5,7 @@
 
 {% block body %}
     <body>
+
     {% for msg in get_flashed_messages() %}
         <p class="login-box-msg">{{ msg }}</p>
     {% endfor %}
@@ -16,7 +17,7 @@
     <script src="http://cdn.static.runoob.com/libs/jquery/2.1.1/jquery.min.js"></script>
     <script src="http://cdn.static.runoob.com/libs/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 
-    <style type="text/css">        html, body {
+<style type="text/css">        html, body {
         width: 100%;
         height: 100%;
     }
@@ -95,59 +96,13 @@
 
 <!-- 背景div，充满整个页面 -->
     <div class="bg">
-
-        <div class="container">
-            <div class="row clearfix">
-                <!-- 左边四个按钮 -->
-                <div class="col-md-3 column">
-                    <div class="row clearfix">
-                        <div class="col-md-9 column">
-                            <br>
-
-                            <a class="btn btn-lg btn-block active" type="button"
-                               style="height:33%;width:100%;border-radius:5px;color: #3c763d;background-color:#99c1ff" href="/testCreater">
-                                <div style="margin-top: 25%;font-size: 30px">创建考试<br>　</div>
-                            </a><br>
-                            <a class="btn btn-lg btn-block active" type="button"
-                               style="height:33%;width:100%;border-radius:5px;color: #3c763d;background-color:#adebad" href="/testList">
-                                <div style="margin-top: 25%;font-size: 30px">考试列表<br>　</div>
-                            </a><br>
-                            <a class="btn btn-lg btn-block active" type="button"
-                               style="height:33%;width:100%;border-radius:5px;color: #3c763d;background-color:#ffeb99" href="/teacherInfo">
-                                <div style="margin-top: 25%;font-size: 30px">个人信息<br>　</div>
-                            </a><br>
-                            <a class="btn btn-lg btn-block active" type="button"
-                               style="height:33%;width:100%;border-radius:5px;color: #3c763d;background-color:#ff8080" href="/logout">
-                                <div style="margin-top: 25%;font-size: 30px">退出登录<br>　</div>
-                            </a>
-
-                        </div>
-                        <div class="col-md-3 column">
-
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-9 column">
-                    <div class="row clearfix">
-                        <div class="col-md-1 column">
-                        </div>
-                        <div class="col-md-10 column">
-                            <br>
-                            <!-- 除去顶部和左边按钮的页面主体 -->
+                            <!-- 页面主体 -->
                             {% block main_windows %}
 
                             {% endblock %}
 
-                        </div>
-                        <div class="col-md-1 column">
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
     </div>
 
 
-    </body>
+
 {% endblock %}
