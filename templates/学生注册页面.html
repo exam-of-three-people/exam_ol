@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-{% extends "base.html" %}
+{% extends "base_B.html" %}
 {% import 'bootstrap/wtf.html' as wtf %}
 <html lang="en">
 {% block head %}
@@ -28,9 +28,7 @@
             </ul>
         {% endif %}
     {% endmacro %}
-    {% for msg in get_flashed_messages() %}
-        <p class="login-box-msg">{{ msg }}</p>
-    {% endfor %}
+
     {{ wtf.quick_form(form,url_for('studentRegister'), form_type="horizontal" ) }}
 		</div>
 		<div class="col-md-2 column">
