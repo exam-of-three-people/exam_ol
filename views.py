@@ -251,7 +251,7 @@ def testCreater():
         plan.date = form.date.data
         plan.time_start = form.start_time.data
         minute_num = form.time_length.data
-        plan.time_length = datetime.timedelta(minutes=minute_num)
+        plan.time_length = minute_num*60
         plan.level = form.level.data
         plan.page_structure = json.dumps(pageStructure)
 
@@ -455,7 +455,7 @@ def createPage(id_plan):
         page.content = json.dumps(id_list)
         page.id_plan = id_plan
         page.id_student = session["uid"]
-        page.rest_time = plan.time_length
+        page.rest_time = plan.time_length * 60
         db.session.add(page)
         db.session.commit()
 
@@ -472,10 +472,10 @@ def createPage(id_plan):
     for type_ in id_list:
         for id_ in id_list[type_]:
             test = Test.query.get(id_)
-            contents[type_].append({"id": test.id, "question": test.question,
-                                    "answer": json.loads(page.answer)[id_] if page.answer else ""})
+            contents[type_].append({"id": test.id, "question": test.question})
+    rest_seconds = page.rest_time
 
-    return render_template('考试页面.html', contents=contents, rest_time=page.rest_time)
+    return render_template('考试页面.html', contents=contents, rest_time=rest_seconds, answer=json.loads(page.answer))
 
 
 @app.route("/get_score", methods=['GET', 'POST'])
@@ -514,11 +514,12 @@ def auto_save():
                 rest_time = int(request.form[key])
             else:
                 answer[key] = request.form[key]
-        student = Student.query.filter(Student.id == session["uid"])
+        student = Student.query.get(session["uid"])
         page = Page.query.get(student.current_page_id)
-        page.rest_time = datetime.timedelta(seconds= rest_time)
-        page.answer = answer
+        page.rest_time = rest_time
+        print(answer)
+        page.answer = json.dumps(answer)
         db.session.commit()
     else:
         pass
-    return rest_time
+    return str(rest_time)
