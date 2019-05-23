@@ -11,21 +11,21 @@
 {% endblock %}
 
 {% block body %}
-    <div id="wrap">
-        <div id="top_content">
-            <div id="header">
-                <div id="rightheader">
 
-                </div>
-
-                <div id="navigation">
-                </div>
+    <div class="container">
+        <div class="row clearfix">
+            <div class="col-md-2 column">
             </div>
-
-            <div id="content">
-                <p id="whereami">
-                </p>
-                <table class="table">
+            <div class="col-md-8 column" >
+                {% for msg in get_flashed_messages() %}
+                    <p class="login-box-msg">{{ msg }}</p>
+                {% endfor %}
+                {% for msg in get_flashed_messages() %}
+                    <div class="alert alert-danger fade in" style="   width:100%;height: 46px">
+                        <button type="button" class="close" data-dismiss="alert">&times;</button>
+                        <strong class="login-box-msg">{{ msg }}</strong></div>
+                {% endfor %}
+   <table class="table">
                     <tr class="table_header">
 
                         <td>
@@ -51,18 +51,17 @@
                                 {{ Plan.query.get(page.id_plan).time_start }}
                             </td>
                             <td>
-                                {{ Subject.query.get(item.id_subject).name }}
+                                {{ Subject.query.get(Plan.query.get(page.id_plan).id_subject).name }}
                             </td>
                             <td>
                                 {{ page.code }}
                             </td>
                         </tr>
                     {% endfor %}
-                </table>
-
+                </table>            </div>
+            <div class="col-md-2 column">
             </div>
         </div>
-
     </div>
+
 {% endblock %}
-</html>
