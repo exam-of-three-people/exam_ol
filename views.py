@@ -61,7 +61,12 @@ def studentMenu():
     id_class = student.id_class
     class_ = Class.query.get(id_class)
     now = datetime.datetime.now()
-    plans = Plan.query.filter(Plan.date >= now.date()).with_parent(class_).all()
+    plans_temp = Plan.query.filter(Plan.date >= now.date()).with_parent(class_).all()
+    plans = []
+    for plan in plans_temp:
+        # 已经参加过的考试不再显示
+        if student not in plan.tested_students:
+            plans.append(plan)
     return render_template("学生菜单_B.html", plans=plans)
 
 
