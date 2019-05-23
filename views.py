@@ -261,7 +261,8 @@ def testCreater():
             plan.classes.append(Class.query.get(class_id))
         db.session.add(plan)
         db.session.commit()
-        return redirect("/teacherMenu")
+        flash("考试计划创建成功")
+        return redirect("/testList")
 
 
 # ===============================================浩，教师列表页面（（（（（（（（（（（（=====================================
@@ -519,7 +520,6 @@ def auto_save():
         student = Student.query.get(session["uid"])
         page = Page.query.get(student.current_page_id)
         page.rest_time = rest_time
-        print(answer)
         page.answer = json.dumps(answer)
         db.session.commit()
     else:
