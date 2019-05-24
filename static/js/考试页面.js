@@ -6,7 +6,6 @@ function Submission_results() {
         if (contents[i].question == contents[i].answer) {
             print('第%d道题回答正确', i - 1)
             correct = correct + 1;
-
         }
     }
     lv = correct / subject;
