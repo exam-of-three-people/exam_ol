@@ -6,6 +6,7 @@ function Submission_results() {
         if (contents[i].question == contents[i].answer) {
             print('第%d道题回答正确', i - 1)
             correct = correct + 1;
+
         }
     }
     lv = correct / subject;
@@ -174,21 +175,19 @@ console.log(form_data)
 $("#form").setForm(form_data)
 
 
-
 function show_test_panel(name) {
-					let answer = document.getElementsByName(name);
-					let answer_length = answer[0].value.length;
-					// answer 是个NodeList, 直接.length永远不为0,最少是1  巨坑!!!
-					let flag = document.getElementById(name);
-					console.log(length);
-					if (answer_length > 0) {
-						console.log("做了");
-						console.log(answer);
-						flag.style.background = "skyblue";
-					} else {
-						console.log("没做");
-						console.log(answer);
-						flag.style.background = "white";
-					}
-				}
+    let answer = document.getElementsByName(name);
+    let answer_length = answer[0].value.length;
+    // answer 是个NodeList, 直接.length永远不为0,最少是1  巨坑!!!
+    flag_id = 'flag_';
+    flag_id = flag_id + name;
+    let flag = document.getElementById(flag_id);
+    if (answer_length > 0) {
+        console.log("做了");
+        flag.style.background = "skyblue";
+    } else {
+        console.log("没做");
+        flag.style.background = "white";
+    }
+}
 
