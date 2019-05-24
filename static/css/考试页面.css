@@ -24,11 +24,12 @@ textarea{
     /*上；右；下；左*/
     margin: 2px 4px 2px 4px;
 }
-/*每个题目标志*/
+/*每个题目标志<span>*/
 .test_flag {
     width: 24px;
     height: 24px;
 	background: white;
+    text-align:center;
     /*行内元素转换成块元素*/
 	display: block;
 	/*添加浮动效果，解决自动换行*/

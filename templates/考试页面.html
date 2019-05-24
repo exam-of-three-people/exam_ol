@@ -24,16 +24,16 @@
                         {% if key=='choice_question' %}
 
                             <dd>
-                                <label><input type="radio" name="{{ item.id }}" value="A">A</label>
-                                <label><input type="radio" name="{{ item.id }}"   value="B">B</label>
-                                <label><input type="radio" name="{{ item.id }}"  value="C">C</label>
-                                <label><input type="radio" name="{{ item.id }}"  value="D">D</label>
+                                <label><input type="radio" name="{{ item.id }}" value="A" onchange=show_test_panel("{{ item.id }}")>A</label>
+                                <label><input type="radio" name="{{ item.id }}"   value="B" onchange=show_test_panel("{{ item.id }}")>B</label>
+                                <label><input type="radio" name="{{ item.id }}"  value="C" onchange=show_test_panel("{{ item.id }}")>C</label>
+                                <label><input type="radio" name="{{ item.id }}"  value="D" onchange=show_test_panel("{{ item.id }}")>D</label>
                             </dd>
                         {% elif key == 'true_false_question' %}
-                            <label><input type="radio" name="{{ item.id }}"   value="0">√</label>
-                            <label><input type="radio" name="{{ item.id }}"   value="1">×</label>
+                            <label><input type="radio" name="{{ item.id }}"   value="0" onchange=show_test_panel("{{ item.id }}")>√</label>
+                            <label><input type="radio" name="{{ item.id }}"   value="1" onchange=show_test_panel("{{ item.id }}")>×</label>
                         {% else %}
-                            <input name="{{ item.id }}" style="border-top:0px ;">
+                            <input name="{{ item.id }}" style="border-top:0px ;" onchange=show_test_panel("{{ item.id }}")>
                         {% endif %}
                         <br> {% endfor %}
                 {% endfor %}
