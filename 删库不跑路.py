@@ -12,7 +12,7 @@ question_random = "qwertyuiopasdfghjklzxcvbnm"
 type_names = ["choice_question", "fill_blank_question", "true_false_question", "free_response_question"]
 
 subjects = []
-colleges=[]
+colleges = []
 majors = []
 classes = []
 for i in range(1,9):

@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <title>welcome to 考试页面</title>
     <link rel="stylesheet" type="text/css" href="../static/css/考试页面.css">
+
 {% endblock %}
 
 {% block body %}
@@ -11,17 +12,19 @@
     <div class="container">
         <div class="col-md-2 column">
         </div>
-        <div class="col-md-8 column " style="background:#e0e0d1">
-            <form id="form" action="/get_score" method="post">
-                <p>{% for key in contents.keys() %}</p>
 
+        <div class="col-md-8 column " style="background:#e0e0d1">
+            <form id="form" action="/get_score" method="post" onsubmit=" return hg(form)">
+                <p>{% for key in contents.keys() %}</p>
                     <span class="label label-default col-sm-2">{{ key }}</span> {% for item in contents[key] %}
+                        <br>{{ loop.index }}
                         <textarea id="text" readonly="readonly" class="col-md-12 column " contenteditable="true"
                                   style="resize: none;border-color: moccasin">{{ item.question }}</textarea>
                         <br>
                         {% if key=='choice_question' %}
+
                             <dd>
-                                <label><input type="radio" name="{{ item.id }}"   value="A">A</label>
+                                <label><input type="radio" name="{{ item.id }}" value="A">A</label>
                                 <label><input type="radio" name="{{ item.id }}"   value="B">B</label>
                                 <label><input type="radio" name="{{ item.id }}"  value="C">C</label>
                                 <label><input type="radio" name="{{ item.id }}"  value="D">D</label>
@@ -32,7 +35,9 @@
                         {% else %}
                             <input name="{{ item.id }}" style="border-top:0px ;">
                         {% endif %}
-                        <br> {% endfor %} {% endfor %} <input id="submit" type="submit" value="交卷" onclick="hg()">
+                        <br> {% endfor %}
+                {% endfor %}
+                <input id="submit" type="submit" value="交卷"></input>
 
             </form>
         </div>
