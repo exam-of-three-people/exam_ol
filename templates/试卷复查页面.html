@@ -5,45 +5,27 @@
 <head>
     <meta charset="UTF-8">
     <title>试卷复查页面</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=gb2312"/>
+    <title>无标题文档</title>
+    <script src="../static/js/jquery.js" type="text/javascript">
+    </script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("#flt").hover(function () {
+                $("#flt").animate({right: "0px"}, 300);
+            }, function () {
+                $("#flt").animate({right: "-150px"}, 300);
+            });
+        });
+    </script>
+    <link href="style.css" rel="stylesheet" type="text/css"/>
 </head>
 {% endblock %}
 
 {% block body %}
 <body>
 
-<div style="width:1000px; height:500px; padding-left:450px;">
-    <table class="table" style=" background-color:#FC9">
-        <thead>
-        <tr>
-            <th style="width:30%;">Modal Type</th>
-            <th>Example</th>
-        </tr>
-        </thead>
-        <tbody>
 
-        <tr>
-            <td class="middle-align">3D Slit</td>
-            <td><a href="javascript:;" class="md-trigger btn btn-primary btn-sm" data-modal="modal-13">Show Me</a></td>
-        </tr>
-
-    </table>
-
-    <div class="md-modal md-effect-13" id="modal-13">
-        <div class="md-content">
-            <h3>Modal Dialog</h3>
-            <div>
-
-
-                hhhhhhh
-
-
-            </div>
-        </div>
-    </div>
-
-    <div class="md-overlay"></div>
-    <!-- the overlay element -->
-</div>
 </body>
 
 {% endblock %}
