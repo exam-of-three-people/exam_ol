@@ -16,8 +16,6 @@ class Student(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(10), nullable=False)
     password_hash = db.Column(db.String(128), nullable=False)
-    id_college = db.Column(db.Integer, db.ForeignKey('tb_college.id'), nullable=False)
-    id_major = db.Column(db.Integer, db.ForeignKey('tb_major.id'), nullable=False)
     grade = db.Column(db.Integer, nullable=False)
     id_class = db.Column(db.Integer, db.ForeignKey('tb_class.id'), nullable=False)
     current_page_id = db.Column(db.Integer, nullable=True, default=None)
@@ -66,7 +64,6 @@ class College(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(16), nullable=False)
 
-    students = db.relationship("Student", backref="tb_college")
     majors = db.relationship("Major", backref="tb_college")
 
     def __repr__(self):
@@ -81,7 +78,6 @@ class Major(db.Model):
     name = db.Column(db.String(16), nullable=False)
     id_college = db.Column(db.Integer, db.ForeignKey('tb_college.id'), nullable=False)
 
-    students = db.relationship("Student", backref="tb_major")
     classes = db.relationship("Class", backref="tb_major")
 
     def __repr__(self):
