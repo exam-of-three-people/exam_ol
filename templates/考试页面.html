@@ -25,23 +25,21 @@
                         {% if key=='choice_question' %}
 
                             <dd>
-                                <label><input type="radio" name="{{ item.id }}" value="A">A</label>
-                                <label><input type="radio" name="{{ item.id }}"   value="B">B</label>
-                                <label><input type="radio" name="{{ item.id }}"  value="C">C</label>
-                                <label><input type="radio" name="{{ item.id }}"  value="D">D</label>
+                                <label><input type="radio" name="{{ item.id }}" value="A" id="liuhao">A</label>
+                                <label><input type="radio" name="{{ item.id }}" value="B" id="liuhao">B</label>
+                                <label><input type="radio" name="{{ item.id }}" value="C" id="liuhao">C</label>
+                                <label><input type="radio" name="{{ item.id }}" value="D" id="liuhao">D</label>
                             </dd>
                         {% elif key == 'true_false_question' %}
-                            <label><input type="radio" name="{{ item.id }}"   value="0">√</label>
-                            <label><input type="radio" name="{{ item.id }}"   value="1">×</label>
+                            <label><input type="radio" name="{{ item.id }}" value="0" id="liuhao">√</label>
+                            <label><input type="radio" name="{{ item.id }}" value="1" id="liuhao">×</label>
                         {% else %}
-                            <input name="{{ item.id }}" style="border-top:0px ;">
+                            <input name="{{ item.id }}" style="border-top:0px ;" id="liuhao">
                         {% endif %}
                         <br> {% endfor %}
                 {% endfor %}
 
                 <input id="submit" type="submit" value="交卷"></input>
-
-
             </form>
         </div>
         <div class="col-md-2 column">

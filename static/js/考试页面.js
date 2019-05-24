@@ -15,6 +15,11 @@ function Submission_results() {
 function hg(form) {
     num = 0;
     for (i = 0; i < form.length; i++) {
+        if (form.elements[i].getAttribute("type") == "radio") {
+            console.log(form.elements[i].getAttribute("checked"))
+            console.log(form.elements[i])
+        }
+        form
         if (form.elements[i].value == "") {
             num = num + 1;
         }
