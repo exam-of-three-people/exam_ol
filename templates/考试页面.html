@@ -42,6 +42,9 @@
             </form>
         </div>
         <div class="col-md-2 column">
+
+            <div id="rest_time" style="font-size:50px;color:red;position: fixed"></div>
+
             <div id="rest_time" style="font-size:50px;color:red"></div>
             <!-- 答题面板 -->
             <div class="test_panel">
@@ -74,8 +77,9 @@
                 {% endfor %}
             </div>
         </div>
+    </div>
 
-        </div>
+
     </body>
     <div id="data_" hidden data-rest_time="{{ rest_time }}" data-answer='{{ answer }}' ></div>
     <script src="../static/js/考试页面.js" type="text/javascript"></script>
