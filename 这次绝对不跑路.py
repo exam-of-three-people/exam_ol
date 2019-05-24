@@ -130,3 +130,5 @@ tests = {"choice_question": [
         {"question": "一个全码的关系模式，其范式一定达到了三范式。（     )", "answer": "1"}
     ]
 }
+
+url = "https://www.cnblogs.com/zpfbuaa/p/5453552.html"
