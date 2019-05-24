@@ -178,3 +178,22 @@ let form_data = JSON.parse($("#data_").attr("data-answer").replace(/'/g, '"'));
 console.log(form_data)
 $("#form").setForm(form_data)
 
+
+
+function show_test_panel(name) {
+					let answer = document.getElementsByName(name);
+					let answer_length = answer[0].value.length;
+					// answer 是个NodeList, 直接.length永远不为0,最少是1  巨坑!!!
+					let flag = document.getElementById(name);
+					console.log(length);
+					if (answer_length > 0) {
+						console.log("做了");
+						console.log(answer);
+						flag.style.background = "skyblue";
+					} else {
+						console.log("没做");
+						console.log(answer);
+						flag.style.background = "white";
+					}
+				}
+
