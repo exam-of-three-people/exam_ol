@@ -13,10 +13,31 @@ function Submission_results() {
     alert('你的成绩为' + str(lv))
 }
 
-function hg() {
-    alert('你的成绩是' + str(lv))
+function hg(form) {
+    num = 0;
+    for (i = 0; i < form.length; i++) {
+        if (form.elements[i].value == "") {
+            num = num + 1;
+        }
+    }
+    if (num == 0) {
+        return true
+    }
+    if (num > 0) {
+        speak = "你还有" + num + "道题没做，确认提交吗?"
+        chose = confirm(speak)
+        if (chose == true) {
+            return true
+        }
+        if (chose == false) {
+            return false
+        }
+    }
 
 }
+
+
+
 
 // ####################################################################
 
@@ -152,5 +173,4 @@ this.settime($("#rest_time"),rest_time_value)
 let form_data = JSON.parse($("#data_").attr("data-answer").replace(/'/g, '"'));
 console.log(form_data)
 $("#form").setForm(form_data)
-
 
