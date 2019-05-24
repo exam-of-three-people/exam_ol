@@ -7,3 +7,31 @@ textarea{
     width: 10%;
 
 }
+
+/*题号面板*/
+.test_panel {
+    background: white;
+    width: 170px;
+	position: fixed;
+	top: 30%;
+    right: 0;
+	border: 1px solid rgba(0, 0, 0, 0);
+}
+/*每个类型*/
+.test_type {
+    background: darkgray;
+    float: left;
+    /*上；右；下；左*/
+    margin: 2px 4px 2px 4px;
+}
+/*每个题目标志*/
+.test_flag {
+    width: 24px;
+    height: 24px;
+	background: white;
+    /*行内元素转换成块元素*/
+	display: block;
+	/*添加浮动效果，解决自动换行*/
+	float: left;
+	margin: 1px;
+}
