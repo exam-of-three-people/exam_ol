@@ -14,6 +14,7 @@
         </div>
 
         <div class="col-md-8 column " style="background:#e0e0d1">
+
             <form id="form" action="/get_score" method="post" onsubmit=" return hg(form)">
 
                 <p>{% for key in contents.keys() %}</p>
@@ -25,14 +26,20 @@
                         {% if key=='choice_question' %}
 
                             <dd>
-                                <label><input type="radio" name="{{ item.id }}" value="A" onchange=show_test_panel("{{ item.id }}")>A</label>
-                                <label><input type="radio" name="{{ item.id }}"   value="B" onchange=show_test_panel("{{ item.id }}")>B</label>
-                                <label><input type="radio" name="{{ item.id }}"  value="C" onchange=show_test_panel("{{ item.id }}")>C</label>
-                                <label><input type="radio" name="{{ item.id }}"  value="D" onchange=show_test_panel("{{ item.id }}")>D</label>
+                                <label><input type="checkbox" name="{{ item.id }}" value="A"
+                                              onchange=show_test_panel("{{ item.id }}")>A</label>
+                                <label><input type="checkbox" name="{{ item.id }}" value="B"
+                                              onchange=show_test_panel("{{ item.id }}")>B</label>
+                                <label><input type="checkbox" name="{{ item.id }}" value="C"
+                                              onchange=show_test_panel("{{ item.id }}")>C</label>
+                                <label><input type="checkbox" name="{{ item.id }}" value="D"
+                                              onchange=show_test_panel("{{ item.id }}")>D</label>
                             </dd>
                         {% elif key == 'true_false_question' %}
-                            <label><input type="radio" name="{{ item.id }}"   value="0" onchange=show_test_panel("{{ item.id }}")>√</label>
-                            <label><input type="radio" name="{{ item.id }}"   value="1" onchange=show_test_panel("{{ item.id }}")>×</label>
+                            <label><input type="checkbox" name="{{ item.id }}" value="0"
+                                          onchange=show_test_panel("{{ item.id }}")>√</label>
+                            <label><input type="checkbox" name="{{ item.id }}" value="1"
+                                          onchange=show_test_panel("{{ item.id }}")>×</label>
                         {% else %}
                             <input name="{{ item.id }}" style="border-top:0px ;" onchange=show_test_panel("{{ item.id }}")>
                         {% endif %}

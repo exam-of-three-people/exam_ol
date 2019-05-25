@@ -13,21 +13,6 @@ function Submission_results() {
 }
 
 function hg(form) {
-    num = 0;
-    for (i = 0; i < form.length; i++) {
-        if (form.elements[i].getAttribute("type") == "radio") {
-            console.log(form.elements[i].getAttribute("checked"))
-            console.log(form.elements[i])
-        }
-        form
-        if (form.elements[i].value == "") {
-            num = num + 1;
-        }
-    }
-    if (num == 0) {
-        return true
-    }
-    if (num > 0) {
         speak = "你还有" + num + "道题没做，确认提交吗?"
         chose = confirm(speak)
         if (chose == true) {
@@ -36,7 +21,7 @@ function hg(form) {
         if (chose == false) {
             return false
         }
-    }
+
 
 }
 
