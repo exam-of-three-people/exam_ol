@@ -18,93 +18,57 @@
             <!-- 试卷区域 -->
             <div class="page_area">
                 {% for key in contents.keys() %}
-                    {% if key=='choice_question'%}
-                        <div class="test_type"><p>选择题</p>
+                    <div class="page_test_type">
+                        {% if key=='choice_question' %}<p>选择题</p>
+                        {% elif key=='true_false_question' %}<p>判断题</p>
+                        {% elif key=='fill_blank_question' %}<p>填空题</p>
+                        {% else %}<p>简答题</p>
+                        {% endif %}
                         {% for item in contents[key] %}
+                            <div class="test">
                                 <!-- 题号 -->
-                                <span id="{{ 'test_'+[item.id]|join }}">{{ loop.index }}</span>
+                                <span id="{{ 'test_'+[item.id]|join }}" class="test_num">{{ loop.index }}</span>
                                 <!-- 对错标志 -->
                                 <span>
-                                    {% if item.flag=='right'%}
-                                        <img src="../static/image/标志图片/success.png" />
+                                    {% if item.flag=='right' %}
+                                        <img src="../static/image/标志图片/success.png"/>
                                     {% else %}
-                                        <img src="../static/image/标志图片/error.png" />
+                                        <img src="../static/image/标志图片/error.png"/>
+                                    {% endif %}
                                 </span>
                                 <!-- 题目 -->
-                                <div>
-
+                                <div class="test">
+                                    <textarea class="textarea">{{ item.question }}</textarea>
+                                    <p>标准答案：{{ item.answer }}</p>
+                                    <p>我的答案：{{ item.myanswer }}</p>
                                 </div>
+                            </div>
                         {% endfor %}
-                        </div>
-                    {% elif key=='true_false_question'%}
-                        <div class="test_type"><p>判断题</p>
-                        {% for item in contents[key] %}
-                            <a href="{{ '#test_'+[item.id]|join }}">
-                                <span class="test_flag" id="{{ 'flag_'+[item.id]|join }}">{{ loop.index }}</span>
-                            </a>
-                        {% endfor %}
-                        </div>
-                    {% elif key=='fill_blank_question'%}
-                        <div class="test_type"><p>填空题</p>
-                        {% for item in contents[key] %}
-                            <a href="{{ '#test_'+[item.id]|join }}">
-                                <span class="test_flag" id="{{ 'flag_'+[item.id]|join }}">{{ loop.index }}</span>
-                            </a>
-                        {% endfor %}
-                        </div>
-                    {% else %}
-                        <div class="test_type"><p>简答题</p>
-                        {% for item in contents[key] %}
-                            <a href="{{ '#test_'+[item.id]|join }}">
-                                <span class="test_flag" id="{{ 'flag_'+[item.id]|join }}">{{ loop.index }}</span>
-                            </a>
-                        {% endfor %}
-                        </div>
-                    {% endif %}
+                    </div>
                 {% endfor %}
             </div>
 
         </div>
 
         <div class="col-md-2 column">
-            <!-- 答题面板 -->
+            <!-- 错题面板 -->
             <div class="test_panel">
                 {% for key in contents.keys() %}
-                    {% if key=='choice_question'%}
-                        <div class="test_type"><p>选择题</p>
-                        {% for item in contents[key] %}
-                            <a href="{{ '#test_'+[item.id]|join }}">
-                                <span class="test_flag" id="{{ 'flag_'+[item.id]|join }}">{{ loop.index }}</span>
-                            </a>
-                        {% endfor %}
-                        </div>
-                    {% elif key=='true_false_question'%}
-                        <div class="test_type"><p>判断题</p>
-                        {% for item in contents[key] %}
-                            <a href="{{ '#test_'+[item.id]|join }}">
-                                <span class="test_flag" id="{{ 'flag_'+[item.id]|join }}">{{ loop.index }}</span>
-                            </a>
-                        {% endfor %}
-                        </div>
-                    {% elif key=='fill_blank_question'%}
-                        <div class="test_type"><p>填空题</p>
-                        {% for item in contents[key] %}
-                            <a href="{{ '#test_'+[item.id]|join }}">
-                                <span class="test_flag" id="{{ 'flag_'+[item.id]|join }}">{{ loop.index }}</span>
-                            </a>
-                        {% endfor %}
-                        </div>
-                    {% else %}
-                        <div class="test_type"><p>简答题</p>
-                        {% for item in contents[key] %}
-                            <a href="{{ '#test_'+[item.id]|join }}">
-                                <span class="test_flag" id="{{ 'flag_'+[item.id]|join }}">{{ loop.index }}</span>
-                            </a>
-                        {% endfor %}
-                        </div>
+                    <div class="flag_test_type">
+                    {% if key=='choice_question' %}<p>选择题</p>
+                    {% elif key=='true_false_question' %}<p>判断题</p>
+                    {% elif key=='fill_blank_question' %}<p>填空题</p>
+                    {% else %}<p>简答题</p>
                     {% endif %}
+                    {% for item in contents[key] %}
+                        <a href="{{ '#test_'+[item.id]|join }}">
+                            <span class="test_flag" id="{{ 'flag_'+[item.id]|join }}">{{ loop.index }}</span>
+                        </a>
+                    {% endfor %}
+                    </div>
                 {% endfor %}
             </div>
+
         </div>
 
     </div>
