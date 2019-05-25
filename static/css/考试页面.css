@@ -19,6 +19,7 @@ textarea{
 }
 /*每个类型*/
 .test_type {
+    width: 100%;
     background: darkgray;
     float: left;
     /*上；右；下；左*/

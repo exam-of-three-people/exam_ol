@@ -1,5 +1,3 @@
-var num = 0
-
 function Submission_results() {
     subject = 0;
     correct = 0;
@@ -152,20 +150,19 @@ console.log(form_data)
 $("#form").setForm(form_data)
 
 
+// 答题卡上色
 function show_test_panel(name) {
-
     let answer = document.getElementsByName(name);
     let answer_length = answer[0].value.length;
     // answer 是个NodeList, 直接.length永远不为0,最少是1  巨坑!!!
-    let flag = document.getElementById(name);
-
+    let flag_id = 'flag_';
+    flag_id = flag_id + name;
+    let flag = document.getElementById(flag_id);
     if (answer_length > 0) {
         console.log("做了");
-        dic[name] = 1;
-        console.log(dic)
         flag.style.background = "skyblue";
     } else {
-        dic[name] = 0;
+        console.log("没做");
         flag.style.background = "white";
     }
 }
