@@ -1,32 +1,113 @@
-<!DOCTYPE html>
 {% extends "base.html" %}
-<html lang="en">
+
 {% block head %}
-<head>
     <meta charset="UTF-8">
-    <title>试卷复查页面</title>
-    <meta http-equiv="Content-Type" content="text/html; charset=gb2312"/>
-    <title>无标题文档</title>
-    <script src="../static/js/jquery.js" type="text/javascript">
-    </script>
-    <script type="text/javascript">
-        $(document).ready(function () {
-            $("#flt").hover(function () {
-                $("#flt").animate({right: "0px"}, 300);
-            }, function () {
-                $("#flt").animate({right: "-150px"}, 300);
-            });
-        });
-    </script>
-    <link href="style.css" rel="stylesheet" type="text/css"/>
-</head>
+    <title>welcome to 考试页面</title>
+    <link rel="stylesheet" type="text/css" href="../static/css/考试页面.css">
+
 {% endblock %}
 
 {% block body %}
-<body>
+    <body style="background: url(../static/image/背景/黑板上的学习几何解题摄影图片_彼岸图网.jpg)  no-repeat ; background-size: cover">
+    <div class="container">
 
+        <div class="col-md-2 column">
+        </div>
 
-</body>
+        <div class="col-md-8 column " style="background:#e0e0d1">
+            <!-- 试卷区域 -->
+            <div class="page_area">
+                {% for key in contents.keys() %}
+                    {% if key=='choice_question'%}
+                        <div class="test_type"><p>选择题</p>
+                        {% for item in contents[key] %}
+                                <!-- 题号 -->
+                                <span id="{{ 'test_'+[item.id]|join }}">{{ loop.index }}</span>
+                                <!-- 对错标志 -->
+                                <span>
+                                    {% if item.flag=='right'%}
+                                        <img src="../static/image/标志图片/success.png" />
+                                    {% else %}
+                                        <img src="../static/image/标志图片/error.png" />
+                                </span>
+                                <!-- 题目 -->
+                                <div>
 
+                                </div>
+                        {% endfor %}
+                        </div>
+                    {% elif key=='true_false_question'%}
+                        <div class="test_type"><p>判断题</p>
+                        {% for item in contents[key] %}
+                            <a href="{{ '#test_'+[item.id]|join }}">
+                                <span class="test_flag" id="{{ 'flag_'+[item.id]|join }}">{{ loop.index }}</span>
+                            </a>
+                        {% endfor %}
+                        </div>
+                    {% elif key=='fill_blank_question'%}
+                        <div class="test_type"><p>填空题</p>
+                        {% for item in contents[key] %}
+                            <a href="{{ '#test_'+[item.id]|join }}">
+                                <span class="test_flag" id="{{ 'flag_'+[item.id]|join }}">{{ loop.index }}</span>
+                            </a>
+                        {% endfor %}
+                        </div>
+                    {% else %}
+                        <div class="test_type"><p>简答题</p>
+                        {% for item in contents[key] %}
+                            <a href="{{ '#test_'+[item.id]|join }}">
+                                <span class="test_flag" id="{{ 'flag_'+[item.id]|join }}">{{ loop.index }}</span>
+                            </a>
+                        {% endfor %}
+                        </div>
+                    {% endif %}
+                {% endfor %}
+            </div>
+
+        </div>
+
+        <div class="col-md-2 column">
+            <!-- 答题面板 -->
+            <div class="test_panel">
+                {% for key in contents.keys() %}
+                    {% if key=='choice_question'%}
+                        <div class="test_type"><p>选择题</p>
+                        {% for item in contents[key] %}
+                            <a href="{{ '#test_'+[item.id]|join }}">
+                                <span class="test_flag" id="{{ 'flag_'+[item.id]|join }}">{{ loop.index }}</span>
+                            </a>
+                        {% endfor %}
+                        </div>
+                    {% elif key=='true_false_question'%}
+                        <div class="test_type"><p>判断题</p>
+                        {% for item in contents[key] %}
+                            <a href="{{ '#test_'+[item.id]|join }}">
+                                <span class="test_flag" id="{{ 'flag_'+[item.id]|join }}">{{ loop.index }}</span>
+                            </a>
+                        {% endfor %}
+                        </div>
+                    {% elif key=='fill_blank_question'%}
+                        <div class="test_type"><p>填空题</p>
+                        {% for item in contents[key] %}
+                            <a href="{{ '#test_'+[item.id]|join }}">
+                                <span class="test_flag" id="{{ 'flag_'+[item.id]|join }}">{{ loop.index }}</span>
+                            </a>
+                        {% endfor %}
+                        </div>
+                    {% else %}
+                        <div class="test_type"><p>简答题</p>
+                        {% for item in contents[key] %}
+                            <a href="{{ '#test_'+[item.id]|join }}">
+                                <span class="test_flag" id="{{ 'flag_'+[item.id]|join }}">{{ loop.index }}</span>
+                            </a>
+                        {% endfor %}
+                        </div>
+                    {% endif %}
+                {% endfor %}
+            </div>
+        </div>
+
+    </div>
+    </body>
 {% endblock %}
 </html>
