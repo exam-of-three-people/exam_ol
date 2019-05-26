@@ -67,7 +67,7 @@ def studentMenu():
         # 已经参加过的考试不再显示
         if student not in plan.tested_students:
             plans.append(plan)
-    return render_template("学生菜单_B.html", plans=plans)
+    return render_template("学生菜单_B.html", plans=plans_temp)
 
 
 @app.route("/teacherMenu", methods=['GET', 'POST'])
@@ -424,17 +424,17 @@ def createPage(id_plan):
     student = Student.query.get(session["uid"])
     if student.current_page_id is None:
         plan = Plan.query.get(id_plan)
-        for tested_student in plan.tested_students:
-            if student.id == tested_student.id:
-                flash("你已经参加过这场考试了")
-                return redirect("/studentMenu")
+        # for tested_student in plan.tested_students:
+        # if student.id == tested_student.id:
+        #     flash("你已经参加过这场考试了")
+        #     return redirect("/studentMenu")
         plan.tested_students.append(student)
-        if datetime.datetime.now().date() > plan.date:
-            flash("这场考试已经结束了")
-            return redirect("/studentMenu")
-        if (datetime.datetime.now()+datetime.timedelta(minutes=10)).date() <= plan.date and (datetime.datetime.now()+datetime.timedelta(minutes=10)).time() <= plan.time_start:
-            flash("这场考试还没开始")
-            return redirect("/studentMenu")
+        # if datetime.datetime.now().date() > plan.date:
+        #     flash("这场考试已经结束了")
+        #     return redirect("/studentMenu")
+        # if (datetime.datetime.now()+datetime.timedelta(minutes=10)).date() <= plan.date and (datetime.datetime.now()+datetime.timedelta(minutes=10)).time() <= plan.time_start:
+        #     flash("这场考试还没开始")
+        #     return redirect("/studentMenu")
         page_structure_detail = {"choice_question": [0, 0, 0], "fill_blank_question": [0, 0, 0],
                                  "true_false_question": [0, 0, 0], "free_response_question": [0, 0, 0]}
         page_structure = json.loads(plan.page_structure)
@@ -495,8 +495,14 @@ def createPage(id_plan):
             contents[type_].append({"id": test.id, "question": test.question})
     rest_seconds = page.rest_time
 
+    test_num = 0
+    ps = page.tb_plan.page_structure
+    ps = json.loads(ps)
+    for key in ps.keys():
+        test_num += int(ps[key])
+
     return render_template('考试页面.html', contents=contents, rest_time=rest_seconds,
-                           answer=json.loads(page.answer) if page.answer else "")
+                           answer=json.loads(page.answer) if page.answer else "", test_number=test_num)
 
 
 @app.route("/get_score", methods=['GET', 'POST'])
