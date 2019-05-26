@@ -58,7 +58,7 @@ for i in range(1,9):
                     student.name = "随机名" + str(i)+str(j)+str(k)+str(l)
                     student.id_college = i
                     student.id_major = (i-1)*8+j
-                    student.id_class = ((i-1)*8+j-1)*8+k
+                    student.class_id = ((i - 1) * 8 + j - 1) * 8 + k
                     student.grade = m
                     student.password_hash = "pbkdf2:sha256:150000$LssWNeqi$de05643547efe747ad0a14b74ac2e0e036e2d21fcae3be98bd43c94392f2226d"
                     db.session.add(student)
