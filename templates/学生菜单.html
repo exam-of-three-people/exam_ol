@@ -186,14 +186,14 @@
                 <td>time_start</td>
                 <td>time_end</td>
             </tr>
-            {% for plan in plans %}
+            {% for page in pages %}
                 <tr class="row1">
-                    <td>{{ plan.name }}</td>
-                    <td>{{ plan.subject }}</td>
-                    <td>{{ plan.date }}</td>
-                    <td>{{ plan.time_start }}</td>
-                    <td>{{ plan.time_end }}</td>
-                    <td><a href="{{ url_for('createPage', id_plan=plan.id) }}">开始考试</a></td>
+                    <td>{{ page.name }}</td>
+                    <td>{{ page.subject }}</td>
+                    <td>{{ page.date }}</td>
+                    <td>{{ page.time_start }}</td>
+                    <td>{{ page.time_end }}</td>
+                    <td><a href="{{ url_for('createPage', page_id=page.id) }}">开始考试</a></td>
                 </tr>
             {% endfor %}
         </table>

@@ -12,14 +12,14 @@ db = SQLAlchemy(app)
 
 
 class Student(db.Model):
-    __table__ = "tb_student"
+    __tablename__ = "tb_student"
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(10), nullable=False)
     password_hash = db.Column(db.String(128), nullable=False)
     grade = db.Column(db.Integer, nullable=False)
     class_id = db.Column(db.Integer, db.ForeignKey('tb_class.id'), nullable=False)
 
-    student_subjects = db.relationship("StudentSubject", backref="student")
+    subjects = db.relationship("StudentSubject", back_populates="student")
 
     @property
     def password(self):
@@ -32,31 +32,59 @@ class Student(db.Model):
     def checkPassword(self, password):
         return check_password_hash(self.password_hash, password)
 
+    def get_pages(self):
+        pages = []
+        for student_subject in self.student_subjects:
+            for teacher_s_s in student_subject.teacher_s_ss:
+                pages.extend(teacher_s_s.pages)
+        return pages
+
+    def get_current_page(self):
+        for student_subject in self.student_subjects:
+            for teacher_s_s in student_subject.teacher_s_ss:
+                for page in teacher_s_s.pages:
+                    if page.ongoing:
+                        return page
+        return None
+
+
     def __repr__(self):
         return "[学生 %r]" % self.id
 
     pass
 
 
-class TeacherCS(db.Model):
-    __table__ = "tb_teacher_c_s"
-    class_subject_id = db.Column(db.Integer, db.ForeignKey("class_subject.id"), primary_key=True),
-    teacher_id = db.Column(db.Integer, db.ForeignKey("teacher.id"), primary_key=True)
+class TeacherSS(db.Model):
+    __tablename__ = "tb_teacher_s_s"
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    student_subject_id = db.Column(db.Integer, db.ForeignKey("tb_student_subject.id"), primary_key=True)
+    teacher_id = db.Column(db.Integer, db.ForeignKey("tb_teacher.id"), primary_key=True)
+
+    student_subject = db.relationship("StudentSubject", back_populates="teachers")
+    teacher = db.relationship("Teacher", back_populates="student_subjects")
+
+    pages = db.relationship("Page", back_populates="teacher_s_s")
 
 
-class ClassSubject(db.Model):
-    __table__ = "tb_class_subject"
-    class_id = db.Column(db.Integer, db.ForeignKey("class_.id"), primary_key=True),
-    subject_id = db.Column(db.Integer, db.ForeignKey("subject.id"), primary_key=True)
+class StudentSubject(db.Model):
+    __tablename__ = "tb_student_subject"
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    student_id = db.Column(db.Integer, db.ForeignKey("tb_student.id"), primary_key=True)
+    subject_id = db.Column(db.Integer, db.ForeignKey("tb_subject.id"), primary_key=True)
+
+    subject = db.relationship("Subject", back_populates="students")
+    student = db.relationship("Student", back_populates="subjects")
+
+    teachers = db.relationship("TeacherSS", back_populates="student_subject")
 
 
 class Teacher(db.Model):
-    __table__ = "tb_teacher"
+    __tablename__ = "tb_teacher"
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(10), nullable=False)
     password_hash = db.Column(db.String(128), nullable=False)
 
-    class_subjects = db.relationship("ClassSubject", secondary="tb_teacher_c_s", backref=db.backref("teachers"))
+    student_subjects = db.relationship("TeacherSS", back_populates="teacher")
 
     def checkPassword(self, password):
         return check_password_hash(self.password_hash, password)
@@ -71,7 +99,7 @@ class Teacher(db.Model):
 
 
 class College(db.Model):
-    __table__ = "tb_college"
+    __tablename__ = "tb_college"
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(16), nullable=False)
 
@@ -82,7 +110,7 @@ class College(db.Model):
 
 
 class Major(db.Model):
-    __table__ = "tb_major"
+    __tablename__ = "tb_major"
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(16), nullable=False)
     college_id = db.Column(db.Integer, db.ForeignKey('tb_college.id'), nullable=False)
@@ -94,52 +122,41 @@ class Major(db.Model):
 
 
 class Subject(db.Model):
-    __table__ = "tb_subject"
+    __tablename__ = "tb_subject"
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(16), nullable=False)
 
     tests = db.relationship("Test", backref="subject")
+    students = db.relationship("StudentSubject", back_populates="subject")
 
     def __repr__(self):
         return "[学科 %r]" % self.name
 
 
-class Plan(db.Model):
-    __table__ = "tb_plan"
+class Page(db.Model):
+    __tablename__ = "tb_page"
     id = db.Column(db.Integer, primary_key=True)
-    subject_id = db.Column(db.Integer, db.ForeignKey('tb_subject.id'), nullable=False)
-    page_structure = db.Column(db.String(128), nullable=False)
+    structure = db.Column(db.String(128), nullable=False)
     level = db.Column(db.Integer, default=5)
     date = db.Column(db.Date, nullable=False)
     time_start = db.Column(db.Time, nullable=False)
     time_length = db.Column(db.Integer, nullable=False)
-    pages = db.relationship('Page', backref="tb_plan")
-    tested_students = db.relationship('Student',
-                                      secondary=students_plans,
-                                      backref=db.backref("tb_plan"))
-
-    def __repr__(self):
-        return "[考试计划 %r]" % self.id
-
-    pass
-
-
-class Page(db.Model):
-    __table__ = "tb_page"
-    id = db.Column(db.Integer, primary_key=True)
-    plan_id = db.Column(db.Integer, db.ForeignKey('tb_plan.id'), nullable=False)
-    id_student = db.Column(db.Integer, db.ForeignKey('tb_student.id'), nullable=False)
     content = db.Column(db.String(1024), nullable=False)
     answer = db.Column(db.Text, nullable=True)
+    ongoing = db.Column(db.Boolean, default=False)
+    finished = db.Column(db.Boolean, default=False)
     rest_time = db.Column(db.Integer, nullable=True)
     code = db.Column(db.Integer, nullable=True)
+
+    teacher_s_s_id = db.Column(db.Integer, db.ForeignKey("tb_teacher_s_s.id"))
+    teacher_s_s = db.relationship("TeacherSS", back_populates="pages")
 
     def __repr__(self):
         return "[试卷 %r]" % self.id
 
 
 class Test(db.Model):
-    __table__ = "tb_test"
+    __tablename__ = "tb_test"
     id = db.Column(db.Integer, primary_key=True)
     subject_id = db.Column(db.Integer, db.ForeignKey('tb_subject.id'), nullable=False)
     type = db.Column(db.String(50), nullable=False)
@@ -152,23 +169,12 @@ class Test(db.Model):
 
 
 class Class(db.Model):
-    __table__ = "tb_class"
+    __tablename__ = "tb_class"
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(32), nullable=False)
     major_id = db.Column(db.Integer, db.ForeignKey('tb_major.id'), nullable=False)
 
-    students = db.relationship("Student", backref="class")
-
-    def __repr__(self):
-        return "[%r]" % self.name
-
-
-class TestType(db.Model):
-    __table__ = "tb_test_type"
-    id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(32), nullable=False)
-
-    tests = db.relationship("Test", backref="tb_test_type")
+    students = db.relationship("Student", backref="class_")
 
     def __repr__(self):
         return "[%r]" % self.name

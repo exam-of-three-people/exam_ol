@@ -46,26 +46,26 @@
                                 班级
 							</td>
 						</tr>
-                        {% for item in plans %}
+                        {% for page in pages %}
 						<tr class="row1">
 							<td>
-                                <a href="/look/?username={{ item.date }}">{{ item.date }}</a>
+                                {{ page.date }}
 							</td>
 							<td>
-								{{item.time_start }}
+                                {{ page.time_start }}
 							</td>
 							<td>
-								{{ item.time_length }}
+                                {{ page.time_length }}
 							</td>
                             <td>
-                                {{ item.teacher_c_s.class_subject.subject.name }}
+                                {{ page.teacher_c_s.class_subject.subject.name }}
                             </td>
                             <td>
-                                {{ item.classes }}
+                                {{ page.classes }}
                             </td>
 							<td>
-								<a href="/delete/?id={{ item.id }}">删除</a>
-{#								<a href="/change/?id={{ item.id }}">修改</a>#}
+                                <a href="/delete/?id={{ page.id }}">删除</a>
+                                {#								<a href="/change/?id={{ page.id }}">修改</a>#}
 							</td>
 
 						</tr>
