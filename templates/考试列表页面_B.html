@@ -58,7 +58,7 @@
 								{{ item.time_length }}
 							</td>
                             <td>
-                                {{ Subject.query.get(item.id_subject).name }}
+                                {{ item.teacher_c_s.class_subject.subject.name }}
                             </td>
                             <td>
                                 {{ item.classes }}

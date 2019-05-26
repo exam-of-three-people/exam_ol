@@ -18,9 +18,8 @@ class Student(db.Model):
     password_hash = db.Column(db.String(128), nullable=False)
     grade = db.Column(db.Integer, nullable=False)
     class_id = db.Column(db.Integer, db.ForeignKey('tb_class.id'), nullable=False)
-    current_page_id = db.Column(db.Integer, nullable=True, default=None)
 
-    pages = db.relationship("Page", backref="student")
+    student_subjects = db.relationship("StudentSubject", backref="student")
 
     @property
     def password(self):
@@ -86,7 +85,7 @@ class Major(db.Model):
     __table__ = "tb_major"
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(16), nullable=False)
-    id_college = db.Column(db.Integer, db.ForeignKey('tb_college.id'), nullable=False)
+    college_id = db.Column(db.Integer, db.ForeignKey('tb_college.id'), nullable=False)
 
     classes = db.relationship("Class", backref="major")
 
@@ -99,24 +98,10 @@ class Subject(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(16), nullable=False)
 
-    plans = db.relationship("Plan", backref="tb_subject")
-    tests = db.relationship("Test", backref="tb_subject")
+    tests = db.relationship("Test", backref="subject")
 
     def __repr__(self):
         return "[学科 %r]" % self.name
-
-    pass
-
-
-classes_plans = db.Table("classes_plans",
-                         db.Column("plan_id", db.Integer, db.ForeignKey("tb_plan.id")),
-                         db.Column("class_id", db.Integer, db.ForeignKey("tb_class.id"))
-                         )
-
-students_plans = db.Table("students_plans",
-                          db.Column("plan_id", db.Integer, db.ForeignKey("tb_plan.id")),
-                          db.Column("student_id", db.Integer, db.ForeignKey("tb_student.id"))
-                          )
 
 
 class Plan(db.Model):
@@ -129,9 +114,6 @@ class Plan(db.Model):
     time_start = db.Column(db.Time, nullable=False)
     time_length = db.Column(db.Integer, nullable=False)
     pages = db.relationship('Page', backref="tb_plan")
-    classes = db.relationship('Class',
-                              secondary=classes_plans,
-                              backref=db.backref("tb_plan"))
     tested_students = db.relationship('Student',
                                       secondary=students_plans,
                                       backref=db.backref("tb_plan"))

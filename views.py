@@ -58,8 +58,8 @@ def index():
 @app.route("/studentMenu", methods=['GET', 'POST'])
 def studentMenu():
     student = Student.query.get(session["uid"])
-    id_class = student.id_class
-    class_ = Class.query.get(id_class)
+    class_id = student.class_id
+    class_ = Class.query.get(class_id)
     now = datetime.datetime.now()
     plans_temp = Plan.query.filter(Plan.date >= now.date()).with_parent(class_).all()
     plans = []
@@ -165,28 +165,28 @@ def studentInfo():
                               (grades[1], grades[1]),
                               (grades[2], grades[2])]
 
-        college = College.query.get(user.id_college)
+        college = College.query.get(user.college_id)
         form.college.choices = [(college.id, college.name)]
         major = Major.query.get(user.id_major)
         form.major.choices = [(major.id, major.name)]
-        classes = Class.query.get(user.id_class)
+        classes = Class.query.get(user.class_id)
         form.classes.choices = [(classes.id, classes.name)]
         return render_template("学生信息页面.html", form=form)
     else:
         name = form.name.data
-        id_college = form.college.data
+        college_id = form.college.data
         grade = form.grade.data
-        id_class = form.classes.data
+        class_id = form.classes.data
         id_major = form.major.data
         new_password = form.new_password.data
         pre_password = form.pre_password.data
 
-        college = College.query.get(id_college)
-        form.college.choices = [(id_college, college.name)]
+        college = College.query.get(college_id)
+        form.college.choices = [(college_id, college.name)]
         major = Major.query.get(id_major)
         form.major.choices = [(id_major, major.name)]
-        classes = Class.query.get(id_class)
-        form.classes.choices = [(id_class, classes.name)]
+        classes = Class.query.get(class_id)
+        form.classes.choices = [(class_id, classes.name)]
         form.grade.choices = [(grade, grade)]
 
         if user.checkPassword(pre_password):
@@ -194,9 +194,9 @@ def studentInfo():
                 # 改资料
                 try:
                     user.name = name
-                    user.id_college = id_college
+                    user.college_id = college_id
                     user.grade = grade
-                    user.id_class = id_class
+                    user.class_id = class_id
                     user.id_major = id_major
                     db.session.commit()
                 except InternalError:
@@ -253,7 +253,7 @@ def testCreater():
         pageStructure["free_response_question"] = form.free_response_question_number.data
 
         plan = Plan()
-        plan.id_subject = form.subject.data
+        plan.subject_id = form.subject.data
         plan.date = form.date.data
         plan.time_start = form.start_time.data
         minute_num = form.time_length.data
@@ -276,7 +276,7 @@ def testList():
     if request.method == 'GET':
         plans = Plan.query.all()
 
-        return render_template('考试列表页面_B.html', plans=plans, Subject=Subject)
+        return render_template('考试列表页面_B.html', plans=plans)
     else:
         return redirect("/teacherMenu")
 
@@ -337,7 +337,7 @@ def studentRegister():
         major_id = request.form.get("major")
         password = request.form.get("password")
         ensure_password = request.form.get("ensure_password")
-        user = Student(id=id, name=name, id_college=college_id, id_major=major_id, grade=grade, id_class=classes_id,
+        user = Student(id=id, name=name, college_id=college_id, id_major=major_id, grade=grade, class_id=classes_id,
                        password=password)
 
         if password == ensure_password:

@@ -32,7 +32,7 @@ for i in range(1,9):
     for major_name in majors:
         major = Major()
         major.name = colleges[i-1] + major_name
-        major.id_college = i
+        major.college_id = i
         db.session.add(major)
 db.session.commit()
 print("专业创建完毕")
