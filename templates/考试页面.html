@@ -16,7 +16,7 @@
 
         <div class="col-md-8 column " style="background:#e0e0d1">
 
-            <form id="form" action="/get_score" method="post" onsubmit="return hg({{ test_number }})">
+            <form id="form" action="/get_score" method="post" onsubmit="return hg({{ test_num }})">
 
                 <p>{% for key in contents.keys() %}</p>
                     <span class="label label-default col-sm-2">{{ key }}</span><br>{% for item in contents[key] %}

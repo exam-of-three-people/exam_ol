@@ -1,6 +1,6 @@
 from flask import render_template, redirect, flash, url_for, request, json, session
 from forms import LoginForm, RegisterFormStudent, RegisterFormTeacher, StudentInfoForm, TeacherInfoForm, TestCreaterForm
-from models import app, Student, Teacher, College, Major, Subject, Plan, Page, Test, Class, TestType, classes_plans, db
+from models import app, Student, Teacher, College, Major, StudentSubject, TeacherSS, Subject, Page, Test, Class, db
 from sqlalchemy.exc import IntegrityError, InternalError
 from sqlalchemy import func
 import time, json, datetime
@@ -58,16 +58,15 @@ def index():
 @app.route("/studentMenu", methods=['GET', 'POST'])
 def studentMenu():
     student = Student.query.get(session["uid"])
-    id_class = student.id_class
-    class_ = Class.query.get(id_class)
     now = datetime.datetime.now()
-    plans_temp = Plan.query.filter(Plan.date >= now.date()).with_parent(class_).all()
-    plans = []
-    for plan in plans_temp:
+    pages = student.get_pages()
+    pages_show = []
+    for page in pages:
         # 已经参加过的考试不再显示
-        if student not in plan.tested_students:
-            plans.append(plan)
-    return render_template("学生菜单_B.html", plans=plans_temp)
+        # if not page.finshed and page.date == now.date():
+        #     pages_show.append(page)
+        pages_show.append(page)
+    return render_template("学生菜单_B.html", pages=pages_show)
 
 
 @app.route("/teacherMenu", methods=['GET', 'POST'])
@@ -103,8 +102,8 @@ def testPage(page_id):
 @app.route("/testQuery", methods=['GET', 'POST'])
 def testQuery():
     student = Student.query.get(session["uid"])
-    pages = student.pages
-    return render_template("考试查询页面.html", pages=pages, Plan=Plan, Subject=Subject)
+    pages = student.get_pages()
+    return render_template("考试查询页面.html", pages=pages)
 
 
 @app.route("/teacherSignUp", methods=['GET', 'POST'])
@@ -165,28 +164,28 @@ def studentInfo():
                               (grades[1], grades[1]),
                               (grades[2], grades[2])]
 
-        college = College.query.get(user.id_college)
+        college = College.query.get(user.college_id)
         form.college.choices = [(college.id, college.name)]
-        major = Major.query.get(user.id_major)
+        major = Major.query.get(user.major_id)
         form.major.choices = [(major.id, major.name)]
-        classes = Class.query.get(user.id_class)
+        classes = Class.query.get(user.class_id)
         form.classes.choices = [(classes.id, classes.name)]
         return render_template("学生信息页面.html", form=form)
     else:
         name = form.name.data
-        id_college = form.college.data
+        college_id = form.college.data
         grade = form.grade.data
-        id_class = form.classes.data
-        id_major = form.major.data
+        class_id = form.classes.data
+        major_id = form.major.data
         new_password = form.new_password.data
         pre_password = form.pre_password.data
 
-        college = College.query.get(id_college)
-        form.college.choices = [(id_college, college.name)]
-        major = Major.query.get(id_major)
-        form.major.choices = [(id_major, major.name)]
-        classes = Class.query.get(id_class)
-        form.classes.choices = [(id_class, classes.name)]
+        college = College.query.get(college_id)
+        form.college.choices = [(college_id, college.name)]
+        major = Major.query.get(major_id)
+        form.major.choices = [(major_id, major.name)]
+        classes = Class.query.get(class_id)
+        form.classes.choices = [(class_id, classes.name)]
         form.grade.choices = [(grade, grade)]
 
         if user.checkPassword(pre_password):
@@ -194,10 +193,10 @@ def studentInfo():
                 # 改资料
                 try:
                     user.name = name
-                    user.id_college = id_college
+                    user.college_id = college_id
                     user.grade = grade
-                    user.id_class = id_class
-                    user.id_major = id_major
+                    user.class_id = class_id
+                    user.major_id = major_id
                     db.session.commit()
                 except InternalError:
                     db.session.rollback()
@@ -259,26 +258,43 @@ def testCreater():
         return render_template("教师创建考试页面_B.html", form=form)
     else:
         form = TestCreaterForm(request.form)
-        pageStructure = {}
-        pageStructure["choice_question"] = form.choice_question_number.data
-        pageStructure["fill_blank_question"] = form.fill_blank_question_number.data
-        pageStructure["true_false_question"] = form.true_false_question_number.data
-        pageStructure["free_response_question"] = form.free_response_question_number.data
+        page_structure = {}
+        page_structure["choice_question"] = form.choice_question_number.data
+        page_structure["fill_blank_question"] = form.fill_blank_question_number.data
+        page_structure["true_false_question"] = form.true_false_question_number.data
+        page_structure["free_response_question"] = form.free_response_question_number.data
 
-        plan = Plan()
-        plan.id_subject = form.subject.data
-        plan.date = form.date.data
-        plan.time_start = form.start_time.data
-        minute_num = form.time_length.data
-        plan.time_length = minute_num*60
-        plan.level = form.level.data
-        plan.page_structure = json.dumps(pageStructure)
-
+        subject_id = form.subject.data
         classes = form.class_.data
         for class_id in classes:
-            plan.classes.append(Class.query.get(class_id))
-        db.session.add(plan)
-        db.session.commit()
+            class_ = Class.query.get(int(class_id))
+            students = class_.students
+            for student in students:
+                student_subject = StudentSubject(student_id=student.id, subject_id=subject_id)
+                try:
+                    db.session.add(student_subject)
+                    db.session.commit()
+                except IntegrityError:
+                    db.session.rollback()
+                    student_subject = StudentSubject.query.filter_by(student_id=session["uid"],
+                                                                     subject_id=subject_id).first()
+                teacher_s_s = TeacherSS(student_subject_id=student_subject.id, teacher_id=session["uid"])
+                try:
+                    db.session.add(teacher_s_s)
+                    db.session.commit()
+                except IntegrityError:
+                    db.session.rollback()
+                    teacher_s_s = TeacherSS.query.filter_by(student_subject_id=student_subject.id,
+                                                            teacher_id=session["uid"]).first()
+                page = Page()
+                page.date = form.date.data
+                page.time_start = form.start_time.data
+                minute_num = form.time_length.data
+                page.time_length = minute_num * 60
+                page.level = form.level.data
+                page.structure = json.dumps(page_structure)
+                teacher_s_s.pages.append(page)
+                db.session.commit()
         flash("考试计划创建成功")
         return redirect("/testList")
 
@@ -287,9 +303,9 @@ def testCreater():
 @app.route("/testList/", methods=['GET', 'POST'])
 def testList():
     if request.method == 'GET':
-        plans = Plan.query.all()
+        pages = Page.query.all()
 
-        return render_template('考试列表页面_B.html', plans=plans, Subject=Subject)
+        return render_template('考试列表页面_B.html', pages=pages)
     else:
         return redirect("/teacherMenu")
 
@@ -297,9 +313,9 @@ def testList():
 @app.route("/delete/", methods=['GET', 'POST'])
 def delete():
     if request.method == 'GET':
-        plan = Plan.query.get(request.args['id'])
+        page = Page.query.get(request.args['id'])
         try:
-            db.session.delete(plan)
+            db.session.delete(page)
             db.session.commit()
         except IntegrityError:
             db.session.rollback()
@@ -342,15 +358,13 @@ def teacherRegister():
 def studentRegister():
     if request.method == "POST":
         form = RegisterFormStudent(request.form)
-        id = int(request.form.get("id"))
+        id_ = int(request.form.get("id"))
         name = request.form.get("name")
-        college_id = request.form.get("college")
         grade = request.form.get("grade")
         classes_id = request.form.get("classes")
-        major_id = request.form.get("major")
         password = request.form.get("password")
         ensure_password = request.form.get("ensure_password")
-        user = Student(id=id, name=name, id_college=college_id, id_major=major_id, grade=grade, id_class=classes_id,
+        user = Student(id=id_, name=name, grade=grade, class_id=classes_id,
                        password=password)
 
         if password == ensure_password:
@@ -413,54 +427,54 @@ def studentRegisterSelects():
     else:
         parent_id = request.form['parent_id']
         major = Major.query.get(parent_id)
-        for clas in major.classes:
-            data["data"].append({"id": clas.id, "name": clas.name})
+        for class_ in major.classes:
+            data["data"].append({"id": class_.id, "name": class_.name})
         pass
     return json.dumps(data)
 
 
-@app.route("/createPage/<int:id_plan>", methods=['GET', 'POST'])
-def createPage(id_plan):
+@app.route("/createPage/<int:page_id>", methods=['GET', 'POST'])
+def createPage(page_id):
     student = Student.query.get(session["uid"])
-    if student.current_page_id is None:
-        plan = Plan.query.get(id_plan)
-        # for tested_student in plan.tested_students:
-        # if student.id == tested_student.id:
-        #     flash("你已经参加过这场考试了")
-        #     return redirect("/studentMenu")
-        plan.tested_students.append(student)
-        # if datetime.datetime.now().date() > plan.date:
+    if student.get_current_page() is None:
+        page = Page.query.get(page_id)
+        # for tested_student in page.tested_students:
+        #     if student.id == tested_student.id:
+        #         flash("你已经参加过这场考试了")
+        #         return redirect("/studentMenu")
+        # page.tested_students.append(student)
+        # if datetime.datetime.now().date() > page.date:
         #     flash("这场考试已经结束了")
         #     return redirect("/studentMenu")
-        # if (datetime.datetime.now()+datetime.timedelta(minutes=10)).date() <= plan.date and (datetime.datetime.now()+datetime.timedelta(minutes=10)).time() <= plan.time_start:
+        # if (datetime.datetime.now() + datetime.timedelta(minutes=10)).date() <= page.date and (
+        #         datetime.datetime.now() + datetime.timedelta(minutes=10)).time() <= page.time_start:
         #     flash("这场考试还没开始")
         #     return redirect("/studentMenu")
         page_structure_detail = {"choice_question": [0, 0, 0], "fill_blank_question": [0, 0, 0],
                                  "true_false_question": [0, 0, 0], "free_response_question": [0, 0, 0]}
-        page_structure = json.loads(plan.page_structure)
+        page_structure = json.loads(page.structure)
         test_list = {"choice_question": [], "fill_blank_question": [], "true_false_question": [],
                      "free_response_question": []}
         for key in page_structure_detail.keys():
-            if plan.level == 1:
+            if page.level == 1:
                 page_structure_detail[key][1] = int(page_structure[key] * 0.3)
                 page_structure_detail[key][2] = int(page_structure[key] * 0.1)
                 page_structure_detail[key][0] = int(
                     page_structure[key] - page_structure_detail[key][1] - page_structure_detail[key][2])
-            if plan.level == 2:
+            if page.level == 2:
                 page_structure_detail[key][1] = int(page_structure[key] * 0.6)
                 page_structure_detail[key][2] = int(page_structure[key] * 0.2)
                 page_structure_detail[key][0] = int(
                     page_structure[key] - page_structure_detail[key][1] - page_structure_detail[key][2])
-            if plan.level == 3:
+            if page.level == 3:
                 page_structure_detail[key][1] = int(page_structure[key] * 0.4)
                 page_structure_detail[key][2] = int(page_structure[key] * 0.4)
                 page_structure_detail[key][0] = int(
                     page_structure[key] - page_structure_detail[key][1] - page_structure_detail[key][2])
         for key in test_list.keys():
-            test_type = TestType.query.filter(TestType.name == key).first()
             for i in range(3):
-                test_list_list = Test.query.filter(Test.id_subject == plan.id_subject).filter(
-                    Test.type == test_type.id).filter(Test.level == i + 1).order_by(func.rand()).limit(
+                test_list_list = Test.query.filter(Test.id_subject == page.id_subject).filter(
+                    Test.type_ == key).filter(Test.level == i + 1).order_by(func.rand()).limit(
                     page_structure_detail[key][i])
                 for test in test_list_list:
                     test_list[key].append(test)
@@ -471,38 +485,28 @@ def createPage(id_plan):
             for test in test_list[key]:
                 id_list[key].append(test.id)
 
-        page = Page()
+        page = Page.query.get(page_id)
         page.content = json.dumps(id_list)
-        page.id_plan = id_plan
-        page.id_student = session["uid"]
-        page.rest_time = plan.time_length * 60
-        db.session.add(page)
+        page.rest_time = page.time_length * 60
+        page.ongoing = True
         db.session.commit()
-
-        student.current_page_id = page.id
-        db.session.commit()
-
     else:
-        page = Page.query.get(student.current_page_id)
+        page = student.get_current_page()
         id_list = json.loads(page.content)
         pass
 
     contents = {"choice_question": [], "fill_blank_question": [], "true_false_question": [],
                 "free_response_question": []}
+    test_num = 0
     for type_ in id_list:
         for id_ in id_list[type_]:
             test = Test.query.get(id_)
             contents[type_].append({"id": test.id, "question": test.question})
+            test_num += 1
     rest_seconds = page.rest_time
 
-    test_num = 0
-    ps = page.tb_plan.page_structure
-    ps = json.loads(ps)
-    for key in ps.keys():
-        test_num += int(ps[key])
-
     return render_template('考试页面.html', contents=contents, rest_time=rest_seconds,
-                           answer=json.loads(page.answer) if page.answer else "", test_number=test_num)
+                           answer=json.loads(page.answer) if page.answer else "", test_num=test_num)
 
 
 @app.route("/get_score", methods=['GET', 'POST'])
@@ -523,20 +527,20 @@ def get_score():
         score = 0
 
     student = Student.query.get(session["uid"])
-    page = Page.query.get(student.current_page_id)
-    temp_page_id = student.current_page_id
-    student.current_page_id = None
+    page = student.get_current_page()
+    page.ongoing = False
     page.code = score
     page.answer = json.dumps(answer)
     db.session.add(page)
     db.session.commit()
     # return "<h1>分数：%d</h1><br>" % score
-    return redirect(url_for("testCheck", page_id=temp_page_id))
+    return redirect(url_for("testCheck", page_id=page.id))
 
 
 @app.route("/auto_save", methods=['GET', 'POST'])
 def auto_save():
     answer ={}
+    rest_time = 0
     if len(request.form) != 0:
         for key in request.form:
             if key == "rest_time":
@@ -544,7 +548,7 @@ def auto_save():
             else:
                 answer[key] = request.form[key]
         student = Student.query.get(session["uid"])
-        page = Page.query.get(student.current_page_id)
+        page = student.get_current_page()
         page.rest_time = rest_time
         page.answer = json.dumps(answer)
         db.session.commit()
