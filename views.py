@@ -224,7 +224,20 @@ def studentInfo():
 
 @app.route("/testCheck/<int:page_id>", methods=['GET', 'POST'])
 def testCheck(page_id):
-    return render_template("试卷复查页面.html")
+    page = Page.Page.query.get(page_id)
+    code = page.code
+
+    my_answers = json.loads(page.answer)
+    test_id_list = page.content
+    contents = {"choice_question": [], "fill_blank_question": [], "true_false_question": [],
+                "free_response_question": []}
+    for key in contents.keys():
+        for test_id in test_id_list[key]:
+            test = Test.query.get(test_id)
+            contents[key].append({"id": test.id, "question": test.question, "answer": test.answer,
+                                  "my_answer": my_answers[test.id],
+                                  "flag": "right" if test.answer != my_answers[test.id] else "wrong"})
+    return render_template("试卷复查页面.html", code=code, contents=contents)
 
 
 @app.route("/testCreater", methods=['GET', 'POST'])
@@ -505,12 +518,14 @@ def get_score():
 
     student = Student.query.get(session["uid"])
     page = Page.query.get(student.current_page_id)
+    temp_page_id = student.current_page_id
     student.current_page_id = None
     page.code = score
     page.answer = json.dumps(answer)
     db.session.add(page)
     db.session.commit()
-    return "<h1>分数：%d</h1><br>" % score
+    # return "<h1>分数：%d</h1><br>" % score
+    return redirect(url_for("testCheck", page_id=temp_page_id))
 
 
 @app.route("/auto_save", methods=['GET', 'POST'])

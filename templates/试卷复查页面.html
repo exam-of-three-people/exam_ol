@@ -2,8 +2,8 @@
 
 {% block head %}
     <meta charset="UTF-8">
-    <title>welcome to 考试页面</title>
-    <link rel="stylesheet" type="text/css" href="../static/css/考试页面.css">
+    <title>试卷复查页面</title>
+    <link rel="stylesheet" type="text/css" href="../static/css/试卷复查页面.css">
 
 {% endblock %}
 
@@ -12,6 +12,7 @@
     <div class="container">
 
         <div class="col-md-2 column">
+            <h1>你的分数是：<br>{{ code }}</h1>
         </div>
 
         <div class="col-md-8 column " style="background:#e0e0d1">
@@ -29,7 +30,7 @@
                                 <!-- 题号 -->
                                 <span id="{{ 'test_'+[item.id]|join }}" class="test_num">{{ loop.index }}</span>
                                 <!-- 对错标志 -->
-                                <span>
+                                <span class="test_flag">
                                     {% if item.flag=='right' %}
                                         <img src="../static/image/标志图片/success.png"/>
                                     {% else %}
@@ -37,10 +38,10 @@
                                     {% endif %}
                                 </span>
                                 <!-- 题目 -->
-                                <div class="test">
+                                <div class="test_area">
                                     <textarea class="textarea">{{ item.question }}</textarea>
                                     <p>标准答案：{{ item.answer }}</p>
-                                    <p>我的答案：{{ item.myanswer }}</p>
+                                    <p><span class="{{ item.flag }}+'_answer'">我的答案：{{ item.my_answer }}</span></p>
                                 </div>
                             </div>
                         {% endfor %}
@@ -62,7 +63,8 @@
                     {% endif %}
                     {% for item in contents[key] %}
                         <a href="{{ '#test_'+[item.id]|join }}">
-                            <span class="test_flag" id="{{ 'flag_'+[item.id]|join }}">{{ loop.index }}</span>
+                            <!-- CSS根据item.flag的不同来分别上色 -->
+                            <span class="{{ item.flag }}+'_flag'" >{{ loop.index }}</span>
                         </a>
                     {% endfor %}
                     </div>
