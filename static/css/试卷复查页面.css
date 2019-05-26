@@ -1,0 +1,83 @@
+/*试卷区域*/
+.page_area {
+    width: 100%;
+    background: #9d9d9d;
+}
+/*每个类型*/
+.page_test_type {
+    size: auto;
+    /*上；右；下；左*/
+    margin: 10px 0 10px 0;
+}
+/*每个题目<div>*/
+.test {
+    background: white;
+    /*上；右；下；左*/
+    margin: 4px 0 0 4px;
+}
+/*题号<span>*/
+.test_num {
+    background:lightskyblue;
+    text-align:center;
+    /*上；右；下；左*/
+    margin: 4px 0 0 4px;
+}
+/*对错标志*/
+.test_flag {
+    width: 32px;
+    height: 32px;
+    /*上；右；下；左*/
+    margin: 4px 0 0 4px;
+}
+/*qusetion*/
+.test_area {
+
+}
+/*错题答案显示*/
+.wrong_answer {
+    background: red;
+}
+
+
+
+/*错题面板*/
+.test_panel {
+    background: white;
+    width: 170px;
+	position: fixed;
+	top: 30%;
+    right: 0;
+	border: 1px solid rgba(0, 0, 0, 0);
+}
+/*每个类型*/
+.flag_test_type {
+    width: 100%;
+    background: darkgray;
+    float: left;
+    /*上；右；下；左*/
+    margin: 2px 4px 2px 4px;
+}
+/*每个题目标志<span>*/
+.right_flag {
+    width: 24px;
+    height: 24px;
+	background: green;
+    text-align:center;
+    /*行内元素转换成块元素*/
+	display: block;
+	/*添加浮动效果，解决自动换行*/
+	float: left;
+    /*上；右；下；左*/
+	margin: 2px 0 0 2px;
+}
+.wrong_flag {
+    width: 24px;
+    height: 24px;
+	background: red;
+    text-align:center;
+    /*行内元素转换成块元素*/
+	display: block;
+	/*添加浮动效果，解决自动换行*/
+	float: left;
+	margin: 1px;
+}

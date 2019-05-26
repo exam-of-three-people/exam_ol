@@ -6,42 +6,16 @@ function Submission_results() {
         if (contents[i].question == contents[i].answer) {
             print('第%d道题回答正确', i - 1)
             correct = correct + 1;
-
         }
     }
     lv = correct / subject;
     alert('你的成绩为' + str(lv))
 }
 
-function hg(form) {
-    num = 0;
-    for (i = 0; i < form.length; i++) {
-        if (form.elements[i].value == "") {
-            num = num + 1;
-        }
-    }
-    if (num == 0) {
-        return true
-    }
-    if (num > 0) {
-        speak = "你还有" + num + "道题没做，确认提交吗?"
-        chose = confirm(speak)
-        if (chose == true) {
-            return true
-        }
-        if (chose == false) {
-            return false
-        }
-    }
-
-}
-
-
-
 
 // ####################################################################
 
-function settime(remainTime,rest_time_) {
+function settime(remainTime, rest_time_) {
     console.log(rest_time_)
     let _countdown = parseInt(rest_time_);
 
@@ -58,9 +32,9 @@ function settime(remainTime,rest_time_) {
             _second = "0" + _second.toString();
         if (_minute < 10)
             _minute = "0" + _minute.toString();
-        remainTime.html("<p style='color:green'>"+_hour + ":" + _minute + ":" + _second +"</p>");
-        _countdown --;
-        let send_data = $("#form").serializeJson("rest_time:" + _countdown.toString()+";")
+        remainTime.html("<p style='color:green'>" + _hour + ":" + _minute + ":" + _second + "</p>");
+        _countdown--;
+        let send_data = $("#form").serializeJson("rest_time:" + _countdown.toString() + ";")
         $.ajax({
             type: "POST",
             url: "/auto_save",
@@ -74,7 +48,7 @@ function settime(remainTime,rest_time_) {
     }
     //每1000毫秒执行一次
     setTimeout(function () {
-        settime(remainTime,rest_time_);
+        settime(remainTime, rest_time_);
     }, 1000);
 };
 
@@ -164,12 +138,13 @@ $.fn.setForm = function (jsonValue) {
             obj.find("[name=" + name + "]").html(ival);
         } else {
             obj.find("[name=" + name + "]").val(ival);
+            obj.find("[name=" + name + "]").trigger("onchange")
         }
     })
 }
 
 let rest_time_value = $("#data_").attr("data-rest_time")
-this.settime($("#rest_time"),rest_time_value)
+this.settime($("#rest_time"), rest_time_value)
 let form_data = JSON.parse($("#data_").attr("data-answer").replace(/'/g, '"'));
 console.log(form_data)
 $("#form").setForm(form_data)
@@ -186,9 +161,43 @@ function show_test_panel(name) {
     if (answer_length > 0) {
         console.log("做了");
         flag.style.background = "skyblue";
+        dic[name] = 1;
     } else {
         console.log("没做");
+        dic[name] = 0;
         flag.style.background = "white";
     }
 }
+
+
+function hg(test_num) {
+    let num = 0;
+    console.log("aaaaaaaaaaaaaa")
+    console.log(dic)
+    for (let key in dic) { // 输出字典元素，如果字典的key是数字，输出时会自动按序输出
+        num += dic[key];
+        console.log(num)
+    }
+    if (num > 0) {
+        p = test_num - num
+        let speak = "你还有" + p + "道题没做，确认提交吗?"
+        let chose = confirm(speak)
+        if (chose == true) {
+            alert("shdjkbdsfsdf")
+            return true
+        }
+        if (chose == false) {
+
+            return false
+        }
+    } else {
+        alert("jdbfvkdsvbsd")
+        return false
+    }
+
+}
+
+
+
+
 

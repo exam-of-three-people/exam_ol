@@ -222,7 +222,20 @@ def studentInfo():
 
 @app.route("/testCheck/<int:page_id>", methods=['GET', 'POST'])
 def testCheck(page_id):
-    return render_template("试卷复查页面.html")
+    page = Page.query.get(page_id)
+    code = page.code
+
+    my_answers = json.loads(page.answer)
+    test_id_list = json.loads(page.content)
+    contents = {"choice_question": [], "fill_blank_question": [], "true_false_question": [],
+                "free_response_question": []}
+    for key in contents.keys():
+        for test_id in test_id_list[key]:
+            test = Test.query.get(test_id)
+            contents[key].append({"id": test.id, "question": test.question, "answer": test.answer,
+                                  "my_answer": my_answers[str(test.id)],
+                                  "flag": "right" if test.answer != my_answers[str(test.id)] else "wrong"})
+    return render_template("试卷复查页面.html", code=code, contents=contents)
 
 
 @app.route("/testCreater", methods=['GET', 'POST'])
@@ -490,6 +503,12 @@ def createPage(page_id):
             test_num += 1
     rest_seconds = page.rest_time
 
+    test_num = 0
+    ps = page.tb_plan.page_structure
+    ps = json.loads(ps)
+    for key in ps.keys():
+        test_num += int(ps[key])
+
     return render_template('考试页面.html', contents=contents, rest_time=rest_seconds,
                            answer=json.loads(page.answer) if page.answer else "", test_num=test_num)
 
@@ -497,12 +516,12 @@ def createPage(page_id):
 @app.route("/get_score", methods=['GET', 'POST'])
 def get_score():
     right_num = 0
-    answer = []
+    answer = {}
 
     if len(request.form) != 0:
         for key in request.form:
             test = Test.query.get(key)
-            answer.append({key: request.form[key]})
+            answer[key] = request.form[key]
             if test.answer == request.form[key]:
                 right_num += 1
             else:
@@ -518,7 +537,8 @@ def get_score():
     page.answer = json.dumps(answer)
     db.session.add(page)
     db.session.commit()
-    return "<h1>分数：%d</h1><br>" % score
+    # return "<h1>分数：%d</h1><br>" % score
+    return redirect(url_for("testCheck", page_id=temp_page_id))
 
 
 @app.route("/auto_save", methods=['GET', 'POST'])
