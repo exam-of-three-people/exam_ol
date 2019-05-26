@@ -157,7 +157,7 @@ tests = {"数据库原理与应用": {
         {"question": "在T-SQL中，用alter table语句修改表的结构，用______句修改表中的数据。", "answer": ["insert select"], "level": 3},
         {"question": "用户自定义函数包括表值函数和__标量值_函数两类，其中表值函数又包括内联表值函数和_____函数。", "answer": ["多语句表值"], "level": 1},
         {"question": "聚合函数AVG返回一组值的平均值，_____返回一组值中项目的数量。", "answer": ["count"], "level": 2},
-        {"question": "EXISTS称为存在量词，在WHERE子句中使用EXISTS，表示当子查询的结果_____存在时，条件为TRUE。", "answer": ["非空"]},
+        {"question": "EXISTS称为存在量词，在WHERE子句中使用EXISTS，表示当子查询的结果_____存在时，条件为TRUE。", "answer": ["非空"], "level": 2},
         {"question": "从历史发展看来，数据管理技术经历了人工管理、   文件管理   和  ________  三个阶段。", "answer": ["数据库管理"], "level": 1},
         {"question": "在SQL语言中，用符号  —  代表单个字符，用符号 _______ 代表0到多个字符。", "answer": ["%"], "level": 3},
         {"question": ".在SQL语言中，为了使查询的结果表中不包含完全相同的两个元组，应在select的后面加上关键词 ________ 。", "answer": ["distinct"], "level": 1},
@@ -214,24 +214,35 @@ for subject_name in tests.keys():
     subject = Subject()
     subject.name = subject_name
     db.session.add(subject)
-    db.session.commit()
     print(subject_name)
     for type_name in tests[subject_name].keys():
-        test = Test()
-        test.type_ = type_name
-        if type_name == "choice_question":
-            test.question = tests[subject_name]["question"] + "\n" + tests[subject_name]["A"] + "\n" + \
-                            tests[subject_name]["B"] + "\n" + tests[subject_name][
-                                "C"] + "\n" + tests[subject_name]["D"]
-        else:
-            test.question = tests[subject_name]["question"]
-        if tests[subject_name] == "fill_blank_question":
-            answer = ""
-            for blank in tests[subject_name]["answer"]:
-                answer += blank
-        else:
-            answer = tests[subject_name]["answer"]
-        test.answer = answer
-        test.level = tests[subject_name]["level"]
-        subject.tests.append(test)
-        db.session.commit()
+        for test_item in tests[subject_name][type_name]:
+            test = Test()
+            test.type_ = type_name
+            if type_name == "choice_question":
+                test.question = test_item["question"] + "\nA." + test_item["A"] + "\nB." + \
+                                test_item["B"] + "\nC." + test_item[
+                                    "C"] + "\nD." + test_item["D"]
+            else:
+                test.question = test_item["question"]
+            if tests[subject_name] == "fill_blank_question":
+                answer = ""
+                for blank in test_item["answer"]:
+                    answer += blank
+            else:
+                answer = test_item["answer"]
+            test.answer = answer
+            test.level = test_item["level"]
+            subject.tests.append(test)
+
+for i in range(84001, 84111):
+    teacher = Teacher()
+    teacher.id = i
+    last_name = random.choice(last_names)
+    sex = random.choice(["male", "female"])
+    first_name = random.choice(first_names[sex])
+    name = last_name + first_name
+    teacher.name = name
+    teacher.password_hash = "pbkdf2:sha256:150000$LssWNeqi$de05643547efe747ad0a14b74ac2e0e036e2d21fcae3be98bd43c94392f2226d"
+    db.session.add(teacher)
+db.session.commit()

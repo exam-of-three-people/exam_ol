@@ -267,7 +267,8 @@ def testCreater():
         subject_id = form.subject.data
         classes = form.class_.data
         for class_id in classes:
-            students = Class.query.get(int(class_id))
+            class_ = Class.query.get(int(class_id))
+            students = class_.students
             for student in students:
                 student_subject = StudentSubject(student_id=student.id, subject_id=subject_id)
                 try:

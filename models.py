@@ -137,11 +137,11 @@ class Page(db.Model):
     __tablename__ = "tb_page"
     id = db.Column(db.Integer, primary_key=True)
     structure = db.Column(db.String(128), nullable=False)
-    level = db.Column(db.Integer, default=5)
+    level = db.Column(db.Integer, default=2)
     date = db.Column(db.Date, nullable=False)
     time_start = db.Column(db.Time, nullable=False)
     time_length = db.Column(db.Integer, nullable=False)
-    content = db.Column(db.String(1024), nullable=False)
+    content = db.Column(db.String(1024), nullable=True)
     answer = db.Column(db.Text, nullable=True)
     ongoing = db.Column(db.Boolean, default=False)
     finished = db.Column(db.Boolean, default=False)
