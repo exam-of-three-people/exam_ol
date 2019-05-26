@@ -224,11 +224,11 @@ def studentInfo():
 
 @app.route("/testCheck/<int:page_id>", methods=['GET', 'POST'])
 def testCheck(page_id):
-    page = Page.Page.query.get(page_id)
+    page = Page.query.get(page_id)
     code = page.code
 
     my_answers = json.loads(page.answer)
-    test_id_list = page.content
+    test_id_list = json.loads(page.content)
     contents = {"choice_question": [], "fill_blank_question": [], "true_false_question": [],
                 "free_response_question": []}
     for key in contents.keys():
@@ -502,12 +502,12 @@ def createPage(id_plan):
 @app.route("/get_score", methods=['GET', 'POST'])
 def get_score():
     right_num = 0
-    answer = []
+    answer = {}
 
     if len(request.form) != 0:
         for key in request.form:
             test = Test.query.get(key)
-            answer.append({key: request.form[key]})
+            answer[key] = request.form[key]
             if test.answer == request.form[key]:
                 right_num += 1
             else:

@@ -163,6 +163,7 @@ $.fn.setForm = function (jsonValue) {
         } else if ($oinput.attr("type") == "textarea") {
             obj.find("[name=" + name + "]").html(ival);
         } else {
+            obj.find("[name=" + name + "]").trigger("onchange");
             obj.find("[name=" + name + "]").val(ival);
         }
     })
