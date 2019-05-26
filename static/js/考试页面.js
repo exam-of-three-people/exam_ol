@@ -161,8 +161,10 @@ function show_test_panel(name) {
     if (answer_length > 0) {
         console.log("做了");
         flag.style.background = "skyblue";
+        dic[name] = 1;
     } else {
         console.log("没做");
+        dic[name] = 0;
         flag.style.background = "white";
     }
 }
