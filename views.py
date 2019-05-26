@@ -63,8 +63,9 @@ def studentMenu():
     pages_show = []
     for page in pages:
         # 已经参加过的考试不再显示
-        if not page.finshed and page.date == now.date():
-            pages_show.append(page)
+        # if not page.finshed and page.date == now.date():
+        #     pages_show.append(page)
+        pages_show.append(page)
     return render_template("学生菜单_B.html", pages=pages_show)
 
 
@@ -436,18 +437,18 @@ def createPage(page_id):
     student = Student.query.get(session["uid"])
     if student.get_current_page() is None:
         page = Page.query.get(page_id)
-        for tested_student in page.tested_students:
-            if student.id == tested_student.id:
-                flash("你已经参加过这场考试了")
-                return redirect("/studentMenu")
-        page.tested_students.append(student)
-        if datetime.datetime.now().date() > page.date:
-            flash("这场考试已经结束了")
-            return redirect("/studentMenu")
-        if (datetime.datetime.now() + datetime.timedelta(minutes=10)).date() <= page.date and (
-                datetime.datetime.now() + datetime.timedelta(minutes=10)).time() <= page.time_start:
-            flash("这场考试还没开始")
-            return redirect("/studentMenu")
+        # for tested_student in page.tested_students:
+        #     if student.id == tested_student.id:
+        #         flash("你已经参加过这场考试了")
+        #         return redirect("/studentMenu")
+        # page.tested_students.append(student)
+        # if datetime.datetime.now().date() > page.date:
+        #     flash("这场考试已经结束了")
+        #     return redirect("/studentMenu")
+        # if (datetime.datetime.now() + datetime.timedelta(minutes=10)).date() <= page.date and (
+        #         datetime.datetime.now() + datetime.timedelta(minutes=10)).time() <= page.time_start:
+        #     flash("这场考试还没开始")
+        #     return redirect("/studentMenu")
         page_structure_detail = {"choice_question": [0, 0, 0], "fill_blank_question": [0, 0, 0],
                                  "true_false_question": [0, 0, 0], "free_response_question": [0, 0, 0]}
         page_structure = json.loads(page.structure)
@@ -503,12 +504,6 @@ def createPage(page_id):
             test_num += 1
     rest_seconds = page.rest_time
 
-    test_num = 0
-    ps = page.tb_plan.page_structure
-    ps = json.loads(ps)
-    for key in ps.keys():
-        test_num += int(ps[key])
-
     return render_template('考试页面.html', contents=contents, rest_time=rest_seconds,
                            answer=json.loads(page.answer) if page.answer else "", test_num=test_num)
 
@@ -538,7 +533,7 @@ def get_score():
     db.session.add(page)
     db.session.commit()
     # return "<h1>分数：%d</h1><br>" % score
-    return redirect(url_for("testCheck", page_id=temp_page_id))
+    return redirect(url_for("testCheck", page_id=page.id))
 
 
 @app.route("/auto_save", methods=['GET', 'POST'])
