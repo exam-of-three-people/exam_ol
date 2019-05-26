@@ -12,7 +12,7 @@
     <div class="container">
 
         <div class="col-md-2 column">
-            <h1>你的分数是：<br>{{ code }}</h1>
+
         </div>
 
         <div class="col-md-8 column " style="background:#e0e0d1">
@@ -41,32 +41,37 @@
                                 <div class="test_area">
                                     <textarea class="textarea">{{ item.question }}</textarea>
                                     <p>标准答案：{{ item.answer }}</p>
-                                    <p><span class="{{ item.flag }}+'_answer'">我的答案：{{ item.my_answer }}</span></p>
+                                    <p>我的答案：<span class="{{ item.flag }}_answer">{{ item.my_answer }}</span></p>
                                 </div>
                             </div>
                         {% endfor %}
                     </div>
                 {% endfor %}
             </div>
-
         </div>
 
         <div class="col-md-2 column">
+            <!-- 分数 -->
+            <div id="show_code">你的分数是：<br>{{ code }}分</div>
             <!-- 错题面板 -->
             <div class="test_panel">
                 {% for key in contents.keys() %}
                     <div class="flag_test_type">
-                    {% if key=='choice_question' %}<p>选择题</p>
-                    {% elif key=='true_false_question' %}<p>判断题</p>
-                    {% elif key=='fill_blank_question' %}<p>填空题</p>
-                    {% else %}<p>简答题</p>
-                    {% endif %}
-                    {% for item in contents[key] %}
-                        <a href="{{ '#test_'+[item.id]|join }}">
-                            <!-- CSS根据item.flag的不同来分别上色 -->
-                            <span class="{{ item.flag }}+'_flag'" >{{ loop.index }}</span>
-                        </a>
-                    {% endfor %}
+                        {% if key=='choice_question' %}<h2>选择题</h2>
+                        {% elif key=='true_false_question' %}<p>判断题</p>
+                        {% elif key=='fill_blank_question' %}<p>填空题</p>
+                        {% else %}<p>简答题</p>
+                        {% endif %}
+                        {% for item in contents[key] %}
+                            <a href="{{ '#test_'+[item.id]|join }}">
+                                <!-- CSS根据item.flag的不同来分别上色 -->
+                                {% if item.flag=='right' %}
+                                    <span class="right_flag">{{ loop.index }}</span>
+                                {% else %}
+                                    <span class="wrong_flag">{{ loop.index }}</span>
+                                {% endif %}
+                            </a>
+                        {% endfor %}
                     </div>
                 {% endfor %}
             </div>

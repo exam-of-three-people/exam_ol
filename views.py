@@ -236,7 +236,7 @@ def testCheck(page_id):
             test = Test.query.get(test_id)
             contents[key].append({"id": test.id, "question": test.question, "answer": test.answer,
                                   "my_answer": my_answers[str(test.id)],
-                                  "flag": "right" if test.answer != my_answers[str(test.id)] else "wrong"})
+                                  "flag": "right" if test.answer == my_answers[str(test.id)] else "wrong"})
     return render_template("试卷复查页面.html", code=code, contents=contents)
 
 
