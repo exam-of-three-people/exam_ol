@@ -16,24 +16,25 @@
         <div class="col-md-8 column " style="background:#e0e0d1">
             <form id="form" action="/get_score" method="post" onsubmit=" return hg(form)">
                 <p>{% for key in contents.keys() %}</p>
-                    <span class="label label-default col-sm-2">{{ key }}</span> {% for item in contents[key] %}
-                        <br>{{ loop.index }}
+                    <span class="label label-default col-sm-2">{{ key }}</span><br>{% for item in contents[key] %}
+                        <!-- 题号放在span里面 方便设置锚点 -->
+                        <span id="{{ 'test_'+[item.id]|join }}">{{ loop.index }}</span>
                         <textarea id="text" readonly="readonly" class="col-md-12 column " contenteditable="true"
                                   style="resize: none;border-color: moccasin">{{ item.question }}</textarea>
                         <br>
                         {% if key=='choice_question' %}
 
                             <dd>
-                                <label><input type="radio" name="{{ item.id }}" value="A">A</label>
-                                <label><input type="radio" name="{{ item.id }}"   value="B">B</label>
-                                <label><input type="radio" name="{{ item.id }}"  value="C">C</label>
-                                <label><input type="radio" name="{{ item.id }}"  value="D">D</label>
+                                <label><input type="radio" name="{{ item.id }}" value="A" onchange=show_test_panel("{{ item.id }}")>A</label>
+                                <label><input type="radio" name="{{ item.id }}"   value="B" onchange=show_test_panel("{{ item.id }}")>B</label>
+                                <label><input type="radio" name="{{ item.id }}"  value="C" onchange=show_test_panel("{{ item.id }}")>C</label>
+                                <label><input type="radio" name="{{ item.id }}"  value="D" onchange=show_test_panel("{{ item.id }}")>D</label>
                             </dd>
                         {% elif key == 'true_false_question' %}
-                            <label><input type="radio" name="{{ item.id }}"   value="0">√</label>
-                            <label><input type="radio" name="{{ item.id }}"   value="1">×</label>
+                            <label><input type="radio" name="{{ item.id }}"   value="0" onchange=show_test_panel("{{ item.id }}")>√</label>
+                            <label><input type="radio" name="{{ item.id }}"   value="1" onchange=show_test_panel("{{ item.id }}")>×</label>
                         {% else %}
-                            <input name="{{ item.id }}" style="border-top:0px ;">
+                            <input name="{{ item.id }}" style="border-top:0px ;" onchange=show_test_panel("{{ item.id }}")>
                         {% endif %}
                         <br> {% endfor %}
                 {% endfor %}
@@ -42,7 +43,47 @@
             </form>
         </div>
         <div class="col-md-2 column">
+
             <div id="rest_time" style="font-size:50px;color:red;position: fixed"></div>
+
+            <!-- 答题面板 -->
+            <div class="test_panel">
+                {% for key in contents.keys() %}
+                    {% if key=='choice_question'%}
+                        <div class="test_type"><p>选择题</p>
+                        {% for item in contents[key] %}
+                            <a href="{{ '#test_'+[item.id]|join }}">
+                                <span class="test_flag" id="{{ 'flag_'+[item.id]|join }}">{{ loop.index }}</span>
+                            </a>
+                        {% endfor %}
+                        </div>
+                    {% elif key=='true_false_question'%}
+                        <div class="test_type"><p>判断题</p>
+                        {% for item in contents[key] %}
+                            <a href="{{ '#test_'+[item.id]|join }}">
+                                <span class="test_flag" id="{{ 'flag_'+[item.id]|join }}">{{ loop.index }}</span>
+                            </a>
+                        {% endfor %}
+                        </div>
+                    {% elif key=='fill_blank_question'%}
+                        <div class="test_type"><p>填空题</p>
+                        {% for item in contents[key] %}
+                            <a href="{{ '#test_'+[item.id]|join }}">
+                                <span class="test_flag" id="{{ 'flag_'+[item.id]|join }}">{{ loop.index }}</span>
+                            </a>
+                        {% endfor %}
+                        </div>
+                    {% else %}
+                        <div class="test_type"><p>简答题</p>
+                        {% for item in contents[key] %}
+                            <a href="{{ '#test_'+[item.id]|join }}">
+                                <span class="test_flag" id="{{ 'flag_'+[item.id]|join }}">{{ loop.index }}</span>
+                            </a>
+                        {% endfor %}
+                        </div>
+                    {% endif %}
+                {% endfor %}
+            </div>
         </div>
     </div>
 
