@@ -3,8 +3,11 @@
 # @Author  : xianfa
 # @FileName: 这次绝对不跑路.py
 # @Software: PyCharm
-from models import Test, db, TestType, College, Class, Subject, Student, Major, Teacher, Page, Plan
-import random
+from models import Test, db, College, Class, Subject, Student, Major, Teacher, Page
+import random, time
+
+db.drop_all()
+db.create_all()
 
 students_data = \
     {
@@ -177,7 +180,6 @@ for college_name in students_data.keys():
     college = College()
     college.name = college_name
     db.session.add(college)
-    db.session.commit()
     college_code += 1
     major_code = 9
     print(college_name)
@@ -185,7 +187,6 @@ for college_name in students_data.keys():
         major = Major()
         major.name = major_name
         college.majors.append(major)
-        db.session.commit()
         major_code += 1
         print(major_name)
         for grade in students_data[college_name][major_name].keys():
@@ -195,45 +196,42 @@ for college_name in students_data.keys():
                 class_ = Class()
                 class_.name = class_name
                 major.classes.append(class_)
-                db.session.commit()
                 print(class_name)
                 for student_code in range(10, 30):
                     last_name = random.choice(last_names)
-                    first_name = random.choice(first_names)
-                    name = first_name + last_name
+                    sex = random.choice(["male", "female"])
+                    first_name = random.choice(first_names[sex])
+                    name = last_name + first_name
                     student = Student()
                     student.name = name
                     student.id = int(
-                        grade[-2:] + str(college_code) + str(major_code) + str(college_code) + str(student_code))
+                        grade[-2:] + str(college_code) + str(major_code) + str(class_code) + str(student_code))
                     student.grade = int(grade)
                     student.password_hash = "pbkdf2:sha256:150000$LssWNeqi$de05643547efe747ad0a14b74ac2e0e036e2d21fcae3be98bd43c94392f2226d"
                     class_.students.append(student)
-                    db.session.commit()
 
-for subject_name in subjects:
+for subject_name in tests.keys():
     subject = Subject()
     subject.name = subject_name
-    subject.
-for type_name in tests.keys():
-    type_ = TestType()
-    type_.name = type_name
-    db.session.add(type_)
+    db.session.add(subject)
     db.session.commit()
-    print(type_name)
-    for test_item in tests[type_name]:
+    print(subject_name)
+    for type_name in tests[subject_name].keys():
         test = Test()
-        if test_item == "choice_question":
-            test.question = test_item["question"] + "\n" + test_item["A"] + "\n" + test_item["B"] + "\n" + test_item[
-                "C"] + "\n" + test_item["D"]
+        test.type_ = type_name
+        if type_name == "choice_question":
+            test.question = tests[subject_name]["question"] + "\n" + tests[subject_name]["A"] + "\n" + \
+                            tests[subject_name]["B"] + "\n" + tests[subject_name][
+                                "C"] + "\n" + tests[subject_name]["D"]
         else:
-            test.question = test_item["question"]
-        if test_item == "fill_blank_question":
+            test.question = tests[subject_name]["question"]
+        if tests[subject_name] == "fill_blank_question":
             answer = ""
-            for blank in test_item["answer"]:
+            for blank in tests[subject_name]["answer"]:
                 answer += blank
         else:
-            answer = test_item["answer"]
+            answer = tests[subject_name]["answer"]
         test.answer = answer
-        test.level = test_item["level"]
-        type_.tests.append(test)
+        test.level = tests[subject_name]["level"]
+        subject.tests.append(test)
         db.session.commit()

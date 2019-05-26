@@ -13,7 +13,7 @@ db = SQLAlchemy(app)
 
 class Student(db.Model):
     __tablename__ = "tb_student"
-    id = db.Column(db.Integer, primary_key=True)
+    id = db.Column(db.BigInteger, primary_key=True)
     name = db.Column(db.String(10), nullable=False)
     password_hash = db.Column(db.String(128), nullable=False)
     grade = db.Column(db.Integer, nullable=False)
@@ -58,7 +58,7 @@ class TeacherSS(db.Model):
     __tablename__ = "tb_teacher_s_s"
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     student_subject_id = db.Column(db.Integer, db.ForeignKey("tb_student_subject.id"), primary_key=True)
-    teacher_id = db.Column(db.Integer, db.ForeignKey("tb_teacher.id"), primary_key=True)
+    teacher_id = db.Column(db.BigInteger, db.ForeignKey("tb_teacher.id"), primary_key=True)
 
     student_subject = db.relationship("StudentSubject", back_populates="teachers")
     teacher = db.relationship("Teacher", back_populates="student_subjects")
@@ -69,7 +69,7 @@ class TeacherSS(db.Model):
 class StudentSubject(db.Model):
     __tablename__ = "tb_student_subject"
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    student_id = db.Column(db.Integer, db.ForeignKey("tb_student.id"), primary_key=True)
+    student_id = db.Column(db.BigInteger, db.ForeignKey("tb_student.id"), primary_key=True)
     subject_id = db.Column(db.Integer, db.ForeignKey("tb_subject.id"), primary_key=True)
 
     subject = db.relationship("Subject", back_populates="students")
@@ -80,7 +80,7 @@ class StudentSubject(db.Model):
 
 class Teacher(db.Model):
     __tablename__ = "tb_teacher"
-    id = db.Column(db.Integer, primary_key=True)
+    id = db.Column(db.BigInteger, primary_key=True)
     name = db.Column(db.String(10), nullable=False)
     password_hash = db.Column(db.String(128), nullable=False)
 
@@ -159,7 +159,7 @@ class Test(db.Model):
     __tablename__ = "tb_test"
     id = db.Column(db.Integer, primary_key=True)
     subject_id = db.Column(db.Integer, db.ForeignKey('tb_subject.id'), nullable=False)
-    type = db.Column(db.String(50), nullable=False)
+    type_ = db.Column(db.String(50), nullable=False)
     question = db.Column(db.VARCHAR(1024), nullable=False)
     answer = db.Column(db.VARCHAR(1000), nullable=False)
     level = db.Column(db.Integer, nullable=False)

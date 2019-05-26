@@ -459,7 +459,7 @@ def createPage(page_id):
         for key in test_list.keys():
             for i in range(3):
                 test_list_list = Test.query.filter(Test.id_subject == page.id_subject).filter(
-                    Test.type == key).filter(Test.level == i + 1).order_by(func.rand()).limit(
+                    Test.type_ == key).filter(Test.level == i + 1).order_by(func.rand()).limit(
                     page_structure_detail[key][i])
                 for test in test_list_list:
                     test_list[key].append(test)
