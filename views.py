@@ -304,7 +304,7 @@ def testCreater():
 def testList():
     if request.method == 'GET':
         teacher = Teacher.query.get(session["uid"])
-        pages = teacher.
+        pages = teacher.teacher_s_ss
 
         return render_template('考试列表页面_B.html', pages=pages)
     else:

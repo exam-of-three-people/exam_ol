@@ -102,6 +102,12 @@ class Teacher(db.Model):
     def setPassword(self, password):
         self.password_hash = generate_password_hash(password)
 
+    def get_pages(self):
+        pages = []
+        for teacher_s_s in self.teacher_s_ss:
+            pages.extend(teacher_s_s.pages)
+        return pages
+
     def __repr__(self):
         return "[%r老师]" % self.name
 
