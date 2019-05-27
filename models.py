@@ -19,7 +19,8 @@ class Student(db.Model):
     grade = db.Column(db.Integer, nullable=False)
     class_id = db.Column(db.Integer, db.ForeignKey('tb_class.id'), nullable=False)
 
-    subjects = db.relationship("StudentSubject", back_populates="student")
+    subjects = db.relationship("StudentSubject", back_populates="student_association")
+    student_subjects = db.relationship("StudentSubject", back_populates="student")
 
     @property
     def password(self):
@@ -60,8 +61,11 @@ class TeacherSS(db.Model):
     student_subject_id = db.Column(db.Integer, db.ForeignKey("tb_student_subject.id"), primary_key=True)
     teacher_id = db.Column(db.BigInteger, db.ForeignKey("tb_teacher.id"), primary_key=True)
 
-    student_subject = db.relationship("StudentSubject", back_populates="teachers")
-    teacher = db.relationship("Teacher", back_populates="student_subjects")
+    student_subject_association = db.relationship("StudentSubject", back_populates="teachers")
+    teacher_association = db.relationship("Teacher", back_populates="student_subjects")
+
+    student_subject = db.relationship("StudentSubject", back_populates="teacher_s_ss")
+    teacher = db.relationship("Teacher", back_populates="teacher_s_ss")
 
     pages = db.relationship("Page", back_populates="teacher_s_s")
 
@@ -72,10 +76,14 @@ class StudentSubject(db.Model):
     student_id = db.Column(db.BigInteger, db.ForeignKey("tb_student.id"), primary_key=True)
     subject_id = db.Column(db.Integer, db.ForeignKey("tb_subject.id"), primary_key=True)
 
-    subject = db.relationship("Subject", back_populates="students")
-    student = db.relationship("Student", back_populates="subjects")
+    subject_association = db.relationship("Subject", back_populates="students")
+    student_association = db.relationship("Student", back_populates="subjects")
 
-    teachers = db.relationship("TeacherSS", back_populates="student_subject")
+    subject = db.relationship("Subject", back_populates="student_subjects")
+    student = db.relationship("Student", back_populates="student_subjects")
+
+    teachers = db.relationship("TeacherSS", back_populates="student_subject_association")
+    teacher_s_ss = db.relationship("TeacherSS", back_populates="student_subject")
 
 
 class Teacher(db.Model):
@@ -84,7 +92,9 @@ class Teacher(db.Model):
     name = db.Column(db.String(10), nullable=False)
     password_hash = db.Column(db.String(128), nullable=False)
 
-    student_subjects = db.relationship("TeacherSS", back_populates="teacher")
+    student_subjects = db.relationship("TeacherSS", back_populates="teacher_association")
+
+    teacher_s_ss = db.relationship("TeacherSS", back_populates="teacher")
 
     def checkPassword(self, password):
         return check_password_hash(self.password_hash, password)
@@ -127,7 +137,8 @@ class Subject(db.Model):
     name = db.Column(db.String(16), nullable=False)
 
     tests = db.relationship("Test", backref="subject")
-    students = db.relationship("StudentSubject", back_populates="subject")
+    students = db.relationship("StudentSubject", back_populates="subject_association")
+    student_subjects = db.relationship("StudentSubject", back_populates="subject")
 
     def __repr__(self):
         return "[学科 %r]" % self.name

@@ -303,7 +303,8 @@ def testCreater():
 @app.route("/testList/", methods=['GET', 'POST'])
 def testList():
     if request.method == 'GET':
-        pages = Page.query.all()
+        teacher = Teacher.query.get(session["uid"])
+        pages = teacher.
 
         return render_template('考试列表页面_B.html', pages=pages)
     else:
