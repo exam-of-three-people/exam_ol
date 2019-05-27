@@ -14,9 +14,8 @@
 
 
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-    <title></title>
+    <title>学生菜单</title>
     <meta charset="utf-8"/>
-
     <style type="text/css">        html, body {
         width: 100%;
         height: 100%;
@@ -30,8 +29,9 @@
         padding: 100px 0;
         text-align: center;
         color: #fff;
+        background: url(../static/image/背景/创意学习办公文具平铺摆拍图片_彼岸图网.jpg) no-repeat;
 
-        background: url(../static/image/考试页面背景图片.jpg);
+
         background-size: cover;
     }
 
@@ -76,7 +76,7 @@
         width: 100%;
         height: 100%;
         /*三原色：最后参数是透明度：0表示完全透明，1表示不透明*/
-        background: url("../static/image/学生菜单背景图片.jpg") repeat;
+        background-color: rgba(0, 0, 0, 0.7);
         /*绝对布局:重新定义坐标位置，根据坐标定义开始参考点的位置*/
         position: absolute;
         left: 0px;
@@ -87,7 +87,7 @@
     #show_test_plan {
         width: 800px;
         height: 600px;
-        background: rgba(240, 240, 255, 0.7);
+        background: rgba(240, 240, 255, 0.9);
         position: absolute;
         top: 0px;
         left: 50%;
@@ -106,22 +106,24 @@
     </style>
     </head>
 
+    <!-- 顶部导航栏 -->
     <nav class="navbar navbar-fixed-top my-navbar" role="navigation">
-        <div class="container-fluid" style="background:#ac2925">
+        <div class="container-fluid">
             <div class="navbar-header">
                 <button type="button" class="navbar-toggle" data-toggle="collapse"
                         data-target="#example-navbar-collapse"><span class="sr-only">切换导航</span> <span
                         class="icon-bar"></span> <span class="icon-bar"></span> <span class="icon-bar"></span></button>
-                <a class="navbar-brand" href="#">智能考试系统</a></div>
-
+                <a class="navbar-brand" style="position: absolute;margin-left: 14%;font-size: 36px">智能考试系统</a></div>
 
         </div>
+    </nav>
 
     </nav>
     <div class="bg">
 
 
         <div class="container">
+            <br><br><br>
             <div class="row clearfix">
                 <div class="col-md-3 column"></div>
                 <div class="col-md-3 column">
@@ -159,40 +161,30 @@
                 <div class="col-md-3 column"></div>
             </div>
         </div>
+
     </div>
 
 
-    {#			 <a class="btn btn-lg btn-primary btn-block active" type="button" onclick="startTest()">开始考试</a>#}
-    {##}
-    {##}
-    {#			 <a class="btn btn-block btn-success btn-lg active" type="button" href="/studentInfo">学生信息</a>#}
-    {##}
-    {##}
-    {#			 <a class="btn btn-warning btn-lg btn-block active" type="button" href="/testQuery">成绩查询</a>#}
-    {##}
-    {##}
-    {#			 <a class="btn btn-danger btn-lg btn-block active" type="button" href="logout">退出登录</a>#}
-
-
+    <br>
     <!--遮光布-->
     <div id="show"></div>
     <!--考试列表-->
     <div id="show_test_plan">
         <table class="table">
             <tr class="table_header">
-                <td>name</td>
-                <td>subject</td>
-                <td>date</td>
-                <td>time_start</td>
-                <td>time_end</td>
+                <td>名称</td>
+                <td>科目</td>
+                <td>日期</td>
+                <td>开始时间</td>
+                <td>持续时间</td>
             </tr>
             {% for page in pages %}
                 <tr class="row1">
                     <td>{{ page.name }}</td>
-                    <td>{{ page.subject }}</td>
+                    <td>{{ page.teacher_s_s.student_subject.subject.name }}</td>
                     <td>{{ page.date }}</td>
                     <td>{{ page.time_start }}</td>
-                    <td>{{ page.time_end }}</td>
+                    <td>{{ page.time_length // 60 }}分钟</td>
                     <td><a href="{{ url_for('createPage', page_id=page.id) }}">开始考试</a></td>
                 </tr>
             {% endfor %}
@@ -200,11 +192,7 @@
     </div>
 
 
-
-
-
-
-
+    </body>
     <script>        $(window).scroll(function () {
         if ($(".navbar").offset().top > 50) {
             $(".navbar-fixed-top").addClass("top-nav");
@@ -232,8 +220,5 @@
     });
 
     </script>
-    </body>
 {% endblock %}
-
-
 </html>

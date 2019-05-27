@@ -1,25 +1,17 @@
 <!DOCTYPE html>
-{% extends "base.html" %}
-<html lang="en">
+{% extends "base_for_teacher.html" %}
+{% import 'bootstrap/wtf.html' as wtf %}
+
 {% block head %}
 <head>
-    <title>Title</title>
-    <meta http-equiv="content-type" content="text/html;charset=utf-8"/>
+    <meta charset="UTF-8">
+    <title>考试列表</title>
 </head>
 {% endblock %}
 
-{% block body %}
-<body>
-<div class="container">
-	<div class="row clearfix">
-		<div class="col-md-12 column">
-			<h3 class="text-center">
-			 考试列表
-			</h3>
-		</div>
-	</div>
-</div>
-<div id="wrap">
+
+{% block main_windows %}
+    <div id="wrap">
 			<div id="top_content">
 				<div id="header">
 					<div id="rightheader">
@@ -45,7 +37,7 @@
 
 							</td>
 							<td>
-								结束时间
+								持续时间
 							</td>
 							<td>
 								科目
@@ -54,26 +46,26 @@
                                 班级
 							</td>
 						</tr>
-                        {% for item in plans %}
+                        {% for page in pages %}
 						<tr class="row1">
 							<td>
-                                <a href="/look/?username={{ item.date }}">{{ item.date }}</a>
+                                {{ page.date }}
 							</td>
 							<td>
-								{{item.time_start }}
+                                {{ page.time_start }}
 							</td>
 							<td>
-								{{ item.time_end }}
+                                {{ page.time_length // 60 }}分钟
 							</td>
                             <td>
-                                {{ item.id_subject }}
+                                {{ page.teacher_s_s.student_subject.subject.name }}
                             </td>
                             <td>
-                                {{ item.classes }}
+                                {{ page.teacher_s_s.student_subject.student.class_.name }}
                             </td>
 							<td>
-								<a href="/delete/?id={{ item.id }}">删除</a>
-								<a href="/change/?id={{ item.id }}">修改</a>
+                                <a href="/delete/?id={{ page.id }}">删除</a>
+                                {#								<a href="/change/?id={{ page.id }}">修改</a>#}
 							</td>
 
 						</tr>
@@ -84,6 +76,4 @@
 			</div>
 
 		</div>
-</body>
 {% endblock %}
-</html>

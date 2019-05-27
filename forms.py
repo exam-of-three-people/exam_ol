@@ -10,7 +10,10 @@ class LoginForm(FlaskForm):
     role = SelectField(label="身份", coerce=int, choices=[(1, '学生'), (2, '教师')])
     remember_me = BooleanField(label="记住密码", default=False)
     password = PasswordField(label='密码', validators=[DataRequired(message="password is None")])
-    login = SubmitField(label="登　　录", render_kw={"style": "width:137%"})
+    login = SubmitField(label="登　　录", render_kw={"style": "width:100%"})
+    Sign_in = StringField(label="",
+                          render_kw={"style": "width:100%", "readonly": "readonly", "href": "#modal-container-557207",
+                                     "type": "button", "value": "注　　册", "data-toggle": "modal"})
     pass
 
 
@@ -64,7 +67,8 @@ class TestCreaterForm(FlaskForm):
     name = StringField(u'名称', validators=[DataRequired()])
     date = DateField(u'日期', validators=[DataRequired()], render_kw={"type": "date"})
     start_time = TimeField(u'开始时间', validators=[DataRequired()], render_kw={"type": "time"})
-    time_length = IntegerField(u'持续时间(分钟)', validators=[DataRequired()], render_kw={"type": "number", "min": "1", "max": "600"})
+    time_length = IntegerField(u'持续时间(分钟)', validators=[DataRequired()],
+                               render_kw={"type": "number", "min": "1", "max": "600"})
     subject = SelectField(u'科目', validators=[DataRequired()], choices=[(1, '1'), (2, '2')])
     class_ = SelectMultipleField(u'班级', validators=[DataRequired()], choices=[(1, '1'), (2, '2')])
     choice_question_number = IntegerField(u'选择题个数', validators=[InputRequired()],
