@@ -304,9 +304,21 @@ def testCreater():
 def testList():
     if request.method == 'GET':
         teacher = Teacher.query.get(session["uid"])
-        pages = teacher.teacher_s_ss
-
-        return render_template('考试列表页面_B.html', pages=pages)
+        pages = teacher.get_pages()
+        pages_show = []
+        is_repeat = False
+        for page in pages:
+            for page_show in pages_show:
+                if page_show.teacher_s_s.student_subject.student.class_id \
+                        == page.teacher_s_s.student_subject.student.class_id \
+                        and page.date == page_show.date \
+                        and page.time_start == page_show.time_start:
+                    is_repeat = True
+                    break
+                is_repeat = False
+            if not is_repeat:
+                pages_show.append(page)
+        return render_template('考试列表页面_B.html', pages=pages_show)
     else:
         return redirect("/teacherMenu")
 
@@ -314,9 +326,20 @@ def testList():
 @app.route("/delete/", methods=['GET', 'POST'])
 def delete():
     if request.method == 'GET':
-        page = Page.query.get(request.args['id'])
+        teacher = Teacher.query.get(session["uid"])
+        page_delete = Page.query.get(request.args['id'])
+        pages = teacher.get_pages()
+        pages_delete = []
+        for page in pages:
+            if page_delete.teacher_s_s.student_subject.student.class_id \
+                    == page.teacher_s_s.student_subject.student.class_id \
+                    and page.date == page_delete.date \
+                    and page.time_start == page_delete.time_start:
+                pages_delete.append(page)
+
         try:
-            db.session.delete(page)
+            for page_delete in pages_delete:
+                db.session.delete(page_delete)
             db.session.commit()
         except IntegrityError:
             db.session.rollback()
@@ -540,7 +563,7 @@ def get_score():
 
 @app.route("/auto_save", methods=['GET', 'POST'])
 def auto_save():
-    answer ={}
+    answer = {}
     rest_time = 0
     if len(request.form) != 0:
         for key in request.form:
