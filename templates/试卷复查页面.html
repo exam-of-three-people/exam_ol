@@ -20,9 +20,9 @@
             <div class="page_area">
                 {% for key in contents.keys() %}
                     <div class="page_test_type">
-                        {% if key=='choice_question' %}<p>选择题</p>
-                        {% elif key=='true_false_question' %}<p>判断题</p>
-                        {% elif key=='fill_blank_question' %}<p>填空题</p>
+                        {% if key=='选择题' %}<p>选择题</p>
+                        {% elif key=='判断题' %}<p>判断题</p>
+                        {% elif key=='填空题' %}<p>填空题</p>
                         {% else %}<p>简答题</p>
                         {% endif %}
                         {% for item in contents[key] %}
@@ -60,9 +60,9 @@
             <div class="test_panel">
                 {% for key in contents.keys() %}
                     <div class="flag_test_type">
-                        {% if key=='choice_question' %}<p>选择题</p>
-                        {% elif key=='true_false_question' %}<p>判断题</p>
-                        {% elif key=='fill_blank_question' %}<p>填空题</p>
+                        {% if key=='选择题' %}<p>选择题</p>
+                        {% elif key=='判断题' %}<p>判断题</p>
+                        {% elif key=='填空题' %}<p>填空题</p>
                         {% else %}<p>简答题</p>
                         {% endif %}
                         {% for item in contents[key] %}
