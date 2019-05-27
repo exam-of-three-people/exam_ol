@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+{% extends "base_for_teacher.html" %}
+{% import 'bootstrap/wtf.html' as wtf %}
+
+{% block head %}
+    <head>
+        <meta charset="UTF-8">
+        <title>考试列表</title>
+    </head>
+{% endblock %}
+
+
+{% block main_windows %}
+    <div id="wrap">
+        <div id="top_content">
+            <div id="header">
+                <div id="rightheader">
+
+                </div>
+
+                <div id="navigation">
+                </div>
+            </div>
+
+            <div id="content">
+                <p id="whereami">
+                </p>
+
+                <table class="table">
+                    <tr class="table_header">
+
+                        <td>
+                            日期
+                        </td>
+                        <td>
+                            开始时间
+
+                        </td>
+                        <td>
+                            持续时间
+                        </td>
+                        <td>
+                            科目
+                        </td>
+                        <td>
+                            班级
+                        </td>
+                    </tr>
+                    {% for page in pages %}
+                        <tr class="row1">
+                            <td>
+                                {{ page.date }}
+                            </td>
+                            <td>
+                                {{ page.time_start }}
+                            </td>
+                            <td>
+                                {{ page.time_length // 60 }}分钟
+                            </td>
+                            <td>
+                                {{ page.teacher_s_s.student_subject.subject.name }}
+                            </td>
+                            <td>
+                                {{ page.teacher_s_s.student_subject.student.class_.name }}
+                            </td>
+                            <td>
+                                <a href="/delete/?id={{ page.id }}">删除</a>
+                                {#								<a href="/change/?id={{ page.id }}">修改</a>#}
+                            </td>
+
+                        </tr>
+                    {% endfor %}
+                </table>
+
+            </div>
+        </div>
+
+    </div>
+{% endblock %}
