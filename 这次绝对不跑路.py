@@ -4,7 +4,7 @@
 # @FileName: 这次绝对不跑路.py
 # @Software: PyCharm
 from models import Test, db, College, Class, Subject, Student, Major, Teacher, Page
-import random, time
+import random
 
 db.drop_all()
 db.create_all()
@@ -97,7 +97,7 @@ subjects = ["计算机程序设计基础", "离散结构", "面向对象程序�
             "工业检测技术", "工业机器人技术"]
 
 tests = {"数据库原理与应用": {
-    "choice_question": [
+    "选择题": [
         {"question": "现实世界中事物在某一方面的特性在信息世界中称为__________。", "A": "实体", "B": "实体值", "C": "属性", "D": "信息", "answer": "C",
          "level": 1},
         {"question": "数据的存储结构与数据逻辑结构之间的独立性称为数据的__________。", "A": "结构独立性", "B": "物理独立性", "C": "逻辑独立性", "D": "分布独立性",
@@ -129,7 +129,7 @@ tests = {"数据库原理与应用": {
         {"question": "在数据管理技术的发展过程中，经历了人工管理阶段、文件系统阶段和数据库系统阶段。在这几个阶段中，数据独立的最高的是____阶段", "A": "数据库系统", "B": "文件系统",
          "C": "人工管理", "D": " 数据项管理", "answer": "A", "level": 3},
     ],
-    "true_false_question": [
+    "判断题": [
         {"question": "SQL Server 2000，Access，Oracle等DBMS，都是面向对象的数据库管理系统。（ ）", "answer": "0", "level": 1},
         {"question": "在关系数据模型中，只有一种结构——关系。不论是实体还是实体之间的联系都是用关系来表达的。( )", "answer": "0", "level": 1},
         {"question": "一个数据库只能对应一个应用程序，即一个数据库只能为一个应用程序所用。（    ）", "answer": "0", "level": 1},
@@ -147,7 +147,7 @@ tests = {"数据库原理与应用": {
         {"question": "数据库是长期储存在计算机内、有组织的、可共享的大量数据的集合。(  ）", "answer": "1", "level": 3}
 
     ],
-    "fill_blank_question": [
+    "填空题": [
         {"question": "SQL Server 2008系统由4部分组成，这4个部分被称为4个服务，分别是_____、分析服务、报表服务和集成服务。", "answer": ["数据库引擎"], "level": 2},
         {"question": "SQL Server 2008系统提供了两种类型的数据库，即__系统数据库_和______。", "answer": ["用户数据库"], "level": 2},
         {"question": "在SQL Server 2008中，主数据未年检的后缀是__.mdf_，事务日志文件的后缀是_.ldf_。辅助文件的后缀___", "answer": [".ndf"], "level": 2},
@@ -171,7 +171,7 @@ tests = {"数据库原理与应用": {
         {"question": "数据模型有层次模型、网状模型、关系模型。当前主流数据库系统采用_______。", "answer": ["关系模型"], 'level': 3},
         {"question": "实体完整性是指关系中的____ 不允许取空值。", "answer": ["主键"], "level": 3}
     ],
-    "free_response_question": [
+    "解答题": [
         {"question": "", "answer": "", "level": 2}
     ]}
 }
@@ -194,6 +194,7 @@ for college_name in students_data.keys():
             for class_code in range(10, 15):
                 class_name = grade + "级" + major_name + str(class_code) + "班"
                 class_ = Class()
+                class_.grade = int(grade)
                 class_.name = class_name
                 major.classes.append(class_)
                 print(class_name)
@@ -206,7 +207,6 @@ for college_name in students_data.keys():
                     student.name = name
                     student.id = int(
                         grade[-2:] + str(college_code) + str(major_code) + str(class_code) + str(student_code))
-                    student.grade = int(grade)
                     student.password_hash = "pbkdf2:sha256:150000$LssWNeqi$de05643547efe747ad0a14b74ac2e0e036e2d21fcae3be98bd43c94392f2226d"
                     class_.students.append(student)
 
@@ -219,13 +219,13 @@ for subject_name in tests.keys():
         for test_item in tests[subject_name][type_name]:
             test = Test()
             test.type_ = type_name
-            if type_name == "choice_question":
+            if type_name == "选择题":
                 test.question = test_item["question"] + "\nA." + test_item["A"] + "\nB." + \
                                 test_item["B"] + "\nC." + test_item[
                                     "C"] + "\nD." + test_item["D"]
             else:
                 test.question = test_item["question"]
-            if tests[subject_name] == "fill_blank_question":
+            if tests[subject_name] == "填空题":
                 answer = ""
                 for blank in test_item["answer"]:
                     answer += blank

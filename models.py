@@ -16,7 +16,6 @@ class Student(db.Model):
     id = db.Column(db.BigInteger, primary_key=True)
     name = db.Column(db.String(10), nullable=False)
     password_hash = db.Column(db.String(128), nullable=False)
-    grade = db.Column(db.Integer, nullable=False)
     class_id = db.Column(db.Integer, db.ForeignKey('tb_class.id'), nullable=False)
 
     subjects = db.relationship("StudentSubject", back_populates="student_association")
@@ -153,6 +152,7 @@ class Subject(db.Model):
 class Page(db.Model):
     __tablename__ = "tb_page"
     id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(64), nullable=True)
     structure = db.Column(db.String(128), nullable=False)
     level = db.Column(db.Integer, default=2)
     date = db.Column(db.Date, nullable=False)
@@ -189,6 +189,7 @@ class Class(db.Model):
     __tablename__ = "tb_class"
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(32), nullable=False)
+    grade = db.Column(db.Integer, nullable=False)
     major_id = db.Column(db.Integer, db.ForeignKey('tb_major.id'), nullable=False)
 
     students = db.relationship("Student", backref="class_")

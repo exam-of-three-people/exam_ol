@@ -177,19 +177,19 @@
     <div id="show_test_plan">
         <table class="table">
             <tr class="table_header">
-                <td>name</td>
-                <td>subject</td>
-                <td>date</td>
-                <td>time_start</td>
-                <td>time_end</td>
+                <td>名称</td>
+                <td>科目</td>
+                <td>日期</td>
+                <td>开始时间</td>
+                <td>持续时间</td>
             </tr>
             {% for page in pages %}
                 <tr class="row1">
                     <td>{{ page.name }}</td>
-                    <td>{{ page.subject }}</td>
+                    <td>{{ page.teacher_s_s.student_subject.subject.name }}</td>
                     <td>{{ page.date }}</td>
                     <td>{{ page.time_start }}</td>
-                    <td>{{ page.time_end }}</td>
+                    <td>{{ page.time_length // 60 }}分钟</td>
                     <td><a href="{{ url_for('createPage', page_id=page.id) }}">开始考试</a></td>
                 </tr>
             {% endfor %}

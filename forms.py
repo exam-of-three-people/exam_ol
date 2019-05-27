@@ -42,7 +42,7 @@ class StudentInfoForm(FlaskForm):
     college = SelectField(u'学院', validators=[DataRequired()])
     major = SelectField(u'专业', validators=[DataRequired()])
     grade = SelectField(u'年级', validators=[DataRequired()])
-    classes = SelectField(u'班级', validators=[DataRequired()])
+    class_ = SelectField(u'班级', validators=[DataRequired()])
     pre_password = PasswordField(u'原密码')
     new_password = PasswordField(u'新密码')
     ensure_password = PasswordField(u'确认密码', validators=[EqualTo('password', message=u'两次输入密码不一致！')])
@@ -61,6 +61,7 @@ class TeacherInfoForm(FlaskForm):
 
 
 class TestCreaterForm(FlaskForm):
+    name = StringField(u'名称', validators=[DataRequired()])
     date = DateField(u'日期', validators=[DataRequired()], render_kw={"type": "date"})
     start_time = TimeField(u'开始时间', validators=[DataRequired()], render_kw={"type": "time"})
     time_length = IntegerField(u'持续时间(分钟)', validators=[DataRequired()], render_kw={"type": "number", "min": "1", "max": "600"})

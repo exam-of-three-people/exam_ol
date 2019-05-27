@@ -19,13 +19,15 @@
             <form id="form" action="/get_score" method="post" onsubmit="return hg({{ test_num }})">
 
                 <p>{% for key in contents.keys() %}</p>
-                    <span class="label label-default col-sm-2">{{ key }}</span><br>{% for item in contents[key] %}
+                    <span class="label label-default col-sm-2" translate="yes">{{ key }}</span><br>
+                    {% for item in contents[key] %}
                         <!-- 题号放在span里面 方便设置锚点 -->
-                        <span id="{{ 'test_'+[item.id]|join }}">{{ loop.index }}</span>
-                        <textarea id="text" readonly="readonly" class="col-md-12 column " contenteditable="true"
-                                  style="resize: none;border-color: moccasin">{{ item.question }}</textarea>
+                        <span id="{{ 'test_'+[item.id]|join }}">{{ loop.index }}.</span>
+                        <textarea id="text" readonly="readonly" class="col-md-12 column " contenteditable="false"
+                                  rows="{{ item.question.count('\n',0) + 2 }}"
+                                  style="text-align:left;overflow-y:visible;border-color: moccasin">{{ item.question }}</textarea>
                         <br>
-                        {% if key=='choice_question' %}
+                        {% if key=='选择题' %}
 
                             <dd>
                                 <label><input type="radio" name="{{ item.id }}" value="A"
@@ -60,7 +62,7 @@
             <!-- 答题面板 -->
             <div class="test_panel">
                 {% for key in contents.keys() %}
-                    {% if key=='choice_question' %}
+                    {% if key=='选择题' %}
                         <div class="test_type"><p>选择题</p>
                             {% for item in contents[key] %}
                                 <a href="{{ '#test_'+[item.id]|join }}">

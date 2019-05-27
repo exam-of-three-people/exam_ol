@@ -156,26 +156,27 @@ def studentInfo():
             first_grade = localtime.tm_year
         else:
             first_grade = localtime.tm_year - 1
-        a = first_grade - user.grade
-        grades = [user.grade + a, user.grade - 1 + a, user.grade - 2 + a, user.grade - 3 + a]
+        a = first_grade - user.class_.grade
+        grades = [user.class_.grade + a, user.class_.grade - 1 + a, user.class_.grade - 2 + a,
+                  user.class_.grade - 3 + a]
         del grades[a]
-        form.grade.choices = [(user.grade, user.grade),
+        form.grade.choices = [(user.class_.grade, user.class_.grade),
                               (grades[0], grades[0]),
                               (grades[1], grades[1]),
                               (grades[2], grades[2])]
 
-        college = College.query.get(user.college_id)
+        college = user.class_.major.college
         form.college.choices = [(college.id, college.name)]
-        major = Major.query.get(user.major_id)
+        major = user.class_.major
         form.major.choices = [(major.id, major.name)]
-        classes = Class.query.get(user.class_id)
-        form.classes.choices = [(classes.id, classes.name)]
+        class_ = user.class_
+        form.class_.choices = [(class_.id, class_.name)]
         return render_template("学生信息页面.html", form=form)
     else:
         name = form.name.data
         college_id = form.college.data
         grade = form.grade.data
-        class_id = form.classes.data
+        class_id = form.class_.data
         major_id = form.major.data
         new_password = form.new_password.data
         pre_password = form.pre_password.data
@@ -184,8 +185,8 @@ def studentInfo():
         form.college.choices = [(college_id, college.name)]
         major = Major.query.get(major_id)
         form.major.choices = [(major_id, major.name)]
-        classes = Class.query.get(class_id)
-        form.classes.choices = [(class_id, classes.name)]
+        class_ = Class.query.get(class_id)
+        form.class_.choices = [(class_id, class_.name)]
         form.grade.choices = [(grade, grade)]
 
         if user.checkPassword(pre_password):
@@ -194,7 +195,7 @@ def studentInfo():
                 try:
                     user.name = name
                     user.college_id = college_id
-                    user.grade = grade
+                    user.class_.grade = grade
                     user.class_id = class_id
                     user.major_id = major_id
                     db.session.commit()
@@ -228,8 +229,7 @@ def testCheck(page_id):
 
     my_answers = json.loads(page.answer)
     test_id_list = json.loads(page.content)
-    contents = {"choice_question": [], "fill_blank_question": [], "true_false_question": [],
-                "free_response_question": []}
+    contents = {"选择题": [], "填空题": [], "判断题": [], "解答题": []}
     for key in contents.keys():
         for test_id in test_id_list[key]:
             test = Test.query.get(test_id)
@@ -257,12 +257,13 @@ def testCreater():
         form.class_.choices = choices
         return render_template("教师创建考试页面_B.html", form=form)
     else:
+        flash("创建时间可能较长,请耐心等待....")
         form = TestCreaterForm(request.form)
         page_structure = {}
-        page_structure["choice_question"] = form.choice_question_number.data
-        page_structure["fill_blank_question"] = form.fill_blank_question_number.data
-        page_structure["true_false_question"] = form.true_false_question_number.data
-        page_structure["free_response_question"] = form.free_response_question_number.data
+        page_structure["选择题"] = form.choice_question_number.data
+        page_structure["填空题"] = form.fill_blank_question_number.data
+        page_structure["判断题"] = form.true_false_question_number.data
+        page_structure["解答题"] = form.free_response_question_number.data
 
         subject_id = form.subject.data
         classes = form.class_.data
@@ -287,6 +288,7 @@ def testCreater():
                     teacher_s_s = TeacherSS.query.filter_by(student_subject_id=student_subject.id,
                                                             teacher_id=session["uid"]).first()
                 page = Page()
+                page.name = form.name.data
                 page.date = form.date.data
                 page.time_start = form.start_time.data
                 minute_num = form.time_length.data
@@ -452,7 +454,8 @@ def studentRegisterSelects():
         parent_id = request.form['parent_id']
         major = Major.query.get(parent_id)
         for class_ in major.classes:
-            data["data"].append({"id": class_.id, "name": class_.name})
+            if class_.grade == int(request.form['grade']):
+                data["data"].append({"id": class_.id, "name": class_.name})
         pass
     return json.dumps(data)
 
@@ -474,11 +477,11 @@ def createPage(page_id):
         #         datetime.datetime.now() + datetime.timedelta(minutes=10)).time() <= page.time_start:
         #     flash("这场考试还没开始")
         #     return redirect("/studentMenu")
-        page_structure_detail = {"choice_question": [0, 0, 0], "fill_blank_question": [0, 0, 0],
-                                 "true_false_question": [0, 0, 0], "free_response_question": [0, 0, 0]}
+        page_structure_detail = {"选择题": [0, 0, 0], "填空题": [0, 0, 0],
+                                 "判断题": [0, 0, 0], "解答题": [0, 0, 0]}
         page_structure = json.loads(page.structure)
-        test_list = {"choice_question": [], "fill_blank_question": [], "true_false_question": [],
-                     "free_response_question": []}
+        test_list = {"选择题": [], "填空题": [], "判断题": [],
+                     "解答题": []}
         for key in page_structure_detail.keys():
             if page.level == 1:
                 page_structure_detail[key][1] = int(page_structure[key] * 0.3)
@@ -497,14 +500,15 @@ def createPage(page_id):
                     page_structure[key] - page_structure_detail[key][1] - page_structure_detail[key][2])
         for key in test_list.keys():
             for i in range(3):
-                test_list_list = Test.query.filter(Test.id_subject == page.id_subject).filter(
+                test_list_list = Test.query.filter(
+                    Test.subject_id == page.teacher_s_s.student_subject.subject.id).filter(
                     Test.type_ == key).filter(Test.level == i + 1).order_by(func.rand()).limit(
                     page_structure_detail[key][i])
                 for test in test_list_list:
                     test_list[key].append(test)
 
-        id_list = {"choice_question": [], "fill_blank_question": [], "true_false_question": [],
-                   "free_response_question": []}
+        id_list = {"选择题": [], "填空题": [], "判断题": [],
+                   "解答题": []}
         for key in id_list.keys():
             for test in test_list[key]:
                 id_list[key].append(test.id)
@@ -519,8 +523,8 @@ def createPage(page_id):
         id_list = json.loads(page.content)
         pass
 
-    contents = {"choice_question": [], "fill_blank_question": [], "true_false_question": [],
-                "free_response_question": []}
+    contents = {"选择题": [], "填空题": [], "判断题": [],
+                "解答题": []}
     test_num = 0
     for type_ in id_list:
         for id_ in id_list[type_]:
