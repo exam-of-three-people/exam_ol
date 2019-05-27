@@ -22,40 +22,27 @@
                         <button type="button" class="close" data-dismiss="alert">&times;</button>
                         <strong class="login-box-msg">{{ msg }}</strong></div>
                 {% endfor %}
-   <table class="table">
-                    <tr class="table_header">
-
-                        <td>
-                            日期
-                        </td>
-                        <td>
-                            开始时间
-
-                        </td>
-                        <td>
-                            科目
-                        </td>
-                        <td>
-                            分数
-                        </td>
-                    </tr>
-                    {% for page in pages %}
-                        <tr class="row1">
-                            <td>
-                                {{ page.date }}
-                            </td>
-                            <td>
-                                {{ page.time_start }}
-                            </td>
-                            <td>
-                                {{ page.teacher_s_s.student_subject.subject.name }}
-                            </td>
-                            <td>
-                                {{ page.code }}
-                            </td>
+                <!--考试列表-->
+                <div id="show_test_plan">
+                    <table class="table">
+                        <tr class="table_header">
+                            <td>名称</td>
+                            <td>科目</td>
+                            <td>日期</td>
+                            <td>开始时间</td>
+                            <td>剩余时间</td>
                         </tr>
-                    {% endfor %}
-                </table>            </div>
+                        {% for page in pages %}
+                            <tr class="row1">
+                                <td><a href="{{ url_for('testCheck', page_id=page.id) }}">{{ page.name }}</a></td>
+                                <td>{{ page.teacher_s_s.student_subject.subject.name }}</td>
+                                <td>{{ page.date }}</td>
+                                <td>{{ page.time_start }}</td>
+                                <td>{{ page.rest_time // 60 }}分钟</td>
+                            </tr>
+                        {% endfor %}
+                    </table>
+                </div>
             <div class="col-md-2 column">
             </div>
         </div>
