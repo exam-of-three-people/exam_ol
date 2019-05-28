@@ -1,0 +1,29 @@
+{% extends "base_for_analyse.html" %}
+
+{% block head %}
+    <head>
+        <meta charset="UTF-8">
+        <title>原始数据</title>
+    </head>
+{% endblock %}
+
+{% block main_windows %}
+
+    <table class="table">
+        <thead>
+        <tr>
+            {% for key in data.keys() %}
+                <th>{{ table_key }}</th>
+            {% endfor %}
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            {% for table_key in data[table_name].keys() %}
+                <td>data[table_name][table_key]</td>
+            {% endfor %}
+        </tr>
+        </tbody>
+    </table>
+
+{% endblock %}
