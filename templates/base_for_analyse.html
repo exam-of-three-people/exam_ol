@@ -7,10 +7,13 @@
         <div class="row clearfix">
             <div class="col-md-2 column">
                 <a class="btn btn-block active" type="button"
-                   href="{{ url_for("analyse", current_button="统计数据", current_class=current_class, date=date, time_start=time_start, subject_id=subject_id) }}">
+                   href="{{ url_for("analyse", current_button="统计数据", current_class=current_class,
+                   date=date, time_start=time_start, subject_id=subject_id) }}">
                     <div id="btn_1">统计<br>数据</div>
                 </a>
-                <a class="btn btn-block active" type="button" href="/">
+                <a class="btn btn-block active" type="button"
+                   href="{{ url_for("analyse", current_button="原始数据", current_class=current_class,
+                   date=date, time_start=time_start, subject_id=subject_id) }}">
                     <div id="btn_1">原始<br>数据</div>
                 </a>
             </div>
@@ -20,13 +23,16 @@
                     <!-- 一排班级标签 -->
                     <ul class="nav nav-tabs">
                         <li class="active">
-                            <a href="/">全员</a>
+                            <a href="{{ url_for("analyse", current_button="统计数据", current_class=current_class,
+                   date=date, time_start=time_start, subject_id=subject_id) }}">全员</a>
                         </li>
                         <li>
-                            <a href="/">1班</a>
+                            <a href="{{ url_for("analyse", current_button="统计数据", current_class=current_class,
+                   date=date, time_start=time_start, subject_id=subject_id) }}">1班</a>
                         </li>
                         <li>
-                            <a href="/">2班</a>
+                            <a href="{{ url_for("analyse", current_button="统计数据", current_class=current_class,
+                   date=date, time_start=time_start, subject_id=subject_id) }}">2班</a>
                         </li>
                     </ul>
                     <!-- 标签的body，加载表格 -->
