@@ -20,11 +20,7 @@
             <div class="page_area">
                 {% for key in contents.keys() %}
                     <div class="page_test_type">
-                        {% if key=='choice_question' %}<p>选择题</p>
-                        {% elif key=='true_false_question' %}<p>判断题</p>
-                        {% elif key=='fill_blank_question' %}<p>填空题</p>
-                        {% else %}<p>简答题</p>
-                        {% endif %}
+                        <p>{{ key }}</p>
                         {% for item in contents[key] %}
                             <div class="test">
                                 <!-- 题号 -->
@@ -60,11 +56,7 @@
             <div class="test_panel">
                 {% for key in contents.keys() %}
                     <div class="flag_test_type">
-                        {% if key=='choice_question' %}<p>选择题</p>
-                        {% elif key=='true_false_question' %}<p>判断题</p>
-                        {% elif key=='fill_blank_question' %}<p>填空题</p>
-                        {% else %}<p>简答题</p>
-                        {% endif %}
+                        <p>{{ key }}</p>
                         {% for item in contents[key] %}
                             <a href="{{ '#test_'+[item.id]|join }}">
                                 <!-- CSS根据item.flag的不同来分别上色 -->
