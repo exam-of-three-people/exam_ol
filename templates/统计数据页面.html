@@ -1,0 +1,112 @@
+{% extends "base_for_analyse.html" %}
+
+{% block head %}
+    <head>
+        <meta charset="UTF-8">
+        <title>统计数据</title>
+    </head>
+{% endblock %}
+
+{% block main_windows %}
+
+    {% for table_name in data.keys() %}
+        <!-- 一块完整的手风琴 -->
+        <div class="panel panel-default">
+            <!-- 手风琴的头 -->
+            <div class="panel-heading">
+                <a class="panel-title" data-toggle="collapse" data-parent="#panel-112559"
+                   href="#panel-element-{{ table_name }}">手风琴切换 #1{{ table_name }}</a>
+            </div>
+            <!-- 手风琴的body -->
+            <div id="panel-element-{{ table_name }}" class="panel-collapse in">
+                <div class="panel-body">
+                    <!-- 手风琴切换 #1 的内容 -->
+                    {% if table_name == '各题型' %}
+                        {% for test_type in data[table_name].keys() %}
+                            <!-- 题型标签 -->
+                            <span class="label label-info">{{ test_type }}</span>
+
+                                <table class="table">
+                                    <thead>
+                                    <tr>
+                                        {% for table_key in data[table_name][test_type].keys() %}
+                                            <th>{{ table_key }}</th>
+                                        {% endfor %}
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr>
+                                        {% for table_key in data[table_name][test_type].keys() %}
+                                            <td>data[table_name][test_type][table_key]</td>
+                                        {% endfor %}
+                                    </tr>
+                                    </tbody>
+                                </table>
+
+                        {% endfor %}
+
+                    {% elif table_name == '各小题得分率' %}
+                        {% for test_type in data[table_name].keys() %}
+                            <!-- 题型标签 -->
+                            <span class="label label-info">{{ test_type }}</span>
+                                <table class="table">
+                                    <thead>
+                                    <tr>
+                                        {% for test in data[table_name][test_type] %}
+                                            <td><a href="#test_{{ test["id"] }}">{{ loop.index }}</a></td>
+                                        {% endfor %}
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr>
+                                        {% for test in data[table_name][test_type] %}
+                                            <td>{{ test["得分率"] }}</td>
+                                        {% endfor %}
+                                    </tr>
+                                    </tbody>
+                                </table>
+                        {% endfor %}
+
+                    {% else %}
+                        <!-- table_name是‘总分’和‘各小题得分率’ -->
+                        <table class="table">
+                            <thead>
+                            <tr>
+                                {% for table_key in data[table_name].keys() %}
+                                    <th>{{ table_key }}</th>
+                                {% endfor %}
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr>
+                                {% for table_key in data[table_name].keys() %}
+                                    <td>data[table_name][table_key]</td>
+                                {% endfor %}
+                            </tr>
+                            </tbody>
+                        </table>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+
+
+    {% endfor %}
+
+{##}
+{##}
+{#    <div class="panel panel-default">#}
+{#        <div class="panel-heading">#}
+{#            <a class="panel-title" data-toggle="collapse"#}
+{#               href="#panel-element-啊">手风琴切换 #2</a>#}
+{#        </div>#}
+{#        <div id="panel-element-啊" class="panel-collapse in">#}
+{#            <div class="panel-body">#}
+{#                <!-- 手风琴切换 #2 的内容 -->#}
+{#                <br><br><br>#}
+{#            </div>#}
+{#        </div>#}
+{#    </div>#}
+
+{% endblock %}

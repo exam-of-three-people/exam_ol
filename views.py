@@ -581,3 +581,8 @@ def auto_save():
     else:
         pass
     return str(rest_time)
+
+
+@app.route("/test", methods=['GET', 'POST'])
+def test():
+    return render_template('统计数据页面.html')
