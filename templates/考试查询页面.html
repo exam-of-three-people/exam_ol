@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-{% extends "base_B.html" %}
+{% extends "base.html" %}
 <html lang="en">
 {% block head %}
     <head>
@@ -38,7 +38,7 @@
                                 <td>{{ page.teacher_s_s.student_subject.subject.name }}</td>
                                 <td>{{ page.date }}</td>
                                 <td>{{ page.time_start }}</td>
-                                <td>{{ page.rest_time // 60 }}分钟</td>
+                                <td>{{ page.time_length // 60 }}分钟</td>
                             </tr>
                         {% endfor %}
                     </table>

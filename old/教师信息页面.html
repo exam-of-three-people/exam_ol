@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+{% extends "base.html" %}
+{% import 'bootstrap/wtf.html' as wtf %}
+<html lang="en">
+{% block head %}
+<head>
+    <meta charset="UTF-8">
+    <title>教师信息页面</title>
+</head>
+{% endblock %}
+
+{% block body %}
+<body>
+
+<div class="container">
+	<div class="row clearfix">
+		<div class="col-md-2 column">
+		</div>
+		<div class="col-md-8 column">
+            {% for msg in get_flashed_messages() %}
+    <p class="login-box-msg">{{ msg }}</p>
+{% endfor %}
+{{ wtf.quick_form(form,url_for('teacherInfo'), form_type="horizontal") }}
+		</div>
+		<div class="col-md-2 column">
+		</div>
+	</div>
+</div>
+
+
+
+
+{#<form action="/teacherInfo" method="post" class="form-horizontal" role="form">#}
+{#    <div class="form-group">{{ form.id.label }}{{ form.id }}</div>#}
+{#    <div class="form-group">{{ form.name.label }}{{ form.name }}</div>#}
+{#    <div class="form-group">{{ form.csrf_token }}#}
+{#        {{ form.pre_password.label }}{{ form.pre_password }}</div>#}
+{#    {{ form.new_password.label }}{{ form.new_password }}#}
+{#    {{ form.ensure_password.label }}{{ form.ensure_password }}#}
+{#    {{ form.submit }}#}
+{#</form>#}
+</body>
+{% endblock %}
+</html>

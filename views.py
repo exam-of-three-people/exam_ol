@@ -13,10 +13,10 @@ def index():
     if request.method == 'POST':
         form = LoginForm(request.form)
         if form.validate_on_submit():
-            id = int(form.id.data)
+            id_ = int(form.id.data)
             password = form.password.data
             if form.role.data == 1:
-                user = Student.query.get(id)
+                user = Student.query.get(id_)
                 if user is None:
                     flash("学号输入错误！")
                 elif user.checkPassword(password):
@@ -27,7 +27,7 @@ def index():
                 else:
                     flash("密码不正确！")
             elif form.role.data == 2:
-                user = Teacher.query.get(id)
+                user = Teacher.query.get(id_)
                 if user is None:
                     flash("工号输入错误！")
                 elif user.checkPassword(password):
@@ -52,7 +52,7 @@ def index():
         except Exception:
             pass
     form = LoginForm()
-    return render_template("登录页面_B.html", form=form)
+    return render_template("登录页面.html", form=form)
 
 
 @app.route("/studentMenu", methods=['GET', 'POST'])
@@ -66,7 +66,7 @@ def studentMenu():
         # if not page.finshed and page.date == now.date():
         #     pages_show.append(page)
         pages_show.append(page)
-    return render_template("学生菜单_B.html", pages=pages_show)
+    return render_template("学生菜单.html", pages=pages_show)
 
 
 @app.route("/teacherMenu", methods=['GET', 'POST'])
@@ -129,18 +129,18 @@ def teacherInfo():
                 return redirect("logout")
             else:
                 flash('新密码和确认密码不一致')
-                return render_template("教师信息页面_B.html", form=form)
+                return render_template("教师信息页面.html", form=form)
 
         else:
             flash("原密码错误！")
-            return render_template("教师信息页面_B.html", form=form)
+            return render_template("教师信息页面.html", form=form)
 
     else:
         form = TeacherInfoForm()
         teacher = Teacher.query.get(session["uid"])
         form.id.data = teacher.id
         form.name.data = teacher.name
-        return render_template("教师信息页面_B.html", form=form)
+        return render_template("教师信息页面.html", form=form)
 
 
 @app.route("/studentInfo", methods=['GET', 'POST'])
@@ -255,7 +255,7 @@ def testCreater():
         for class_ in classes:
             choices.append((class_.id, class_.name))
         form.class_.choices = choices
-        return render_template("教师创建考试页面_B.html", form=form)
+        return render_template("教师创建考试页面.html", form=form)
     else:
         flash("创建时间可能较长,请耐心等待....")
         form = TestCreaterForm(request.form)
@@ -320,7 +320,7 @@ def testList():
                 is_repeat = False
             if not is_repeat:
                 pages_show.append(page)
-        return render_template('考试列表页面_B.html', pages=pages_show)
+        return render_template('考试列表页面.html', pages=pages_show)
     else:
         return redirect("/teacherMenu")
 
@@ -507,8 +507,7 @@ def createPage(page_id):
                 for test in test_list_list:
                     test_list[key].append(test)
 
-        id_list = {"选择题": [], "填空题": [], "判断题": [],
-                   "解答题": []}
+        id_list = {"选择题": [], "填空题": [], "判断题": [], "解答题": []}
         for key in id_list.keys():
             for test in test_list[key]:
                 id_list[key].append(test.id)
@@ -523,8 +522,7 @@ def createPage(page_id):
         id_list = json.loads(page.content)
         pass
 
-    contents = {"选择题": [], "填空题": [], "判断题": [],
-                "解答题": []}
+    contents = {"选择题": [], "填空题": [], "判断题": [], "解答题": []}
     test_num = 0
     for type_ in id_list:
         for id_ in id_list[type_]:

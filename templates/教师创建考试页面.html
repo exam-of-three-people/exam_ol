@@ -1,7 +1,7 @@
-{% extends "base.html" %}
-{% import 'bootstrap/wtf.html' as wtf %}
 <!DOCTYPE html>
-<html lang="en">
+{% extends "base_for_teacher.html" %}
+{% import 'bootstrap/wtf.html' as wtf %}
+
 {% block head %}
     <head>
         <meta charset="UTF-8">
@@ -10,38 +10,11 @@
 {% endblock %}
 
 
-{% block body %}
-    <body>
-    <div class="container">
-        <div class="row clearfix">
-            <div class="col-md-2 column">
-            </div>
-            <div class="col-md-8 column">
+{% block main_windows %}
                 {% for msg in get_flashed_messages() %}
                     <p class="alert alert-dismissable alert-info">{{ msg }}</p>
                 {% endfor %}
-                {{ wtf.quick_form(form,url_for('testCreater'), form_type="horizontal") }}
-            </div>
-            <div class="col-md-2 column">
-            </div>
-        </div>
-    </div>
-
-
-    {#    <form action="/testCreater" method="post" class="form-horizontal">#}
-    {#        {{ form.date.label }}{{ form.date }}#}
-    {#        {{ form.start_time.label }}{{ form.start_time }}#}
-    {#        {{ form.end_time.label }}{{ form.end_time }}#}
-    {#        {{ form.subject.label }}{{ form.subject }}#}
-    {#        {{ form.class_.label }}{{ form.class_ }}#}
-    {#        {{ form.choice_question_number.label }}{{ form.choice_question_number }}#}
-    {#        {{ form.fill_blank_question_number.label }}{{ form.fill_blank_question_number }}#}
-    {#        {{ form.true_false_question_number.label }}{{ form.true_false_question_number }}#}
-    {#        {{ form.free_response_question_number.label }}{{ form.free_response_question_number }}#}
-    {#        {{ form.Expected_difficulty.label }}{{ form.Expected_difficulty }}#}
-    {#         {{ form.submit }}#}
-    {#    </form>#}
-
-    </body>
+    {{ wtf.quick_form(form,url_for('testCreater'), form_type="horizontal") }}
 {% endblock %}
-</html>
+{% block btn_back %}
+{% endblock %}
