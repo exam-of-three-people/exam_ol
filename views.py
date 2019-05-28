@@ -594,45 +594,48 @@ def analyse():
     current_class_id = request.args["current_class_id"]
     current_button = request.args["current_button"]
 
-    # 数据结构准备
-    classes_id = []
-    classes = []
-    data = {"各小题": {"选择题": [], "填空题": [], "判断题": [], "解答题": []},
-            "各题型": {"选择题": {"平均分": 0, "最高分": 0, "最低分": 1000},
-                    "填空题": {"平均分": 0, "最高分": 0, "最低分": 1000},
-                    "判断题": {"平均分": 0, "最高分": 0, "最低分": 1000},
-                    "解答题": {"平均分": 0, "最高分": 0, "最低分": 1000}},
-            "各分数段": {"0~59": 0, "60~69": 0, "70~79": 0, "80~89": 0, "90~100": 0},
-            "总分": {"平均分": 0, "及格率": 0, "最高分": 0, "最低分": 0, "优秀率": 0},
-            "及格人数": 0,
-            "应考人数": 0,
-            "实考人数": 0}
     first_flag = True
-    test_number = 0
-    page_number = 0
-    finished_number = 0
-    should_number = 0
 
-    # 统计数据
+    pages_classes_query = Page.query.filter(Page.teacher_s_s.teacher.id == session["uid"],
+                                            Page.date == date,
+                                            Page.time_start == time_start,
+                                            Page.teacher_s_s.student_subject.subject.id == subject_id)
+
+    # 所有相关班级
+    classes_id = []
+    for page in pages_classes_query.all():
+        class_id = page.teacher_s_s.student_subject.student.class_id
+        if class_id not in classes_id:
+            classes_id.append(class_id)
+    # 试卷涉及的所有班级
+    classes = []
+    for class_id in classes_id:
+        class_ = Class.query.get(class_id)
+        classes.append(class_)
+
+    # 当前选中班级
+    if current_class_id != 0:
+        pages_one_class_query = pages_classes_query.filter(
+            Page.teacher_s_s.student_subject.student.class_id == current_class_id)
+    else:
+        pages_one_class_query = pages_classes_query
+
     if current_button == "统计数据":
-
-        pages_classes_query = Page.query.filter(Page.teacher_s_s.teacher.id == session["uid"],
-                                                Page.date == date,
-                                                Page.time_start == time_start,
-                                                Page.teacher_s_s.student_subject.subject.id == subject_id)
-
-        # 所有相关班级
-        for page in pages_classes_query.all():
-            class_id = page.teacher_s_s.student_subject.student.class_id
-            if class_id not in classes_id:
-                classes_id.append(class_id)
-
-        # 当前选中班级
-        if current_class_id != 0:
-            pages_one_class_query = pages_classes_query.filter(
-                Page.teacher_s_s.student_subject.student.class_id == current_class_id)
-        else:
-            pages_one_class_query = pages_classes_query
+        # 数据结构准备
+        data = {"各小题": {"选择题": [], "填空题": [], "判断题": [], "解答题": []},
+                "各题型": {"选择题": {"平均分": 0, "最高分": 0, "最低分": 1000},
+                        "填空题": {"平均分": 0, "最高分": 0, "最低分": 1000},
+                        "判断题": {"平均分": 0, "最高分": 0, "最低分": 1000},
+                        "解答题": {"平均分": 0, "最高分": 0, "最低分": 1000}},
+                "各分数段": {"0~59": 0, "60~69": 0, "70~79": 0, "80~89": 0, "90~100": 0},
+                "总分": {"平均分": 0, "及格率": 0, "最高分": 0, "最低分": 0, "优秀率": 0},
+                "及格人数": 0,
+                "应考人数": 0,
+                "实考人数": 0}
+        test_number = 0
+        page_number = 0
+        finished_number = 0
+        should_number = 0
 
         for page in pages_one_class_query.all():
             should_number += 1
@@ -698,13 +701,28 @@ def analyse():
         # 优秀与及格率:
         data["总分"]["优秀率"] = (data["各分数段"]["80~89"] + data["各分数段"]["90~100"]) / page_number
         data["总分"]["及格率"] = 1 - (data["各分数段"]["0~59"]) / page_number
-        # 试卷涉及的所有班级
-        for class_id in classes_id:
-            class_ = Class.query.get(class_id)
-            classes.append(class_)
         return render_template("成绩分析页面.html", classes=classes, data=data, current_class_id=current_class_id,
                                current_button=current_button, date=date, time_start=time_start)
     else:
-        pass
-    return render_template("原始数据页面.html", classes=classes, data=data, current_class_id=current_class_id,
-                           current_button=current_button, date=date, time_start=time_start)
+        # 初始化数据结构
+        data = []
+        data_item = {"学号": 0, "姓名": 0,
+                     "选择题": {"总分": 0, "各小题": []},
+                     "填空题": {"总分": 0, "各小题": []},
+                     "判断题": {"总分": 0, "各小题": []},
+                     "简答题": {"总分": 0, "各小题": []}}
+        for page in pages_one_class_query.all():
+            data_item["学号"] = page.teacher_s_s.student_subject.student.id
+            data_item["姓名"] = page.teacher_s_s.student_subject.student.name
+            scores = json.loads(page.scores)
+            contents = json.loads(page.content)
+            for key in contents.keys():
+                this_type_score = 0
+                for test in contents[key]:
+                    score = scores[str(test["id"])]
+                    data_item[key]["各小题"].append(score)
+                    this_type_score += score
+                data_item[key]["总分"] = this_type_score
+            data.append(data_item)
+        return render_template("原始数据页面.html", classes=classes, data=data, current_class_id=current_class_id,
+                               current_button=current_button, date=date, time_start=time_start)
