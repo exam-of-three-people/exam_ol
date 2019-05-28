@@ -6,16 +6,16 @@ $(function () {
     //绑定事件
     $("#college").change(function () {
         majorBind();
-    })
+    });
 
     $("#grade").change(function () {
         classBind();
-    })
+    });
 
     $("#major").change(function () {
         classBind();
     })
-})
+});
 
 function Bind(str) {
     alert($("#college").html());
@@ -35,7 +35,7 @@ function collegeBind() {
             //从服务器获取数据进行绑定
             $.each(data.data, function (i, item) {
                 str += "<option value=" + item.id + ">" + item.name + "</option>";
-            })
+            });
             //将数据添加到省份这个下拉框里面
             $("#college").append(str);
         },
@@ -67,7 +67,7 @@ function majorBind() {
             //从服务器获取数据进行绑定
             $.each(data.data, function (i, item) {
                 str += "<option value=" + item.id + ">" + item.name + "</option>";
-            })
+            });
             //将数据添加到省份这个下拉框里面
             $("#major").append(str);
         },
@@ -100,7 +100,7 @@ function classBind() {
             //从服务器获取数据进行绑定
             $.each(data.data, function (i, item) {
                 str += "<option value=" + item.id + ">" + item.name + "</option>";
-            })
+            });
             //将数据添加到省份这个下拉框里面
             $("#class_").append(str);
         },

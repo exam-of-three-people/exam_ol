@@ -2,203 +2,98 @@
 {% extends "base.html" %}
 <html lang="en">
 {% block head %}
-<head>
-    <meta charset="UTF-8">
-    <link href="../static/css/教师菜单.css" rel="stylesheet"/>
-    <link href="../static/js/教师菜单.js" rel="script"/>
-    <title>教师菜单</title>
-</head>
+    <head>
+        <meta charset="UTF-8">
+        <link href="../static/css/教师菜单.css" rel="stylesheet"/>
+        <link href="../static/js/教师菜单.js" rel="script"/>
+        <title>教师菜单</title>
+    </head>
 {% endblock %}
 
 
 {% block body %}
-<body>
-
-
-<div class="container">
-	<div class="row clearfix">
-		<div class="col-md-10 column">
-			 <a class="btn btn-primary btn-lg btn-block" type="button"  href="/testCreater" >创建考试</a>
-		</div>
-		<div class="col-md-2 column">
-			<img alt="140x140" src="../static/image/教师菜单图片1.png" />
-		</div>
-	</div>
-	<div class="row clearfix">
-		<div class="col-md-4 column">
-			<img alt="140x140"  src="../static/image/教师菜单图片1.png" />
-		</div>
-		<div class="col-md-4 column">
-			 <address> <strong>《书院》</strong><br />力学如力耕，勤惰尔自知。但使书种多 ，会有岁稔时。<br /> </address>
-		</div>
-		<div class="col-md-4 column">
-		</div>
-	</div>
-	<div class="row clearfix">
-		<div class="col-md-10 column">
-			 <a class="btn btn-success btn-block btn-lg" type="button" href="/testList">考试列表</a>
-		</div>
-		<div class="col-md-2 column">
-			<img alt="140x140" src="../static/image/教师菜单图片1.png" />
-		</div>
-	</div>
-	<div class="row clearfix">
-		<div class="col-md-4 column">
-			<img alt="140x140" src="../static/image/教师菜单图片1.png" />
-		</div>
-		<div class="col-md-4 column">
-			<p>
-				<strong> 《学奕》</strong>弈秋，通国之善弈者也。使弈秋诲二人弈，其一人专心致志，惟弈秋之为听；一人虽听之，一心以为有鸿鹄将至，思援弓缴而射之。虽与之俱学，弗若之矣。为是其智弗若与？曰：非然也。
-			</p>
-		</div>
-		<div class="col-md-4 column">
-		</div>
-	</div>
-	<div class="row clearfix">
-		<div class="col-md-10 column">
-			 <a class="btn btn-warning btn-lg btn-block" type="button" href="/teacherInfo">个人信息</a>
-		</div>
-		<div class="col-md-2 column">
-			<img alt="140x140" src="../static/image/教师菜单图片1.png" />
-	</div>
-	<div class="row clearfix">
-		<div class="col-md-4 column">
-			<img alt="140x140"  src="../static/image/教师菜单图片1.png" />
-		</div>
-		<div class="col-md-4 column">
-			 <address> <strong>《 劝学》</strong><br />三更灯火五更鸡，正是男儿读书时。
-黑发不知勤学早，白首方悔读书迟。</address>
-		</div>
-		<div class="col-md-4 column">
-		</div>
-	</div>
-	<div class="row clearfix">
-		<div class="col-md-10 column">
-			 <a class="btn btn-danger btn-block btn-lg" type="button"  href="/logout">退出考试</a>
-		</div>
-		<div class="col-md-2 column">
-			<img alt="140x140" src="../static/image/教师菜单图片1.png" />
-		</div>
-	</div>
-	<div class="row clearfix">
-		<div class="col-md-4 column">
-			<img alt="140x140"  src="../static/image/教师菜单图片1.png" />
-		</div>
-		<div class="col-md-4 column">
-			 <address> <strong>《学而》</strong><br /> 子曰：“学而时习之，不亦说乎？有朋自远方来，不亦乐乎？人不知而不愠，不亦君子乎？” </address>
-		</div>
-		<div class="col-md-4 column">
-		</div>
-	</div>
-</div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-</body>
+    <body>
+
+
+    <div class="container">
+        <div class="row clearfix">
+            <div class="col-md-10 column">
+                <a class="btn btn-primary btn-lg btn-block" type="button" href="/testCreater">创建考试</a>
+            </div>
+            <div class="col-md-2 column">
+                <img alt="140x140" src="../static/image/教师菜单图片1.png"/>
+            </div>
+        </div>
+        <div class="row clearfix">
+            <div class="col-md-4 column">
+                <img alt="140x140" src="../static/image/教师菜单图片1.png"/>
+            </div>
+            <div class="col-md-4 column">
+                <address><strong>《书院》</strong><br/>力学如力耕，勤惰尔自知。但使书种多 ，会有岁稔时。<br/></address>
+            </div>
+            <div class="col-md-4 column">
+            </div>
+        </div>
+        <div class="row clearfix">
+            <div class="col-md-10 column">
+                <a class="btn btn-success btn-block btn-lg" type="button" href="/testList">考试列表</a>
+            </div>
+            <div class="col-md-2 column">
+                <img alt="140x140" src="../static/image/教师菜单图片1.png"/>
+            </div>
+        </div>
+        <div class="row clearfix">
+            <div class="col-md-4 column">
+                <img alt="140x140" src="../static/image/教师菜单图片1.png"/>
+            </div>
+            <div class="col-md-4 column">
+                <p>
+                    <strong> 《学奕》</strong>弈秋，通国之善弈者也。使弈秋诲二人弈，其一人专心致志，惟弈秋之为听；一人虽听之，一心以为有鸿鹄将至，思援弓缴而射之。虽与之俱学，弗若之矣。为是其智弗若与？曰：非然也。
+                </p>
+            </div>
+            <div class="col-md-4 column">
+            </div>
+        </div>
+        <div class="row clearfix">
+            <div class="col-md-10 column">
+                <a class="btn btn-warning btn-lg btn-block" type="button" href="/teacherInfo">个人信息</a>
+            </div>
+            <div class="col-md-2 column">
+                <img alt="140x140" src="../static/image/教师菜单图片1.png"/>
+            </div>
+            <div class="row clearfix">
+                <div class="col-md-4 column">
+                    <img alt="140x140" src="../static/image/教师菜单图片1.png"/>
+                </div>
+                <div class="col-md-4 column">
+                    <address><strong>《 劝学》</strong><br/>三更灯火五更鸡，正是男儿读书时。
+                        黑发不知勤学早，白首方悔读书迟。
+                    </address>
+                </div>
+                <div class="col-md-4 column">
+                </div>
+            </div>
+            <div class="row clearfix">
+                <div class="col-md-10 column">
+                    <a class="btn btn-danger btn-block btn-lg" type="button" href="/logout">退出考试</a>
+                </div>
+                <div class="col-md-2 column">
+                    <img alt="140x140" src="../static/image/教师菜单图片1.png"/>
+                </div>
+            </div>
+            <div class="row clearfix">
+                <div class="col-md-4 column">
+                    <img alt="140x140" src="../static/image/教师菜单图片1.png"/>
+                </div>
+                <div class="col-md-4 column">
+                    <address><strong>《学而》</strong><br/> 子曰：“学而时习之，不亦说乎？有朋自远方来，不亦乐乎？人不知而不愠，不亦君子乎？”</address>
+                </div>
+                <div class="col-md-4 column">
+                </div>
+            </div>
+        </div>
+
+
+    </body>
 {% endblock %}
 </html>

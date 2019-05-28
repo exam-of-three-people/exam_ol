@@ -64,18 +64,18 @@
 
     </div>
     <!-- 答题面板 -->
-            <div class="test_panel">
-                {% for key in contents.keys() %}
-                        <div class="test_type">
-                            <p>{{ key }}</p>
-                            {% for item in contents[key] %}
-                                <a href="{{ '#test_'+[item.id]|join }}">
-                                    <span class="test_flag" id="{{ 'flag_'+[item.id]|join }}">{{ loop.index }}</span>
-                                </a>
-                            {% endfor %}
-                        </div>
+    <div class="test_panel">
+        {% for key in contents.keys() %}
+            <div class="test_type">
+                <p>{{ key }}</p>
+                {% for item in contents[key] %}
+                    <a href="{{ '#test_'+[item.id]|join }}">
+                        <span class="test_flag" id="{{ 'flag_'+[item.id]|join }}">{{ loop.index }}</span>
+                    </a>
                 {% endfor %}
             </div>
+        {% endfor %}
+    </div>
 
     </body>
     <div id="data_" hidden data-rest_time="{{ rest_time }}" data-answer='{{ answer }}'></div>

@@ -10,4 +10,4 @@ var Timer = setInterval(function () {
         $(".time").text("请重新发送");
         clearInterval(Timer);
     }
-}, 1000)
+}, 1000);

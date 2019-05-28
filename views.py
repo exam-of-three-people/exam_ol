@@ -1,9 +1,13 @@
+import datetime
+import json
+import time
+
 from flask import render_template, redirect, flash, url_for, request, json, session
+from sqlalchemy import func
+from sqlalchemy.exc import IntegrityError, InternalError
+
 from forms import LoginForm, RegisterFormStudent, RegisterFormTeacher, StudentInfoForm, TeacherInfoForm, TestCreaterForm
 from models import app, Student, Teacher, College, Major, StudentSubject, TeacherSS, Subject, Page, Test, Class, db
-from sqlalchemy.exc import IntegrityError, InternalError
-from sqlalchemy import func
-import time, json, datetime
 
 
 @app.route("/", methods=['GET', 'POST'])

@@ -6,14 +6,14 @@ $(function () {
     //绑定事件
     $("#college").change(function () {
         majorBind();
-    })
+    });
 
     $("#major").change(function () {
         classBind();
     })
 
 
-})
+});
 
 function Bind(str) {
     alert($("#college").html());
@@ -40,7 +40,7 @@ function collegeBind() {
             //从服务器获取数据进行绑定
             $.each(data.data, function (i, item) {
                 str += "<option value=" + item.id + ">" + item.name + "</option>";
-            })
+            });
             //将数据添加到省份这个下拉框里面
             $("#college").append(str);
         },
@@ -67,14 +67,14 @@ function majorBind() {
     $.ajax({
         type: "POST",
         url: "/studentRegister/selects",
-        data: {"parent_id":college_id, "my_select": "major"},
+        data: {"parent_id": college_id, "my_select": "major"},
         dataType: "JSON",
         async: false,
         success: function (data) {
             //从服务器获取数据进行绑定
             $.each(data.data, function (i, item) {
                 str += "<option value=" + item.id + ">" + item.name + "</option>";
-            })
+            });
             //将数据添加到省份这个下拉框里面
             $("#major").append(str);
         },
@@ -107,7 +107,7 @@ function classBind() {
             //从服务器获取数据进行绑定
             $.each(data.data, function (i, item) {
                 str += "<option value=" + item.id + ">" + item.name + "</option>";
-            })
+            });
             //将数据添加到省份这个下拉框里面
             $("#classes").append(str);
         },

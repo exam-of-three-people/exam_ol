@@ -35,10 +35,10 @@
                                 </span>
                                 <!-- 题目 -->
                                 <div class="test_area">
-{#                                    <textarea class="textarea">{{ item.question }}</textarea>#}
+                                    {#                                    <textarea class="textarea">{{ item.question }}</textarea>#}
                                     <textarea id="text" readonly="readonly" class="textarea" contenteditable="false"
-                                  rows="{{ item.question.count('\n',0) + 2 }}"
-                                  style="text-align:left;overflow-y:visible;border-color: moccasin">{{ item.question }}</textarea>
+                                              rows="{{ item.question.count('\n',0) + 2 }}"
+                                              style="text-align:left;overflow-y:visible;border-color: moccasin">{{ item.question }}</textarea>
                                     <p>标准答案：{{ item.answer }}</p>
                                     <p>我的答案：<span class="{{ item.flag }}_answer">{{ item.my_answer }}</span></p>
                                 </div>

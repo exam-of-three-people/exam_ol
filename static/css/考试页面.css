@@ -1,8 +1,9 @@
-.body{
+.body {
     background: url(../image/考试页面背景边框.jpg) no-repeat;
     background-size: cover;
 }
-textarea{
+
+textarea {
     width: 100%;
 }
 
@@ -10,11 +11,12 @@ textarea{
 .test_panel {
     background: white;
     width: 170px;
-	position: fixed;
-	top: 30%;
+    position: fixed;
+    top: 30%;
     right: 0;
-	border: 1px solid rgba(0, 0, 0, 0);
+    border: 1px solid rgba(0, 0, 0, 0);
 }
+
 /*每个类型*/
 .test_type {
     width: 100%;
@@ -23,16 +25,17 @@ textarea{
     /*上；右；下；左*/
     margin: 2px 4px 2px 4px;
 }
+
 /*每个题目标志<span>*/
 .test_flag {
     width: 24px;
     height: 24px;
-	background: white;
-    text-align:center;
+    background: white;
+    text-align: center;
     /*行内元素转换成块元素*/
-	display: block;
-	/*添加浮动效果，解决自动换行*/
-	float: left;
+    display: block;
+    /*添加浮动效果，解决自动换行*/
+    float: left;
     /*上；右；下；左*/
-	margin: 2px 0 0 2px;
+    margin: 2px 0 0 2px;
 }

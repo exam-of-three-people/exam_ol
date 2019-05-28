@@ -3,54 +3,50 @@
 {% import 'bootstrap/wtf.html' as wtf %}
 <html lang="en">
 {% block head %}
-<head>
-    <meta charset="UTF-8">
-    <title>教师注册页面</title>
-</head>
+    <head>
+        <meta charset="UTF-8">
+        <title>教师注册页面</title>
+    </head>
 {% endblock %}
 
 
 {% block body %}
-<body>
-<br>
-<br>
-<div class="container">
-	<div class="row clearfix">
-		<div class="col-md-2 column">
-		</div>
+    <body>
+    <br>
+    <br>
+    <div class="container">
+        <div class="row clearfix">
+            <div class="col-md-2 column">
+            </div>
 
-        <div class="col-md-8 column" style="background: url(../static/image/考试页面背景图片.jpg)">
-            {% for msg in get_flashed_messages() %}
-            <p class="alert alert-dismissable alert-info">{{ msg }}</p>
-            {% endfor %}
-        <br>
-        <br>
+            <div class="col-md-8 column" style="background: url(../static/image/考试页面背景图片.jpg)">
+                {% for msg in get_flashed_messages() %}
+                    <p class="alert alert-dismissable alert-info">{{ msg }}</p>
+                {% endfor %}
+                <br>
+                <br>
 
-{% for msg in get_flashed_messages() %}
-                <div class="alert alert-danger fade in" style="   width:100%;height: 46px">
-                    <button type="button" class="close" data-dismiss="alert">&times;</button>
-                    <strong class="login-box-msg">{{ msg }}</strong></div>
-            {% endfor %}
-{{ wtf.quick_form(form,url_for('teacherRegister'), form_type="horizontal") }}
-		</div>
-		<div class="col-md-2 column">
-		</div>
-	</div>
-</div>
-
-
+                {% for msg in get_flashed_messages() %}
+                    <div class="alert alert-danger fade in" style="   width:100%;height: 46px">
+                        <button type="button" class="close" data-dismiss="alert">&times;</button>
+                        <strong class="login-box-msg">{{ msg }}</strong></div>
+                {% endfor %}
+                {{ wtf.quick_form(form,url_for('teacherRegister'), form_type="horizontal") }}
+            </div>
+            <div class="col-md-2 column">
+            </div>
+        </div>
+    </div>
 
 
-
-
-{#<form action="/teacherRegister" method="post">#}
-{#    {{ form.id.label }}{{ form.id }}#}
-{#    {{ form.name.label }}{{ form.name }}#}
-{#    {{ form.csrf_token }}#}
-{#    {{ form.password.label }}{{ form.password }}#}
-{#    {{ form.ensure_password.label }}{{ form.ensure_password }}#}
-{#    {{ form.submit }}#}
-{#</form>#}
-</body>
+    {#<form action="/teacherRegister" method="post">#}
+    {#    {{ form.id.label }}{{ form.id }}#}
+    {#    {{ form.name.label }}{{ form.name }}#}
+    {#    {{ form.csrf_token }}#}
+    {#    {{ form.password.label }}{{ form.password }}#}
+    {#    {{ form.ensure_password.label }}{{ form.ensure_password }}#}
+    {#    {{ form.submit }}#}
+    {#</form>#}
+    </body>
 {% endblock %}
 </html>

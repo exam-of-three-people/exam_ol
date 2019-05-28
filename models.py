@@ -47,7 +47,6 @@ class Student(db.Model):
                         return page
         return None
 
-
     def __repr__(self):
         return "[学生 %r]" % self.id
 
