@@ -699,7 +699,7 @@ def analyse():
         # 优秀与及格率:
         data["总分"]["优秀率"] = (data["各分数段"]["80~89"] + data["各分数段"]["90~100"]) / page_number
         data["总分"]["及格率"] = 1 - (data["各分数段"]["0~59"]) / page_number
-        return render_template("成绩分析页面.html", classes=classes, data=data, current_class_id=current_class_id,
+        return render_template("统计数据页面.html", classes=classes, data=data, current_class_id=current_class_id,
                                current_button=current_button, date=date, time_start=time_start)
     else:
         # 初始化数据结构

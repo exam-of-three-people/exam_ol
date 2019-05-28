@@ -28,6 +28,9 @@
 
                 <table class="table">
                     <tr class="table_header">
+                        <td>
+                            名称
+                        </td>
 
                         <td>
                             日期
@@ -45,9 +48,15 @@
                         <td>
                             班级
                         </td>
+                        <td>
+                            操作
+                        </td>
                     </tr>
                     {% for page in pages %}
                         <tr class="row1">
+                            <td>
+                                {{ page["page"].name }}
+                            </td>
                             <td>
                                 {{ page["page"].date }}
                             </td>
@@ -62,12 +71,13 @@
                             </td>
                             <td>
                                 {% for class_id in page["classes"] %}
-                                    {{ Class.query.get(class_id).name }}
+                                    {{ Class.query.get(class_id).name }}<br>
                                 {% endfor %}
                             </td>
                             <td>
                                 <a href="/delete/?id={{ page["page"].id }}">删除</a>
-                                {#								<a href="/change/?id={{ page.id }}">修改</a>#}
+                                <a href="{{ url_for("analyse", current_button="统计数据", current_class_id=0,
+                   date=page["page"].date, time_start=page["page"].time_start, subject_id=page["page"].teacher_s_s.student_subject.subject.id) }}">分析</a>
                             </td>
 
                         </tr>
