@@ -49,22 +49,24 @@
                     {% for page in pages %}
                         <tr class="row1">
                             <td>
-                                {{ page.date }}
+                                {{ page["page"].date }}
                             </td>
                             <td>
-                                {{ page.time_start }}
+                                {{ page["page"].time_start }}
                             </td>
                             <td>
-                                {{ page.time_length // 60 }}分钟
+                                {{ page["page"].time_length // 60 }}分钟
                             </td>
                             <td>
-                                {{ page.teacher_s_s.student_subject.subject.name }}
+                                {{ page["page"].teacher_s_s.student_subject.subject.name }}
                             </td>
                             <td>
-                                {{ page.teacher_s_s.student_subject.student.class_.name }}
+                                {% for class_id in page["classes"] %}
+                                    {{ Class.query.get(class_id).name }}
+                                {% endfor %}
                             </td>
                             <td>
-                                <a href="/delete/?id={{ page.id }}">删除</a>
+                                <a href="/delete/?id={{ page["page"].id }}">删除</a>
                                 {#								<a href="/change/?id={{ page.id }}">修改</a>#}
                             </td>
 

@@ -275,22 +275,18 @@ def testCreater():
             class_ = Class.query.get(int(class_id))
             students = class_.students
             for student in students:
-                student_subject = StudentSubject(student_id=student.id, subject_id=subject_id)
-                try:
+                student_subject = StudentSubject.query.filter_by(student_id=student.id,
+                                                                 subject_id=subject_id).first()
+                if student_subject is None:
+                    student_subject = StudentSubject(student_id=student.id, subject_id=subject_id)
                     db.session.add(student_subject)
                     db.session.commit()
-                except IntegrityError:
-                    db.session.rollback()
-                    student_subject = StudentSubject.query.filter_by(student_id=session["uid"],
-                                                                     subject_id=subject_id).first()
-                teacher_s_s = TeacherSS(student_subject_id=student_subject.id, teacher_id=session["uid"])
-                try:
+                teacher_s_s = TeacherSS.query.filter_by(student_subject_id=student_subject.id,
+                                                        teacher_id=session["uid"]).first()
+                if teacher_s_s is None:
+                    teacher_s_s = TeacherSS(student_subject_id=student_subject.id, teacher_id=session["uid"])
                     db.session.add(teacher_s_s)
-                    db.session.commit()
-                except IntegrityError:
-                    db.session.rollback()
-                    teacher_s_s = TeacherSS.query.filter_by(student_subject_id=student_subject.id,
-                                                            teacher_id=session["uid"]).first()
+                    # db.session.commit()
                 page = Page()
                 page.name = form.name.data
                 page.date = form.date.data
@@ -315,16 +311,17 @@ def testList():
         is_repeat = False
         for page in pages:
             for page_show in pages_show:
-                if page_show.teacher_s_s.student_subject.student.class_id \
-                        == page.teacher_s_s.student_subject.student.class_id \
-                        and page.date == page_show.date \
-                        and page.time_start == page_show.time_start:
+                if page.date == page_show["page"].date and page.time_start == page_show["page"].time_start \
+                        and page.teacher_s_s.student_subject.subject.id == page_show[
+                    "page"].teacher_s_s.student_subject.id:
                     is_repeat = True
+                    if page.teacher_s_s.student_subject.student.class_id not in page_show["classes"]:
+                        page_show["classes"].append(page.teacher_s_s.student_subject.student.class_id)
                     break
                 is_repeat = False
             if not is_repeat:
-                pages_show.append(page)
-        return render_template('考试列表页面.html', pages=pages_show)
+                pages_show.append({"page": page, "classes": []})
+        return render_template('考试列表页面.html', pages=pages_show, Class=Class)
     else:
         return redirect("/teacherMenu")
 
@@ -337,9 +334,7 @@ def delete():
         pages = teacher.get_pages()
         pages_delete = []
         for page in pages:
-            if page_delete.teacher_s_s.student_subject.student.class_id \
-                    == page.teacher_s_s.student_subject.student.class_id \
-                    and page.date == page_delete.date \
+            if page.date == page_delete.date \
                     and page.time_start == page_delete.time_start:
                 pages_delete.append(page)
 
