@@ -19,21 +19,23 @@
             </div>
             <div class="col-md-10 column">
                 <br><br>
-                <div class="tabbable" id="tabs-522636">
+                <div class="tabbable">
                     <!-- 一排班级标签 -->
                     <ul class="nav nav-tabs">
+                        {% for class_ in classes %}
                         <li class="active">
-                            <a href="{{ url_for("analyse", current_button="统计数据", current_class=current_class,
-                   date=date, time_start=time_start, subject_id=subject_id) }}">全员</a>
+                            <a href="{{ url_for("analyse", current_button=current_button, current_class=current_class,
+                   date=date, time_start=time_start, subject_id=subject_id) }}">{{ class_ }}</a>
                         </li>
-                        <li>
-                            <a href="{{ url_for("analyse", current_button="统计数据", current_class=current_class,
-                   date=date, time_start=time_start, subject_id=subject_id) }}">1班</a>
-                        </li>
-                        <li>
-                            <a href="{{ url_for("analyse", current_button="统计数据", current_class=current_class,
-                   date=date, time_start=time_start, subject_id=subject_id) }}">2班</a>
-                        </li>
+                        {% endfor %}
+{#                        <li>#}
+{#                            <a href="{{ url_for("analyse", current_button=current_button, current_class=current_class,#}
+{#                   date=date, time_start=time_start, subject_id=subject_id) }}">1班</a>#}
+{#                        </li>#}
+{#                        <li>#}
+{#                            <a href="{{ url_for("analyse", current_button=current_button, current_class=current_class,#}
+{#                   date=date, time_start=time_start, subject_id=subject_id) }}">2班</a>#}
+{#                        </li>#}
                     </ul>
                     <!-- 标签的body，加载表格 -->
                     <div class="tab-content">

@@ -589,4 +589,4 @@ def auto_save():
 
 @app.route("/test", methods=['GET', 'POST'])
 def test():
-    return render_template('统计数据页面.html')
+    return render_template('base_for_analyse.html')
