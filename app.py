@@ -1,13 +1,14 @@
-from flask_script import Manager
 from flask_admin import Admin
 from flask_admin.contrib.sqla import ModelView
-from models import Student, Teacher, College, Major, Subject, Page, Test, Class, db
-from flask_migrate import Migrate, MigrateCommand
 from flask_admin.form import BaseForm
-from wtforms import StringField
-from views import app
-from wtforms.validators import DataRequired, EqualTo
 from flask_bootstrap import Bootstrap
+from flask_migrate import Migrate, MigrateCommand
+from flask_script import Manager
+from wtforms import StringField
+from wtforms.validators import DataRequired
+
+from models import Student, Teacher, College, Major, Subject, Page, Test, Class, db
+from views import app
 
 bootstrap = Bootstrap()
 bootstrap.init_app(app)
@@ -38,7 +39,6 @@ admin.add_view(ModelView(Subject, db.session))
 admin.add_view(ModelView(Page, db.session))
 admin.add_view(ModelView(Test, db.session))
 admin.add_view(ModelView(Class, db.session))
-
 
 if __name__ == '__main__':
     manager.run()

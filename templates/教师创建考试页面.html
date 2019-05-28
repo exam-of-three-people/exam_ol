@@ -11,9 +11,9 @@
 
 
 {% block main_windows %}
-                {% for msg in get_flashed_messages() %}
-                    <p class="alert alert-dismissable alert-info">{{ msg }}</p>
-                {% endfor %}
+    {% for msg in get_flashed_messages() %}
+        <p class="alert alert-dismissable alert-info">{{ msg }}</p>
+    {% endfor %}
     {{ wtf.quick_form(form,url_for('testCreater'), form_type="horizontal") }}
 {% endblock %}
 {% block btn_back %}

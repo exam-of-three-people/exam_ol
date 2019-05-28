@@ -1,24 +1,24 @@
 /*遮光布*/
-#show{
-	width: 100%;
-	height: 100%;
-	/*三原色：最后参数是透明度：0表示完全透明，1表示不透明*/
-	background: rgba(0,0,0,0.7);
-	/*绝对布局:重新定义坐标位置，根据坐标定义开始参考点的位置*/
-	position: absolute;
-	left: 0px;
-	top: 0px;
-	display: none;
+#show {
+    width: 100%;
+    height: 100%;
+    /*三原色：最后参数是透明度：0表示完全透明，1表示不透明*/
+    background: rgba(0, 0, 0, 0.7);
+    /*绝对布局:重新定义坐标位置，根据坐标定义开始参考点的位置*/
+    position: absolute;
+    left: 0px;
+    top: 0px;
+    display: none;
 }
 
-#show_test_plan{
-	width: 600px;
-	height: 450px;
-	background: palegreen;
-	position: absolute;
-	top: 0px;
-	left: 50%;
-	margin-left: -300px;
-	margin-top: 150px;
-	display: none;
+#show_test_plan {
+    width: 600px;
+    height: 450px;
+    background: palegreen;
+    position: absolute;
+    top: 0px;
+    left: 50%;
+    margin-left: -300px;
+    margin-top: 150px;
+    display: none;
 }

@@ -3,8 +3,9 @@
 # @Author  : xianfa
 # @FileName: 这次绝对不跑路.py
 # @Software: PyCharm
-from models import Test, db, College, Class, Subject, Student, Major, Teacher, Page
 import random
+
+from models import Test, db, College, Class, Subject, Student, Major, Teacher
 
 db.drop_all()
 db.create_all()

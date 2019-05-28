@@ -2,227 +2,243 @@
 {% extends "base.html" %}
 {% import 'bootstrap/wtf.html' as wtf %}
 {% block head %}
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>登录页面</title>
-    <link rel="stylesheet" type="text/css" href="../static/css/登录页面.css">
-<script src="../static/js/登录页面.js" type="text/javascript"></script>
-</head>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>登录页面</title>
+        <link rel="stylesheet" type="text/css" href="../static/css/登录页面.css">
+        <script src="../static/js/登录页面.js" type="text/javascript"></script>
+    </head>
 {% endblock %}
 
-{% block  body%}
-<body >
-<div class="container ">
-	<div class="row clearfix">
-		<div class="col-md-7 column">
-			<h1 class="text-right text-info" style="margin-top: -2px">
-				智能考试系统
-			</h1>
-		</div>
-		<div class="col-md-5 column" >
-			<div class="panel-group" id="panel-338214">
-				<div class="panel panel-default">
+{% block  body %}
+    <body>
+    <div class="container ">
+        <div class="row clearfix">
+            <div class="col-md-7 column">
+                <h1 class="text-right text-info" style="margin-top: -2px">
+                    智能考试系统
+                </h1>
+            </div>
+            <div class="col-md-5 column">
+                <div class="panel-group" id="panel-338214">
+                    <div class="panel panel-default">
 
-						 <button   class="  col-md-12 panel-title collapsed" href="#panel-element-846427" data-toggle="collapse" data-parent="#panel-338214 ">登录和注册</button>
+                        <button class="  col-md-12 panel-title collapsed" href="#panel-element-846427"
+                                data-toggle="collapse" data-parent="#panel-338214 ">登录和注册
+                        </button>
 
-					<div class="panel-collapse collapse" id="panel-element-846427">
-						<div class="panel-body">
-							{% for msg in get_flashed_messages() %}
-    <p class="login-box-msg">{{ msg }}</p>
-{% endfor %}
-                        {{ wtf.quick_form(form,url_for('index'), form_type="horizontal",horizontal_columns=('lg', 3, 7)) }}
-{#<form action="/login" method="post" class="form-horizontal">#}
-{#{{ form.id }}#}
-{#  {{ form.password(class_="form-control")}}{{ form.password.label }}#}
-{#{{ form.remember_me.label }}{{ form.remember_me }}#}
-{#    {{ form.login(style='margin-left:15px',type_="button") }}#}
-{##}
-{#</form>#}
+                        <div class="panel-collapse collapse" id="panel-element-846427">
+                            <div class="panel-body">
+                                {% for msg in get_flashed_messages() %}
+                                    <p class="login-box-msg">{{ msg }}</p>
+                                {% endfor %}
+                                {{ wtf.quick_form(form,url_for('index'), form_type="horizontal",horizontal_columns=('lg', 3, 7)) }}
+                                {#<form action="/login" method="post" class="form-horizontal">#}
+                                {#{{ form.id }}#}
+                                {#  {{ form.password(class_="form-control")}}{{ form.password.label }}#}
+                                {#{{ form.remember_me.label }}{{ form.remember_me }}#}
+                                {#    {{ form.login(style='margin-left:15px',type_="button") }}#}
+                                {##}
+                                {#</form>#}
 
-         <div class="container position-absolute">
-	<div class="row clearfix">
-		<div class="col-md-4 column">
-			 <button  role="button" href="#modal-container-557207" data-toggle="modal" class="btn btn-primary col-sm-7" style="margin-left: 200px; margin-top:-49px">注册</button>
-			<div class="modal fade" id="modal-container-557207" role="dialog" aria-hidden="true" aria-labelledby="myModalLabel">
-				<div class="modal-dialog">
-					<div class="modal-content">
-						<div class="modal-header">
-							 <button class="close" aria-hidden="true" type="button" data-dismiss="modal">X</button>
-							<h4 class="modal-title" id="myModalLabel">
-								注册
-							</h4>
-						</div>
-						<div class="modal-footer">
-							 <button class="btn btn-default" type="button" data-dismiss="modal" onclick="teacherRegister()">老师注册</button> <button class="btn btn-primary" type="button" onclick="studentRegister()">学生注册</button>
-						</div>
-					</div>
+                                <div class="container position-absolute">
+                                    <div class="row clearfix">
+                                        <div class="col-md-4 column">
+                                            <button role="button" href="#modal-container-557207" data-toggle="modal"
+                                                    class="btn btn-primary col-sm-7"
+                                                    style="margin-left: 200px; margin-top:-49px">注册
+                                            </button>
+                                            <div class="modal fade" id="modal-container-557207" role="dialog"
+                                                 aria-hidden="true" aria-labelledby="myModalLabel">
+                                                <div class="modal-dialog">
+                                                    <div class="modal-content">
+                                                        <div class="modal-header">
+                                                            <button class="close" aria-hidden="true" type="button"
+                                                                    data-dismiss="modal">X
+                                                            </button>
+                                                            <h4 class="modal-title" id="myModalLabel">
+                                                                注册
+                                                            </h4>
+                                                        </div>
+                                                        <div class="modal-footer">
+                                                            <button class="btn btn-default" type="button"
+                                                                    data-dismiss="modal" onclick="teacherRegister()">
+                                                                老师注册
+                                                            </button>
+                                                            <button class="btn btn-primary" type="button"
+                                                                    onclick="studentRegister()">学生注册
+                                                            </button>
+                                                        </div>
+                                                    </div>
 
-				</div>
+                                                </div>
 
-			</div>
+                                            </div>
 
-		</div>
-	</div>
-</div>
-
-
-
-
-
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
-	<div class="row clearfix">
-		<div class="col-md-12 column">
-			<div class="carousel slide" id="carousel-452170">
-				<ol class="carousel-indicators">
-					<li class="active" data-target="#carousel-452170" data-slide-to="0">
-					</li>
-					<li data-target="#carousel-452170" data-slide-to="1">
-					</li>
-					<li data-target="#carousel-452170" data-slide-to="2">
-					</li>
-				</ol>
-				<div class="carousel-inner">
-					<div class="item active">
-						<img alt="" src="../static/image/登录界面图片8.jpg" />
-						<div class="carousel-caption">
-							<h1>
-								智能考试系统制作人：曾宪法
-							</h1>
-
-						</div>
-					</div>
-					<div class="item">
-						<img alt="" src="../static/image/登录界面图片7.jpg" />
-						<div class="carousel-caption">
-							<h1>
-								智能考试系统制作人：王正
-							</h1>
-
-						</div>
-					</div>
-					<div class="item">
-						<img alt="" src="../static/image/登录界面图片6.jpg" />
-						<div class="carousel-caption">
-							<h1>
-								智能考试系统制作人：刘浩
-							</h1>
-
-						</div>
-					</div>
-				</div> <a class="left carousel-control" href="#carousel-452170" data-slide="prev"><span class="glyphicon glyphicon-chevron-left"></span></a> <a class="right carousel-control" href="#carousel-452170" data-slide="next"><span class="glyphicon glyphicon-chevron-right"></span></a>
-			</div>
-		</div>
-	</div>
-	<div class="row clearfix">
-		<div class="col-md-12 column">
-			<div class="jumbotron">
-				<h1>
-					智能考试系统！
-				</h1>
-				<p>
-					这是一个智能考试系统，可以完成在线考试，智能改卷，查询成绩，上传成绩等功能，减少老师重复批改试卷的操作。
-				</p>
-			</div>
-		</div>
-	</div>
-	<div class="row clearfix">
-		<div class="col-md-4 column">
-			<img alt="410*208" src="../static/image/登录界面图片4.jpg" />
-			<dl>
-				<dt>
-					考试不及格？不怕，努力就有希望！
-				</dt>
-				<dd>
-					学习除了自己，没人能帮到你。相信自己，这是重中之重！
-				</dd>
-				<dt>
-					加油，别放弃！能吃苦中苦，方为人上人！
-				</dt>
-				<dd>
-					只要你敢想，一切不是梦！
-				</dd>
-
-				<dt>
-
-				</dt>
-				<dd>
-					一个学生要有学习目标，要有学习动力，要有学习信心 那就自然会去好好学习的！
-				</dd>
-				<dt>
-					 少壮不努力，老大图伤悲！ 抛弃周围一切没有意义的干扰和自己的杂念！努力为自己的前程而奋斗吧
-				</dt>
-				<dd>
-					钢铁是怎样炼成的!多去看几遍! 抛弃杂念，一心一意学习起来吧，幸福的明天在向你招手！
-				</dd>
-			</dl>
-		</div>
-		<div class="col-md-4 column">
-			<img alt="340*400" src="../static/image/登录界面图片1.jpg" />
-			<dl>
-				<dt>
-					勤奋是成功之母，懒惰乃万恶之源。
-				</dt>
-				<dd>
-					真正的人生，只有在经过艰难卓绝的斗争之后才能实现。
-				</dd>
-				<dt>
-					成功＝艰苦劳动＋正确方法＋少说空话。
-				</dt>
-				<dd>
-					日日行，不怕千万里；常常做，不怕千万事。
-				</dd>
-				<dd>
-					勤奋的人是时间的主人，懒惰的人是时间的奴隶。
-				</dd>
-				<dt>
-					业精于勤而荒于嬉，行成于思而毁于随。
-				</dt>
-				<dd>
-					盛年不再来，一日难再晨，及时当勉励，岁月不待人。
-				</dd>
-				<dt>
-					天才就是百分之九十九的汗水加百分之一的灵感。
-				</dt>
-				<dd>
-					勤学如春起之苗，不见其增，日有所长；辍学如磨刀之石，不见其损，日有所亏。
-
-				</dd>
-			</dl>
-		</div>
-		<div class="col-md-4 column">
-			<img alt="140x140" src="../static/image/登录界面图片5.jpg" />
-			<dl>
-				<dt>
-					不经历风雨，怎能见彩虹？
-				</dt>
-				<dd>
-					懦弱的人只会裹足不前，莽撞的人只能引为烧身，只有真正勇敢的人才能所向披靡。
-				</dd>
-				<dt>
-					天道酬勤！
-				</dt>
-				<dd>
-					路是脚踏出来的，历史是人写出来的。人的每一步行动都在书写自己的历史。
-				</dd>
-				<dd>
-					聪明出于勤奋，天才在于积累。
-				</dd>
-				<dt>
-					牛不训不会耕，马不练不能骑。
-				</dt>
-				人勤地生宝，人懒地生草！
-			</dl>
-		</div>
-	</div>
-</div>
+                                        </div>
+                                    </div>
+                                </div>
 
 
-</body>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row clearfix">
+            <div class="col-md-12 column">
+                <div class="carousel slide" id="carousel-452170">
+                    <ol class="carousel-indicators">
+                        <li class="active" data-target="#carousel-452170" data-slide-to="0">
+                        </li>
+                        <li data-target="#carousel-452170" data-slide-to="1">
+                        </li>
+                        <li data-target="#carousel-452170" data-slide-to="2">
+                        </li>
+                    </ol>
+                    <div class="carousel-inner">
+                        <div class="item active">
+                            <img alt="" src="../static/image/登录界面图片8.jpg"/>
+                            <div class="carousel-caption">
+                                <h1>
+                                    智能考试系统制作人：曾宪法
+                                </h1>
+
+                            </div>
+                        </div>
+                        <div class="item">
+                            <img alt="" src="../static/image/登录界面图片7.jpg"/>
+                            <div class="carousel-caption">
+                                <h1>
+                                    智能考试系统制作人：王正
+                                </h1>
+
+                            </div>
+                        </div>
+                        <div class="item">
+                            <img alt="" src="../static/image/登录界面图片6.jpg"/>
+                            <div class="carousel-caption">
+                                <h1>
+                                    智能考试系统制作人：刘浩
+                                </h1>
+
+                            </div>
+                        </div>
+                    </div>
+                    <a class="left carousel-control" href="#carousel-452170" data-slide="prev"><span
+                            class="glyphicon glyphicon-chevron-left"></span></a> <a class="right carousel-control"
+                                                                                    href="#carousel-452170"
+                                                                                    data-slide="next"><span
+                        class="glyphicon glyphicon-chevron-right"></span></a>
+                </div>
+            </div>
+        </div>
+        <div class="row clearfix">
+            <div class="col-md-12 column">
+                <div class="jumbotron">
+                    <h1>
+                        智能考试系统！
+                    </h1>
+                    <p>
+                        这是一个智能考试系统，可以完成在线考试，智能改卷，查询成绩，上传成绩等功能，减少老师重复批改试卷的操作。
+                    </p>
+                </div>
+            </div>
+        </div>
+        <div class="row clearfix">
+            <div class="col-md-4 column">
+                <img alt="410*208" src="../static/image/登录界面图片4.jpg"/>
+                <dl>
+                    <dt>
+                        考试不及格？不怕，努力就有希望！
+                    </dt>
+                    <dd>
+                        学习除了自己，没人能帮到你。相信自己，这是重中之重！
+                    </dd>
+                    <dt>
+                        加油，别放弃！能吃苦中苦，方为人上人！
+                    </dt>
+                    <dd>
+                        只要你敢想，一切不是梦！
+                    </dd>
+
+                    <dt>
+
+                    </dt>
+                    <dd>
+                        一个学生要有学习目标，要有学习动力，要有学习信心 那就自然会去好好学习的！
+                    </dd>
+                    <dt>
+                        少壮不努力，老大图伤悲！ 抛弃周围一切没有意义的干扰和自己的杂念！努力为自己的前程而奋斗吧
+                    </dt>
+                    <dd>
+                        钢铁是怎样炼成的!多去看几遍! 抛弃杂念，一心一意学习起来吧，幸福的明天在向你招手！
+                    </dd>
+                </dl>
+            </div>
+            <div class="col-md-4 column">
+                <img alt="340*400" src="../static/image/登录界面图片1.jpg"/>
+                <dl>
+                    <dt>
+                        勤奋是成功之母，懒惰乃万恶之源。
+                    </dt>
+                    <dd>
+                        真正的人生，只有在经过艰难卓绝的斗争之后才能实现。
+                    </dd>
+                    <dt>
+                        成功＝艰苦劳动＋正确方法＋少说空话。
+                    </dt>
+                    <dd>
+                        日日行，不怕千万里；常常做，不怕千万事。
+                    </dd>
+                    <dd>
+                        勤奋的人是时间的主人，懒惰的人是时间的奴隶。
+                    </dd>
+                    <dt>
+                        业精于勤而荒于嬉，行成于思而毁于随。
+                    </dt>
+                    <dd>
+                        盛年不再来，一日难再晨，及时当勉励，岁月不待人。
+                    </dd>
+                    <dt>
+                        天才就是百分之九十九的汗水加百分之一的灵感。
+                    </dt>
+                    <dd>
+                        勤学如春起之苗，不见其增，日有所长；辍学如磨刀之石，不见其损，日有所亏。
+
+                    </dd>
+                </dl>
+            </div>
+            <div class="col-md-4 column">
+                <img alt="140x140" src="../static/image/登录界面图片5.jpg"/>
+                <dl>
+                    <dt>
+                        不经历风雨，怎能见彩虹？
+                    </dt>
+                    <dd>
+                        懦弱的人只会裹足不前，莽撞的人只能引为烧身，只有真正勇敢的人才能所向披靡。
+                    </dd>
+                    <dt>
+                        天道酬勤！
+                    </dt>
+                    <dd>
+                        路是脚踏出来的，历史是人写出来的。人的每一步行动都在书写自己的历史。
+                    </dd>
+                    <dd>
+                        聪明出于勤奋，天才在于积累。
+                    </dd>
+                    <dt>
+                        牛不训不会耕，马不练不能骑。
+                    </dt>
+                    人勤地生宝，人懒地生草！
+                </dl>
+            </div>
+        </div>
+    </div>
+
+
+    </body>
 {% endblock %}
 </html>

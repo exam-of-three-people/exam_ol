@@ -135,7 +135,7 @@
                 </div>
                 <div class="col-md-3 column">
                     <a class="btn btn-lg btn-block active btn-success" type="button"
-                           style="height: 240px ;width: 240px;float:left; border-top-left-radius:60px;margin-bottom:10px;margin-left:0%;border-bottom-right-radius: 60px; "
+                       style="height: 240px ;width: 240px;float:left; border-top-left-radius:60px;margin-bottom:10px;margin-left:0%;border-bottom-right-radius: 60px; "
                        href="studentInfo">
                         <div class="menu">学生<br>信息</div>
                     </a>
@@ -195,30 +195,30 @@
     </body>
     <script>
         $(window).scroll(function () {
-        if ($(".navbar").offset().top > 50) {
-            $(".navbar-fixed-top").addClass("top-nav");
-        } else {
-            $(".navbar-fixed-top").removeClass("top-nav");
-        }
-    })
+            if ($(".navbar").offset().top > 50) {
+                $(".navbar-fixed-top").addClass("top-nav");
+            } else {
+                $(".navbar-fixed-top").removeClass("top-nav");
+            }
+        });
 
-    {#=============新写的js也连不上，放在这里应该能用==========#}
-    //弹窗效果
-    $("#start_exam").click(function () {
-        //让遮光布显示出来
-        //	$("#show").show();
-        //渐入效果 ;时间单位：毫秒 1000 = 1秒
-        $("#show").fadeIn(800);
-        $("#show_test_plan").fadeIn(800);
-    });
+        {#=============新写的js也连不上，放在这里应该能用==========#}
+        //弹窗效果
+        $("#start_exam").click(function () {
+            //让遮光布显示出来
+            //	$("#show").show();
+            //渐入效果 ;时间单位：毫秒 1000 = 1秒
+            $("#show").fadeIn(800);
+            $("#show_test_plan").fadeIn(800);
+        });
 
-    //退出效果
-    $("#show").click(function () {
-        //渐入效果 ;时间单位：毫秒 1000 = 1秒
+        //退出效果
+        $("#show").click(function () {
+            //渐入效果 ;时间单位：毫秒 1000 = 1秒
 
-        $("#show_test_plan").fadeOut(800);
-        $("#show").fadeOut(800);
-    });
+            $("#show_test_plan").fadeOut(800);
+            $("#show").fadeOut(800);
+        });
 
     </script>
 {% endblock %}
