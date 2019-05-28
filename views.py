@@ -542,12 +542,14 @@ def createPage(page_id):
 def get_score():
     right_num = 0
     answer = {}
+    scores = {}
 
     if len(request.form) != 0:
         for key in request.form:
             test = Test.query.get(key)
             answer[key] = request.form[key]
             if test.answer == request.form[key]:
+                scores[key] = 100 / len(request.form)
                 right_num += 1
             else:
                 pass
@@ -557,6 +559,7 @@ def get_score():
 
     student = Student.query.get(session["uid"])
     page = student.get_current_page()
+    page.scores = json.dumps(scores)
     page.ongoing = False
     page.code = score
     page.answer = json.dumps(answer)
