@@ -441,7 +441,6 @@ def teacherInfoUpdate():
 
 @app.route("/studentRegister/selects", methods=["POST"])
 def studentRegisterSelects():
-    print(request.form)
     data = {"data": []}
     if request.form['my_select'] == 'college':
         colleges = College.query.all()
@@ -585,3 +584,58 @@ def auto_save():
     else:
         pass
     return str(rest_time)
+
+
+@app.route("/analyse", methods=['GET', 'POST'])
+def analyse():
+    date = request.args['date']
+    time_start = request.args["time_start"]
+    subject_id = request.args["subject_id"]
+    current_class = request.args["current_class"]
+    current_button = request.args["current_button"]
+
+    # 数据结构准备
+    classes_id = []
+    classes = []
+    data = {"各小题": {}}
+    tests_id = []
+    first_flag = True
+    test_number = 0
+    page_number = 0
+
+    # 统计数据
+    if current_button == "统计数据":
+        pages = Page.query.filter(Page.teacher_s_s.teacher.id == session["uid"],
+                                  Page.date == date,
+                                  Page.time_start == time_start,
+                                  Page.teacher_s_s.student_subject.subject.id == subject_id)
+        for page in pages:
+            class_id = page.teacher_s_s.student_subject.student.class_id
+            if class_id not in classes_id:
+                classes_id.append(class_id)
+
+            # 生成各小题得分率数据结构
+            if first_flag:
+                contents = json.loads(page.content)
+                for key in contents.keys():
+                    data["各小题"][key] = []
+                    for test in contents[key]:
+                        data["各小题"][key].append({"题目ID": test["id"], "得分率": 0})
+                        test_number += 1
+            # 计算各小题得分总数
+            scores = json.loads(page.scores)
+            for test_type in data["各小题"].keys():
+                for i in range(len(data["各小题"][test_type])):
+                    test_id = data["各小题"][test_type][i]["题目ID"]
+                    data["各小题"][test_type][i]["得分率"] += scores[test_id]
+            page_number += 1
+            first_flag = False
+        # 算出各小题得分率
+        for test_type in data["各小题"].keys():
+            for i in range(len(data["各小题"][test_type])):
+                data["各小题"][test_type][i]["得分率"] /= page_number * test_number
+        pass
+    else:
+        pass
+    return render_template("成绩分析页面.html", classes=classes, data=data, current_class=current_class,
+                           current_button=current_button)

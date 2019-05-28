@@ -159,6 +159,7 @@ class Page(db.Model):
     time_length = db.Column(db.Integer, nullable=False)
     content = db.Column(db.String(1024), nullable=True)
     answer = db.Column(db.Text, nullable=True)
+    scores = db.Column(db.String(1024), nullable=True)
     ongoing = db.Column(db.Boolean, default=False)
     finished = db.Column(db.Boolean, default=False)
     rest_time = db.Column(db.Integer, nullable=True)
