@@ -597,7 +597,7 @@ def analyse():
     # 数据结构准备
     classes_id = []
     classes = []
-    data = {"各小题": {}}
+    data = {"各小题": {}, "各题型": {}}
     tests_id = []
     first_flag = True
     test_number = 0
@@ -619,6 +619,7 @@ def analyse():
                 contents = json.loads(page.content)
                 for key in contents.keys():
                     data["各小题"][key] = []
+                    data["各题型"][key] = {"平均分": 0, "最高分": 0, "最低分": 1000}
                     for test in contents[key]:
                         data["各小题"][key].append({"题目ID": test["id"], "得分率": 0})
                         test_number += 1
@@ -628,12 +629,18 @@ def analyse():
                 for i in range(len(data["各小题"][test_type])):
                     test_id = data["各小题"][test_type][i]["题目ID"]
                     data["各小题"][test_type][i]["得分率"] += scores[test_id]
+                    data["各题型"][test_type]["平均分"] += scores[test_id]
+                    if data["各题型"][test_type]["最高分"] < scores[test_id]:
+                        data["各题型"][test_type]["最高分"] = scores[test_id]
+                    if data["各题型"][test_type]["最低分"] > scores[test_id]:
+                        data["各题型"][test_type]["最低分"] = scores[test_id]
             page_number += 1
             first_flag = False
         # 算出各小题得分率
         for test_type in data["各小题"].keys():
             for i in range(len(data["各小题"][test_type])):
                 data["各小题"][test_type][i]["得分率"] /= page_number * test_number
+            data["各题型"][test_type]["平均分"] /= page_number
         pass
     else:
         pass
