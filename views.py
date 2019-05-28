@@ -591,8 +591,8 @@ def auto_save():
 
 @app.route("/analyse", methods=['GET', 'POST'])
 def analyse():
-    date = request.args['date']
-    time_start = request.args["time_start"]
+    date = datetime.datetime.strptime(request.args['date'], "%Y-%m-%d")
+    time_start = datetime.datetime.strptime(request.args["time_start"], "%H:%M:%S")
     subject_id = request.args["subject_id"]
     current_class_id = request.args["current_class_id"]
     current_button = request.args["current_button"]
