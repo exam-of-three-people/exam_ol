@@ -597,7 +597,12 @@ def analyse():
     # 数据结构准备
     classes_id = []
     classes = []
-    data = {"各小题": {}, "各题型": {}}
+    data = {"各小题": {"选择题": [], "填空题": [], "判断题": [], "解答题": []},
+            "各题型": {"选择题": {"平均分": 0, "最高分": 0, "最低分": 1000},
+                    "填空题": {"平均分": 0, "最高分": 0, "最低分": 1000},
+                    "判断题": {"平均分": 0, "最高分": 0, "最低分": 1000},
+                    "解答题": {"平均分": 0, "最高分": 0, "最低分": 1000}},
+            "各分数段": {"0~59": 0, "60~69": 0, "70~79": 0, "80~89": 0, "90~100": 0}}
     tests_id = []
     first_flag = True
     test_number = 0
@@ -619,7 +624,6 @@ def analyse():
                 contents = json.loads(page.content)
                 for key in contents.keys():
                     data["各小题"][key] = []
-                    data["各题型"][key] = {"平均分": 0, "最高分": 0, "最低分": 1000}
                     for test in contents[key]:
                         data["各小题"][key].append({"题目ID": test["id"], "得分率": 0})
                         test_number += 1
@@ -634,6 +638,16 @@ def analyse():
                         data["各题型"][test_type]["最高分"] = scores[test_id]
                     if data["各题型"][test_type]["最低分"] > scores[test_id]:
                         data["各题型"][test_type]["最低分"] = scores[test_id]
+                    if 0 <= page.code <= 59:
+                        data["各分数段"]["0~59"] += 1
+                    elif 60 <= page.code <= 69:
+                        data["各分数段"]["60~69"] += 1
+                    elif 70 <= page.code <= 79:
+                        data["各分数段"]["80~89"] += 1
+                    elif 80 <= page.code <= 89:
+                        data["各分数段"]["80~89"] += 1
+                    else:
+                        data["各分数段"]["90~100"] += 1
             page_number += 1
             first_flag = False
         # 算出各小题得分率
@@ -641,6 +655,9 @@ def analyse():
             for i in range(len(data["各小题"][test_type])):
                 data["各小题"][test_type][i]["得分率"] /= page_number * test_number
             data["各题型"][test_type]["平均分"] /= page_number
+        # 计算各分数段比例:
+        for key in data["各分数段"].keys():
+            data["各分数段"][key] /= page_number
         pass
     else:
         pass
