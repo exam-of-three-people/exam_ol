@@ -1,11 +1,9 @@
 .body{
     background: url(../image/考试页面背景边框.jpg) no-repeat;
-    background-size: 100% 100%;
+    background-size: cover;
 }
 textarea{
-    text-align: center;
-    width: 10%;
-
+    width: 100%;
 }
 
 /*题号面板*/

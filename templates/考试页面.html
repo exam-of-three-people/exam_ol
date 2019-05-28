@@ -19,13 +19,13 @@
             <form id="form" action="/get_score" method="post" onsubmit="return hg({{ test_num }})">
 
                 <p>{% for key in contents.keys() %}</p>
-                    <span class="label label-default col-sm-2" translate="yes">{{ key }}</span><br>
+                    <span class="label label-default col-sm-2">{{ key }}</span><br>
                     {% for item in contents[key] %}
                         <!-- 题号放在span里面 方便设置锚点 -->
                         <span id="{{ 'test_'+[item.id]|join }}">{{ loop.index }}.</span>
                         <textarea id="text" readonly="readonly" class="col-md-12 column " contenteditable="false"
                                   rows="{{ item.question.count('\n',0) + 2 }}"
-                                  style="text-align:left;overflow-y:visible;border-color: moccasin">{{ item.question }}</textarea>
+                                  style="text-align:left;border-color: moccasin">{{ item.question }}</textarea>
                         <br>
                         {% if key=='选择题' %}
 
@@ -40,7 +40,7 @@
                                               onchange=show_test_panel("{{ item.id }}")>D</label>
                                 <label><input type="radio" name="{{ item.id }}" value="" hidden checked></label>
                             </dd>
-                        {% elif key == 'true_false_question' %}
+                        {% elif key == '判断题' %}
                             <label><input type="radio" name="{{ item.id }}" value="0"
                                           onchange=show_test_panel("{{ item.id }}")>√</label>
                             <label><input type="radio" name="{{ item.id }}" value="1"
@@ -59,7 +59,11 @@
 
             <div id="rest_time" style="font-size:50px;color:red;position: fixed"></div>
 
-            <!-- 答题面板 -->
+
+        </div>
+
+    </div>
+    <!-- 答题面板 -->
             <div class="test_panel">
                 {% for key in contents.keys() %}
                     {% if key=='选择题' %}
@@ -70,7 +74,7 @@
                                 </a>
                             {% endfor %}
                         </div>
-                    {% elif key=='true_false_question' %}
+                    {% elif key=='判断题' %}
                         <div class="test_type"><p>判断题</p>
                             {% for item in contents[key] %}
                                 <a href="{{ '#test_'+[item.id]|join }}">
@@ -78,7 +82,7 @@
                                 </a>
                             {% endfor %}
                         </div>
-                    {% elif key=='fill_blank_question' %}
+                    {% elif key=='填空题' %}
                         <div class="test_type"><p>填空题</p>
                             {% for item in contents[key] %}
                                 <a href="{{ '#test_'+[item.id]|join }}">
@@ -97,9 +101,6 @@
                     {% endif %}
                 {% endfor %}
             </div>
-        </div>
-    </div>
-
 
     </body>
     <div id="data_" hidden data-rest_time="{{ rest_time }}" data-answer='{{ answer }}'></div>
