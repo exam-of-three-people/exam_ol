@@ -7,12 +7,12 @@
         <div class="row clearfix">
             <div class="col-md-2 column">
                 <a class="btn btn-block active" type="button"
-                   href="{{ url_for("analyse", current_button="统计数据", current_class=current_class,
+                   href="{{ url_for("analyse", current_button="统计数据", current_class_id=current_class_id,
                    date=date, time_start=time_start, subject_id=subject_id) }}">
                     <div id="btn_1">统计<br>数据</div>
                 </a>
                 <a class="btn btn-block active" type="button"
-                   href="{{ url_for("analyse", current_button="原始数据", current_class=current_class,
+                   href="{{ url_for("analyse", current_button="原始数据", current_class_id=current_class_id,
                    date=date, time_start=time_start, subject_id=subject_id) }}">
                     <div id="btn_1">原始<br>数据</div>
                 </a>
@@ -24,16 +24,16 @@
                     <ul class="nav nav-tabs">
                         {% for class_ in classes %}
                         <li class="active">
-                            <a href="{{ url_for("analyse", current_button=current_button, current_class=current_class,
-                   date=date, time_start=time_start, subject_id=subject_id) }}">{{ class_.name }}</a>
+                            <a href="{{ url_for("analyse", current_button=current_button, current_class_id=current_class_id,
+                   date=date, time_start=time_start, subject_id=subject_id) }}">{{ class_ }}</a>
                         </li>
                         {% endfor %}
 {#                        <li>#}
-{#                            <a href="{{ url_for("analyse", current_button=current_button, current_class=current_class,#}
+                        {#                            <a href="{{ url_for("analyse", current_button=current_button, current_class_id=current_class_id,#}
 {#                   date=date, time_start=time_start, subject_id=subject_id) }}">1班</a>#}
 {#                        </li>#}
 {#                        <li>#}
-{#                            <a href="{{ url_for("analyse", current_button=current_button, current_class=current_class,#}
+                        {#                            <a href="{{ url_for("analyse", current_button=current_button, current_class_id=current_class_id,#}
 {#                   date=date, time_start=time_start, subject_id=subject_id) }}">2班</a>#}
 {#                        </li>#}
                     </ul>

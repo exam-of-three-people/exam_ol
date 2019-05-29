@@ -275,22 +275,18 @@ def testCreater():
             class_ = Class.query.get(int(class_id))
             students = class_.students
             for student in students:
-                student_subject = StudentSubject(student_id=student.id, subject_id=subject_id)
-                try:
+                student_subject = StudentSubject.query.filter_by(student_id=student.id,
+                                                                 subject_id=subject_id).first()
+                if student_subject is None:
+                    student_subject = StudentSubject(student_id=student.id, subject_id=subject_id)
                     db.session.add(student_subject)
                     db.session.commit()
-                except IntegrityError:
-                    db.session.rollback()
-                    student_subject = StudentSubject.query.filter_by(student_id=session["uid"],
-                                                                     subject_id=subject_id).first()
-                teacher_s_s = TeacherSS(student_subject_id=student_subject.id, teacher_id=session["uid"])
-                try:
+                teacher_s_s = TeacherSS.query.filter_by(student_subject_id=student_subject.id,
+                                                        teacher_id=session["uid"]).first()
+                if teacher_s_s is None:
+                    teacher_s_s = TeacherSS(student_subject_id=student_subject.id, teacher_id=session["uid"])
                     db.session.add(teacher_s_s)
-                    db.session.commit()
-                except IntegrityError:
-                    db.session.rollback()
-                    teacher_s_s = TeacherSS.query.filter_by(student_subject_id=student_subject.id,
-                                                            teacher_id=session["uid"]).first()
+                    # db.session.commit()
                 page = Page()
                 page.name = form.name.data
                 page.date = form.date.data
@@ -315,16 +311,18 @@ def testList():
         is_repeat = False
         for page in pages:
             for page_show in pages_show:
-                if page_show.teacher_s_s.student_subject.student.class_id \
-                        == page.teacher_s_s.student_subject.student.class_id \
-                        and page.date == page_show.date \
-                        and page.time_start == page_show.time_start:
+                if page.date == page_show["page"].date and page.time_start == page_show["page"].time_start \
+                        and page.teacher_s_s.student_subject.subject.id == page_show[
+                    "page"].teacher_s_s.student_subject.id:
                     is_repeat = True
+                    if page.teacher_s_s.student_subject.student.class_id \
+                            not in page_show["classes"]:
+                        page_show["classes"].append(page.teacher_s_s.student_subject.student.class_id)
                     break
                 is_repeat = False
             if not is_repeat:
-                pages_show.append(page)
-        return render_template('考试列表页面.html', pages=pages_show)
+                pages_show.append({"page": page, "classes": []})
+        return render_template('考试列表页面.html', pages=pages_show, Class=Class)
     else:
         return redirect("/teacherMenu")
 
@@ -337,9 +335,7 @@ def delete():
         pages = teacher.get_pages()
         pages_delete = []
         for page in pages:
-            if page_delete.teacher_s_s.student_subject.student.class_id \
-                    == page.teacher_s_s.student_subject.student.class_id \
-                    and page.date == page_delete.date \
+            if page.date == page_delete.date \
                     and page.time_start == page_delete.time_start:
                 pages_delete.append(page)
 
@@ -552,6 +548,7 @@ def get_score():
                 scores[key] = 100 / len(request.form)
                 right_num += 1
             else:
+                scores[key] = 0
                 pass
         score = 100 * right_num / len(request.form)
     else:
@@ -591,18 +588,19 @@ def auto_save():
 
 @app.route("/analyse", methods=['GET', 'POST'])
 def analyse():
-    date = datetime.datetime.strptime(request.args['date'], "%Y-%m-%d")
-    time_start = datetime.datetime.strptime(request.args["time_start"], "%H:%M:%S")
-    subject_id = request.args["subject_id"]
-    current_class_id = request.args["current_class_id"]
+    date = datetime.datetime.strptime(request.args['date'], "%Y-%m-%d").date()
+    time_start = datetime.datetime.strptime(request.args["time_start"], "%H:%M:%S").time()
+    subject_id = int(request.args["subject_id"])
+    current_class_id = int(request.args["current_class_id"])
     current_button = request.args["current_button"]
 
     first_flag = True
 
-    pages_classes_query = Page.query.filter(Page.teacher_s_s.teacher.id == session["uid"],
-                                            Page.date == date,
-                                            Page.time_start == time_start,
-                                            Page.teacher_s_s.student_subject.subject.id == subject_id)
+    pages_classes_query = Page.query.join(Page.teacher_s_s).join(TeacherSS.student_subject).filter(
+        TeacherSS.teacher_id == session["uid"],
+        Page.date == date,
+        Page.time_start == time_start,
+        StudentSubject.subject_id == subject_id)
 
     # 所有相关班级
     classes_id = []
@@ -618,8 +616,8 @@ def analyse():
 
     # 当前选中班级
     if current_class_id != 0:
-        pages_one_class_query = pages_classes_query.filter(
-            Page.teacher_s_s.student_subject.student.class_id == current_class_id)
+        pages_one_class_query = pages_classes_query.join(StudentSubject.student).filter(
+            Student.class_id == current_class_id)
     else:
         pages_one_class_query = pages_classes_query
 
@@ -632,9 +630,7 @@ def analyse():
                         "解答题": {"平均分": 0, "最高分": 0, "最低分": 1000}},
                 "各分数段": {"0~59": 0, "60~69": 0, "70~79": 0, "80~89": 0, "90~100": 0},
                 "总分": {"平均分": 0, "及格率": 0, "最高分": 0, "最低分": 0, "优秀率": 0},
-                "及格人数": 0,
-                "应考人数": 0,
-                "实考人数": 0}
+                }
         test_number = 0
         page_number = 0
         finished_number = 0
@@ -648,12 +644,12 @@ def analyse():
                 for key in contents.keys():
                     data["各小题"][key] = []
                     for test in contents[key]:
-                        data["各小题"][key].append({"题目ID": test["id"], "得分率": 0})
+                        data["各小题"][key].append({"题目ID": test, "得分率": 0})
                         test_number += 1
 
             # 计算各小题得分总数
-            scores = json.loads(page.scores)
             if page.finished:
+                scores = json.loads(page.scores)
                 finished_number += 1
                 for test_type in data["各小题"].keys():
                     this_type_score = 0
@@ -704,8 +700,8 @@ def analyse():
         # 优秀与及格率:
         data["总分"]["优秀率"] = (data["各分数段"]["80~89"] + data["各分数段"]["90~100"]) / page_number
         data["总分"]["及格率"] = 1 - (data["各分数段"]["0~59"]) / page_number
-        return render_template("成绩分析页面.html", classes=classes, data=data, current_class_id=current_class_id,
-                               current_button=current_button, date=date, time_start=time_start)
+        return render_template("统计数据页面.html", classes=classes, data=data, current_class_id=current_class_id,
+                               current_button=current_button, date=date, time_start=time_start, subject_id=subject_id)
     else:
         # 初始化数据结构
         data = []
@@ -713,19 +709,26 @@ def analyse():
                      "选择题": {"总分": 0, "各小题": []},
                      "填空题": {"总分": 0, "各小题": []},
                      "判断题": {"总分": 0, "各小题": []},
-                     "简答题": {"总分": 0, "各小题": []}}
+                     "解答题": {"总分": 0, "各小题": []}}
         for page in pages_one_class_query.all():
             data_item["学号"] = page.teacher_s_s.student_subject.student.id
             data_item["姓名"] = page.teacher_s_s.student_subject.student.name
-            scores = json.loads(page.scores)
-            contents = json.loads(page.content)
-            for key in contents.keys():
-                this_type_score = 0
-                for test in contents[key]:
-                    score = scores[str(test["id"])]
-                    data_item[key]["各小题"].append(score)
-                    this_type_score += score
-                data_item[key]["总分"] = this_type_score
-            data.append(data_item)
+            if page.content and page.scores:
+                scores = json.loads(page.scores)
+                contents = json.loads(page.content)
+                for key in contents.keys():
+                    this_type_score = 0
+                    for test in contents[key]:
+                        score = scores[str(test)]
+                        data_item[key]["各小题"].append(score)
+                        this_type_score += score
+                    data_item[key]["总分"] = this_type_score
+            else:
+                page_structure = json.loads(page.structure)
+                for type_ in page_structure.keys():
+                    for i in range(page_structure[type_]):
+                        data_item[type_]["各小题"].append(0)
+                    data_item[type_]["总分"] = 0
+                data.append(data_item)
         return render_template("原始数据页面.html", classes=classes, data=data, current_class_id=current_class_id,
-                               current_button=current_button, date=date, time_start=time_start)
+                               current_button=current_button, date=date, time_start=time_start, subject_id=subject_id)

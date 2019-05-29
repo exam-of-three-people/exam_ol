@@ -9,22 +9,21 @@
 
 {% block main_windows %}
 
-{#    <table class="table">#}
-{#        <thead>#}
-{#        <tr>#}
-{#            {% for key in data.keys() %}#}
-{#                <th>{{ table_key }}</th>#}
-{#            {% endfor %}#}
-{#        </tr>#}
-{#        </thead>#}
-{#        <tbody>#}
-{#        <tr>#}
-{#            {% for table_key in data[table_name].keys() %}#}
-{#                <td>data[table_name][table_key]</td>#}
-{#            {% endfor %}#}
-{#        </tr>#}
-{#        </tbody>#}
-{#    </table>#}
-
+    <table class="table">
+        <thead>
+        <tr>
+            {% for key in data[0].keys() %}
+                <th>{{ key }}</th>
+            {% endfor %}
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            {% for table_key in data[table_name].keys() %}
+                <td>data[table_name][table_key]</td>
+            {% endfor %}
+        </tr>
+        </tbody>
+    </table>
 
 {% endblock %}
