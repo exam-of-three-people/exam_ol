@@ -39,6 +39,7 @@
     </div>
 
     {% for table_name in data.keys() %}
+        {% if table_name not in ['及格人数', '应考人数', '实考人数'] %}
         <!-- 一块完整的手风琴 -->
         <div class="panel panel-default">
             <!-- 手风琴的头 -->
@@ -122,6 +123,7 @@
                 </div>
             </div>
         </div>
+        {% endif %}
 
     {% endfor %}
 
