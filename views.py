@@ -315,7 +315,8 @@ def testList():
                         and page.teacher_s_s.student_subject.subject.id == page_show[
                     "page"].teacher_s_s.student_subject.id:
                     is_repeat = True
-                    if page.teacher_s_s.student_subject.student.class_id not in page_show["classes"]:
+                    if page.teacher_s_s.student_subject.student.class_id \
+                            not in page_show["classes"]:
                         page_show["classes"].append(page.teacher_s_s.student_subject.student.class_id)
                     break
                 is_repeat = False
@@ -594,10 +595,11 @@ def analyse():
 
     first_flag = True
 
-    pages_classes_query = Page.query.filter(Page.teacher_s_s.teacher.id == session["uid"],
-                                            Page.date == date,
-                                            Page.time_start == time_start,
-                                            Page.teacher_s_s.student_subject.subject.id == subject_id)
+    pages_classes_query = Page.query.join(Page.teacher_s_s).join(TeacherSS.student_subject).filter(
+        TeacherSS.teacher_id == session["uid"],
+        Page.date == date,
+        Page.time_start == time_start,
+        StudentSubject.subject_id == subject_id)
 
     # 所有相关班级
     classes_id = []
@@ -613,8 +615,8 @@ def analyse():
 
     # 当前选中班级
     if current_class_id != 0:
-        pages_one_class_query = pages_classes_query.filter(
-            Page.teacher_s_s.student_subject.student.class_id == current_class_id)
+        pages_one_class_query = pages_classes_query.join(StudentSubject.student).filter(
+            Student.class_id == current_class_id)
     else:
         pages_one_class_query = pages_classes_query
 
