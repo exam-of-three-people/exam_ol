@@ -8,6 +8,35 @@
 {% endblock %}
 
 {% block main_windows %}
+    <div class="panel panel-default">
+            <!-- 手风琴的头 -->
+            <div class="panel-heading">
+                <a class="panel-title" data-toggle="collapse"
+                   href="#panel-element-{{ table_name }}">手风琴切换 #1{{ table_name }}</a>
+            </div>
+            <!-- 手风琴的body -->
+            <div id="panel-element-{{ table_name }}" class="panel-collapse in">
+                <div class="panel-body">
+                    <!-- 手风琴切换 #1 的内容 -->
+                <table class="table">
+                                    <thead>
+                                    <tr>
+                                            <th>应考人数</th>
+                                            <th>实考人数</th>
+                                            <th>及格人数</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr>
+                                            <td>{{ data["应考人数"] }}</td>
+                                            <td>{{ data["实考人数"] }}</td>
+                                            <td>{{ data["及格人数"] }}</td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                </div>
+            </div>
+    </div>
 
     {% for table_name in data.keys() %}
         <!-- 一块完整的手风琴 -->
@@ -52,8 +81,9 @@
                                 <table class="table">
                                     <thead>
                                     <tr>
+                                        <!-- 各小题题号 -->
                                         {% for test in data[table_name][test_type] %}
-                                            <td><a href="#test_{{ test["id"] }}">{{ loop.index }}</a></td>
+                                            <td><a class="test_" id="test_{{ test["id"] }}">{{ loop.index }}</a></td>
                                         {% endfor %}
                                     </tr>
                                     </thead>
@@ -67,8 +97,10 @@
                                 </table>
                         {% endfor %}
 
+                    {% elif table_name in ['及格人数', '应考人数', '实考人数'] %}
+
                     {% else %}
-                        <!-- table_name是‘总分’和‘各小题得分率’ -->
+                        <!-- table_name是‘总分’和‘各分数段比例’ -->
                         <table class="table">
                             <thead>
                             <tr>
@@ -90,8 +122,6 @@
             </div>
         </div>
 
-
-
     {% endfor %}
 
 {##}
@@ -108,5 +138,19 @@
 {#            </div>#}
 {#        </div>#}
 {#    </div>#}
+
+    <!-- 点击查看具体各小题 -->
+    <div class="hidden">
+        {% for test_type in data[table_name].keys() %}
+            {% for test in data[table_name][test_type] %}
+                <div class="alert alert-dismissable alert-info" id="more_{{ test["id"] }}">
+                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                    <textarea id="text" readonly="readonly" class="test_more" contenteditable="false"
+                              rows="{{ Test.query.get(test["id"]).question.count('\n',0) + 2 }}"
+                              style="text-align:left;border-color: moccasin">{{ Test.query.get(test["id"]).question }}</textarea>
+                </div>
+            {% endfor %}
+        {% endfor %}
+    </div>
 
 {% endblock %}
