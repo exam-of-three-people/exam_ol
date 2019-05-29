@@ -441,7 +441,6 @@ def teacherInfoUpdate():
 
 @app.route("/studentRegister/selects", methods=["POST"])
 def studentRegisterSelects():
-    print(request.form)
     data = {"data": []}
     if request.form['my_select'] == 'college':
         colleges = College.query.all()
@@ -543,12 +542,14 @@ def createPage(page_id):
 def get_score():
     right_num = 0
     answer = {}
+    scores = {}
 
     if len(request.form) != 0:
         for key in request.form:
             test = Test.query.get(key)
             answer[key] = request.form[key]
             if test.answer == request.form[key]:
+                scores[key] = 100 / len(request.form)
                 right_num += 1
             else:
                 pass
@@ -558,6 +559,7 @@ def get_score():
 
     student = Student.query.get(session["uid"])
     page = student.get_current_page()
+    page.scores = json.dumps(scores)
     page.ongoing = False
     page.code = score
     page.answer = json.dumps(answer)
@@ -587,6 +589,143 @@ def auto_save():
     return str(rest_time)
 
 
-@app.route("/test", methods=['GET', 'POST'])
-def test():
-    return render_template('test.html')
+@app.route("/analyse", methods=['GET', 'POST'])
+def analyse():
+    date = datetime.datetime.strptime(request.args['date'], "%Y-%m-%d")
+    time_start = datetime.datetime.strptime(request.args["time_start"], "%H:%M:%S")
+    subject_id = request.args["subject_id"]
+    current_class_id = request.args["current_class_id"]
+    current_button = request.args["current_button"]
+
+    first_flag = True
+
+    pages_classes_query = Page.query.filter(Page.teacher_s_s.teacher.id == session["uid"],
+                                            Page.date == date,
+                                            Page.time_start == time_start,
+                                            Page.teacher_s_s.student_subject.subject.id == subject_id)
+
+    # 所有相关班级
+    classes_id = []
+    for page in pages_classes_query.all():
+        class_id = page.teacher_s_s.student_subject.student.class_id
+        if class_id not in classes_id:
+            classes_id.append(class_id)
+    # 试卷涉及的所有班级
+    classes = []
+    for class_id in classes_id:
+        class_ = Class.query.get(class_id)
+        classes.append(class_)
+
+    # 当前选中班级
+    if current_class_id != 0:
+        pages_one_class_query = pages_classes_query.filter(
+            Page.teacher_s_s.student_subject.student.class_id == current_class_id)
+    else:
+        pages_one_class_query = pages_classes_query
+
+    if current_button == "统计数据":
+        # 数据结构准备
+        data = {"各小题": {"选择题": [], "填空题": [], "判断题": [], "解答题": []},
+                "各题型": {"选择题": {"平均分": 0, "最高分": 0, "最低分": 1000},
+                        "填空题": {"平均分": 0, "最高分": 0, "最低分": 1000},
+                        "判断题": {"平均分": 0, "最高分": 0, "最低分": 1000},
+                        "解答题": {"平均分": 0, "最高分": 0, "最低分": 1000}},
+                "各分数段": {"0~59": 0, "60~69": 0, "70~79": 0, "80~89": 0, "90~100": 0},
+                "总分": {"平均分": 0, "及格率": 0, "最高分": 0, "最低分": 0, "优秀率": 0},
+                "及格人数": 0,
+                "应考人数": 0,
+                "实考人数": 0}
+        test_number = 0
+        page_number = 0
+        finished_number = 0
+        should_number = 0
+
+        for page in pages_one_class_query.all():
+            should_number += 1
+            # 生成各小题得分率数据结构
+            if first_flag:
+                contents = json.loads(page.content)
+                for key in contents.keys():
+                    data["各小题"][key] = []
+                    for test in contents[key]:
+                        data["各小题"][key].append({"题目ID": test["id"], "得分率": 0})
+                        test_number += 1
+
+            # 计算各小题得分总数
+            scores = json.loads(page.scores)
+            if page.finished:
+                finished_number += 1
+                for test_type in data["各小题"].keys():
+                    this_type_score = 0
+                    for i in range(len(data["各小题"][test_type])):
+                        test_id = data["各小题"][test_type][i]["题目ID"]
+                        data["各小题"][test_type][i]["得分率"] += scores[test_id]
+                        this_type_score += scores[test_id]
+                    # 各题型总分数
+                    data["各题型"][test_type]["平均分"] += this_type_score
+                    if data["各题型"][test_type]["最高分"] < this_type_score:
+                        data["各题型"][test_type]["最高分"] = this_type_score
+                    if data["各题型"][test_type]["最低分"] > this_type_score:
+                        data["各题型"][test_type]["最低分"] = this_type_score
+                # 试卷总分
+                data["总分"]["平均分"] += page.code
+                if data["总分"]["最高分"] < page.code:
+                    data["总分"]["最高分"] = page.code
+                if data["总分"]["最低分"] > page.code:
+                    data["总分"]["最低分"] = page.code
+
+                if 0 <= page.code <= 59:
+                    data["各分数段"]["0~59"] += 1
+                elif 60 <= page.code <= 69:
+                    data["各分数段"]["60~69"] += 1
+                elif 70 <= page.code <= 79:
+                    data["各分数段"]["80~89"] += 1
+                elif 80 <= page.code <= 89:
+                    data["各分数段"]["80~89"] += 1
+                else:
+                    data["各分数段"]["90~100"] += 1
+            else:
+                # 有些人就是不参加考试,我还要为他写个if语句
+                for test_type in data["各小题"].keys():
+                    data["各题型"][test_type]["最低分"] = 0
+                data["各分数段"]["0~59"] += 1
+
+            page_number += 1
+            first_flag = False
+        # 各种平均分
+        for test_type in data["各小题"].keys():
+            for i in range(len(data["各小题"][test_type])):
+                data["各小题"][test_type][i]["得分率"] /= page_number * test_number
+            data["各题型"][test_type]["平均分"] /= page_number
+        data["总分"]["平均分"] /= page_number
+        # 计算各分数段比例:
+        for key in data["各分数段"].keys():
+            data["各分数段"][key] /= page_number
+        # 优秀与及格率:
+        data["总分"]["优秀率"] = (data["各分数段"]["80~89"] + data["各分数段"]["90~100"]) / page_number
+        data["总分"]["及格率"] = 1 - (data["各分数段"]["0~59"]) / page_number
+        return render_template("成绩分析页面.html", classes=classes, data=data, current_class_id=current_class_id,
+                               current_button=current_button, date=date, time_start=time_start)
+    else:
+        # 初始化数据结构
+        data = []
+        data_item = {"学号": 0, "姓名": 0,
+                     "选择题": {"总分": 0, "各小题": []},
+                     "填空题": {"总分": 0, "各小题": []},
+                     "判断题": {"总分": 0, "各小题": []},
+                     "简答题": {"总分": 0, "各小题": []}}
+        for page in pages_one_class_query.all():
+            data_item["学号"] = page.teacher_s_s.student_subject.student.id
+            data_item["姓名"] = page.teacher_s_s.student_subject.student.name
+            scores = json.loads(page.scores)
+            contents = json.loads(page.content)
+            for key in contents.keys():
+                this_type_score = 0
+                for test in contents[key]:
+                    score = scores[str(test["id"])]
+                    data_item[key]["各小题"].append(score)
+                    this_type_score += score
+                data_item[key]["总分"] = this_type_score
+            data.append(data_item)
+        return render_template("原始数据页面.html", classes=classes, data=data, current_class_id=current_class_id,
+                               current_button=current_button, date=date, time_start=time_start)
