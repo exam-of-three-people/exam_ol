@@ -12,8 +12,8 @@
     <table class="table">
         <thead>
         <tr>
-            {% for key in data.keys() %}
-                <th>{{ table_key }}</th>
+            {% for key in data[0].keys() %}
+                <th>{{ key }}</th>
             {% endfor %}
         </tr>
         </thead>

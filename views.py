@@ -548,6 +548,7 @@ def get_score():
                 scores[key] = 100 / len(request.form)
                 right_num += 1
             else:
+                scores[key] = 0
                 pass
         score = 100 * right_num / len(request.form)
     else:
@@ -587,10 +588,10 @@ def auto_save():
 
 @app.route("/analyse", methods=['GET', 'POST'])
 def analyse():
-    date = datetime.datetime.strptime(request.args['date'], "%Y-%m-%d")
-    time_start = datetime.datetime.strptime(request.args["time_start"], "%H:%M:%S")
-    subject_id = request.args["subject_id"]
-    current_class_id = request.args["current_class_id"]
+    date = datetime.datetime.strptime(request.args['date'], "%Y-%m-%d").date()
+    time_start = datetime.datetime.strptime(request.args["time_start"], "%H:%M:%S").time()
+    subject_id = int(request.args["subject_id"])
+    current_class_id = int(request.args["current_class_id"])
     current_button = request.args["current_button"]
 
     first_flag = True
@@ -629,9 +630,7 @@ def analyse():
                         "解答题": {"平均分": 0, "最高分": 0, "最低分": 1000}},
                 "各分数段": {"0~59": 0, "60~69": 0, "70~79": 0, "80~89": 0, "90~100": 0},
                 "总分": {"平均分": 0, "及格率": 0, "最高分": 0, "最低分": 0, "优秀率": 0},
-                "及格人数": 0,
-                "应考人数": 0,
-                "实考人数": 0}
+                }
         test_number = 0
         page_number = 0
         finished_number = 0
@@ -645,12 +644,12 @@ def analyse():
                 for key in contents.keys():
                     data["各小题"][key] = []
                     for test in contents[key]:
-                        data["各小题"][key].append({"题目ID": test["id"], "得分率": 0})
+                        data["各小题"][key].append({"题目ID": test, "得分率": 0})
                         test_number += 1
 
             # 计算各小题得分总数
-            scores = json.loads(page.scores)
             if page.finished:
+                scores = json.loads(page.scores)
                 finished_number += 1
                 for test_type in data["各小题"].keys():
                     this_type_score = 0
@@ -702,7 +701,7 @@ def analyse():
         data["总分"]["优秀率"] = (data["各分数段"]["80~89"] + data["各分数段"]["90~100"]) / page_number
         data["总分"]["及格率"] = 1 - (data["各分数段"]["0~59"]) / page_number
         return render_template("统计数据页面.html", classes=classes, data=data, current_class_id=current_class_id,
-                               current_button=current_button, date=date, time_start=time_start)
+                               current_button=current_button, date=date, time_start=time_start, subject_id=subject_id)
     else:
         # 初始化数据结构
         data = []
@@ -710,19 +709,26 @@ def analyse():
                      "选择题": {"总分": 0, "各小题": []},
                      "填空题": {"总分": 0, "各小题": []},
                      "判断题": {"总分": 0, "各小题": []},
-                     "简答题": {"总分": 0, "各小题": []}}
+                     "解答题": {"总分": 0, "各小题": []}}
         for page in pages_one_class_query.all():
             data_item["学号"] = page.teacher_s_s.student_subject.student.id
             data_item["姓名"] = page.teacher_s_s.student_subject.student.name
-            scores = json.loads(page.scores)
-            contents = json.loads(page.content)
-            for key in contents.keys():
-                this_type_score = 0
-                for test in contents[key]:
-                    score = scores[str(test["id"])]
-                    data_item[key]["各小题"].append(score)
-                    this_type_score += score
-                data_item[key]["总分"] = this_type_score
-            data.append(data_item)
+            if page.content and page.scores:
+                scores = json.loads(page.scores)
+                contents = json.loads(page.content)
+                for key in contents.keys():
+                    this_type_score = 0
+                    for test in contents[key]:
+                        score = scores[str(test)]
+                        data_item[key]["各小题"].append(score)
+                        this_type_score += score
+                    data_item[key]["总分"] = this_type_score
+            else:
+                page_structure = json.loads(page.structure)
+                for type_ in page_structure.keys():
+                    for i in range(page_structure[type_]):
+                        data_item[type_]["各小题"].append(0)
+                    data_item[type_]["总分"] = 0
+                data.append(data_item)
         return render_template("原始数据页面.html", classes=classes, data=data, current_class_id=current_class_id,
-                               current_button=current_button, date=date, time_start=time_start)
+                               current_button=current_button, date=date, time_start=time_start, subject_id=subject_id)

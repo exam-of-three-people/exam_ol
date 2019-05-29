@@ -171,26 +171,21 @@ function show_test_panel(name) {
 
 function hg(test_num) {
     let num = 0;
-    console.log("aaaaaaaaaaaaaa");
-    console.log(dic);
     for (let key in dic) { // 输出字典元素，如果字典的key是数字，输出时会自动按序输出
         num += dic[key];
         console.log(num)
     }
     if (num > 0) {
-        p = test_num - num;
+        let p = test_num - num;
         let speak = "你还有" + p + "道题没做，确认提交吗?";
         let chose = confirm(speak);
-        if (chose == true) {
-            alert("shdjkbdsfsdf");
+        if (chose) {
             return true
-        }
-        if (chose == false) {
+        } else {
 
             return false
         }
     } else {
-        alert("jdbfvkdsvbsd");
         return false
     }
 
