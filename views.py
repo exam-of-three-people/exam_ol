@@ -627,6 +627,9 @@ def analyse():
                         "填空题": {"平均分": 0, "最高分": 0, "最低分": 1000},
                         "判断题": {"平均分": 0, "最高分": 0, "最低分": 1000},
                         "解答题": {"平均分": 0, "最高分": 0, "最低分": 1000}},
+                "应考人数": 0,
+                "实考人数": 0,
+                "及格人数": 0
                 }
         test_number = 0
         page_number = 0
@@ -686,6 +689,9 @@ def analyse():
         # 优秀与及格率:
         data["总分"]["优秀率"] = (data["各分数段"]["80~89"] + data["各分数段"]["90~100"]) / page_number
         data["总分"]["及格率"] = 1 - (data["各分数段"]["0~59"]) / page_number
+        data["实考人数"] = finished_number
+        data["应考人数"] = should_number
+        data["及格人数"] = page_number - data["各分数段"]["0~59"]
         return render_template("统计数据页面.html", classes=classes, data=data, current_class_id=current_class_id,
                                current_button=current_button, date=date, time_start=time_start, subject_id=subject_id)
     else:
@@ -715,6 +721,7 @@ def analyse():
                     for i in range(page_structure[type_]):
                         data_item[type_]["各小题"].append(0)
                     data_item[type_]["总分"] = 0
+                data_item["总分"] = page.code
                 data.append(data_item)
         return render_template("原始数据页面.html", classes=classes, data=data, current_class_id=current_class_id,
                                current_button=current_button, date=date, time_start=time_start, subject_id=subject_id)

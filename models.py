@@ -163,7 +163,7 @@ class Page(db.Model):
     ongoing = db.Column(db.Boolean, default=False)
     finished = db.Column(db.Boolean, default=False)
     rest_time = db.Column(db.Integer, nullable=True)
-    code = db.Column(db.Integer, nullable=True)
+    code = db.Column(db.Integer, nullable=True, default=0)
 
     teacher_s_s_id = db.Column(db.Integer, db.ForeignKey("tb_teacher_s_s.id"))
     teacher_s_s = db.relationship("TeacherSS", back_populates="pages")
