@@ -16,7 +16,7 @@
             <th>姓名</th>
             {% for key in ["选择题","填空题", "判断题", "解答题"] %}
                 <th>{{ key }}总分</th>
-                {% for test in data[0][key] %}
+                {% for test in data[0][key]["各小题"] %}
                     <th>{{ loop.index }}</th>
                 {% endfor %}
             {% endfor %}
