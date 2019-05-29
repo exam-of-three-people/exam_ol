@@ -7,17 +7,31 @@
 
         <div class="row clearfix">
             <div class="col-md-2 column">
-                <a class="btn btn-block active" type="button"
-                   href="{{ url_for("analyse", current_button="统计数据", current_class_id=current_class_id,
+{#
+                <a href="{{ url_for("analyse", current_button="统计数据", current_class_id=current_class_id,
                    date=date, time_start=time_start, subject_id=subject_id) }}">
-                    <div id="btn_1">统计<br>数据</div>
+                    {% if current_button == "统计数据" %}
+                   <button type="button" class="btn btn-info btn-lg"
+                   style="position: fixed; top:27%;"><br><br>　统计数据　<br><br><br></button>
+                    {% else %}
+                   <button type="button" class="btn btn-default btn-lg"
+                   style="position: fixed; top:27%;"><br><br>　统计数据　<br><br><br></button>
+                    {% endif %}
                 </a>
-                <a class="btn btn-block active" type="button"
-                   href="{{ url_for("analyse", current_button="原始数据", current_class_id=current_class_id,
+                <br><br><br>
+                <a href="{{ url_for("analyse", current_button="原始数据", current_class_id=current_class_id,
                    date=date, time_start=time_start, subject_id=subject_id) }}">
-                    <div id="btn_1">原始<br>数据</div>
+                    {% if current_button == "原始数据" %}
+                   <button type="button" class="btn btn-info btn-lg"
+                   style="position: fixed; top:50%;"><br><br>　原始数据　<br><br><br></button>
+                    {% else %}
+                   <button type="button" class="btn btn-default btn-lg"
+                   style="position: fixed; top:50%;"><br><br>　原始数据　<br><br><br></button>
+                    {% endif %}
                 </a>
+
             </div>
+
             <div class="col-md-10 column">
                 <br><br>
                 <div class="tabbable">
