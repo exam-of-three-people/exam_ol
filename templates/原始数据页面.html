@@ -29,12 +29,12 @@
             <td>{{ item["学号"] }}</td>
             <td>{{ item["姓名"] }}</td>
             {% for key in ["选择题","填空题", "判断题", "解答题"] %}
-                <td>{{ item[key]["总分"] }}</td>
+                <th>{{ item[key]["总分"] }}</th>
                 {% for score in item[key]["各小题"] %}
-                    <th>{{ score }}</th>
+                    <td>{{ score }}</td>
                 {% endfor %}
             {% endfor %}
-            <td>{{ item["总分"] }}</td>
+            <th>{{ item["总分"] }}</th>
         </tr>
         {% endfor %}
         </tbody>

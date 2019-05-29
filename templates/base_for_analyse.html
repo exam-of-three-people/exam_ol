@@ -23,40 +23,52 @@
                 <div class="tabbable">
                     <!-- 一排班级标签 -->
                     <ul class="nav nav-tabs">
+                    <!-- 根据current_class_id改变标签li的类是否为active -->
+                        <!-- 第一个标签：全体考生 -->
+                        {% if current_class_id==0 %}
+                            <li class="active">
+                                <a href="{{ url_for("analyse", current_button=current_button, current_class_id=0,
+                                    date=date, time_start=time_start, subject_id=subject_id) }}">全体考生</a>
+                            </li>
+                        {% else %}
+                            <li>
+                                <a href="{{ url_for("analyse", current_button=current_button, current_class_id=0,
+                                    date=date, time_start=time_start, subject_id=subject_id) }}">全体考生</a>
+                            </li>
+                        {% endif %}
+                        <!-- 后面的标签：各班级 -->
                         {% for class_ in classes %}
-                        <li class="active">
-                            <a href="{{ url_for("analyse", current_button=current_button, current_class_id=class_.id,
-                   date=date, time_start=time_start, subject_id=subject_id) }}">{{ class_ }}</a>
-                        </li>
+                            {% if current_class_id==class_.id %}
+                                <li class="active">
+                                    <a href="{{ url_for("analyse", current_button=current_button, current_class_id=class_.id,
+                                    date=date, time_start=time_start, subject_id=subject_id) }}">{{ class_ }}</a>
+                                </li>
+                            {% else %}
+                                <li>
+                                    <a href="{{ url_for("analyse", current_button=current_button, current_class_id=class_.id,
+                                    date=date, time_start=time_start, subject_id=subject_id) }}">{{ class_ }}</a>
+                                </li>
+                            {% endif %}
                         {% endfor %}
-{#                        <li>#}
-                        {#                            <a href="{{ url_for("analyse", current_button=current_button, current_class_id=current_class_id,#}
-{#                   date=date, time_start=time_start, subject_id=subject_id) }}">1班</a>#}
-{#                        </li>#}
-{#                        <li>#}
-                        {#                            <a href="{{ url_for("analyse", current_button=current_button, current_class_id=current_class_id,#}
-{#                   date=date, time_start=time_start, subject_id=subject_id) }}">2班</a>#}
-{#                        </li>#}
                     </ul>
                     <!-- 标签的body，加载表格 -->
                     <div class="tab-content">
                         <div class="tab-pane active">
                             <div class="panel-group">
+                                <br>
                                 {% block main_windows %}
 
                                 {% endblock %}
                             </div>
                         </div>
                     </div>
-                </div>
 
+                </div>
 
             </div>
         </div>
     </div>
 
     </body>
-{% endblock %}
-<!-- 重写 block btn_back 不继承那个按钮 -->
-{% block btn_back %}
+
 {% endblock %}
