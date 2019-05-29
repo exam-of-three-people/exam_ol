@@ -66,7 +66,7 @@
                                 <tbody>
                                 <tr>
                                     {% for table_key in data[table_name][test_type].keys() %}
-                                        <td>data[table_name][test_type][table_key]</td>
+                                        <td>{{ data[table_name][test_type][table_key] }}</td>
                                     {% endfor %}
                                 </tr>
                                 </tbody>
