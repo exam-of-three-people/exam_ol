@@ -538,17 +538,17 @@ def createPage(page_id):
 def get_score():
     right_num = 0
     answer = {}
-    scores = {}
+    scores = {"选择题": {}, "填空题": {}, "判断题": {}, "解答题": {}}
 
     if len(request.form) != 0:
         for key in request.form:
             test = Test.query.get(key)
             answer[key] = request.form[key]
             if test.answer == request.form[key]:
-                scores[key] = 100 / len(request.form)
+                scores[test.type_][key] = 100 / len(request.form)
                 right_num += 1
             else:
-                scores[key] = 0
+                scores[test.type_][key] = 0
                 pass
         score = 100 * right_num / len(request.form)
     else:
@@ -594,8 +594,6 @@ def analyse():
     current_class_id = int(request.args["current_class_id"])
     current_button = request.args["current_button"]
 
-    first_flag = True
-
     pages_classes_query = Page.query.join(Page.teacher_s_s).join(TeacherSS.student_subject).filter(
         TeacherSS.teacher_id == session["uid"],
         Page.date == date,
@@ -629,7 +627,6 @@ def analyse():
                         "填空题": {"平均分": 0, "最高分": 0, "最低分": 1000},
                         "判断题": {"平均分": 0, "最高分": 0, "最低分": 1000},
                         "解答题": {"平均分": 0, "最高分": 0, "最低分": 1000}},
-                "各小题": {"选择题": [], "填空题": [], "判断题": [], "解答题": []},
                 }
         test_number = 0
         page_number = 0
@@ -637,26 +634,18 @@ def analyse():
         should_number = 0
 
         for page in pages_one_class_query.all():
+            test_number = 0
             should_number += 1
-            # 生成各小题得分率数据结构
-            if first_flag:
-                contents = json.loads(page.content)
-                for key in contents.keys():
-                    data["各小题"][key] = []
-                    for test in contents[key]:
-                        data["各小题"][key].append({"题目ID": test, "得分率": 0})
-                        test_number += 1
 
-            # 计算各小题得分总数
+            # 计算各题型得分总数
             if page.finished:
                 scores = json.loads(page.scores)
                 finished_number += 1
-                for test_type in data["各小题"].keys():
+                for test_type in data["各题型"].keys():
                     this_type_score = 0
-                    for i in range(len(data["各小题"][test_type])):
-                        test_id = data["各小题"][test_type][i]["题目ID"]
-                        data["各小题"][test_type][i]["得分率"] += scores[test_id]
-                        this_type_score += scores[test_id]
+                    for test_id in scores[test_type].keys():
+                        this_type_score += scores[test_type][test_id]
+                        test_number += 1
                     # 各题型总分数
                     data["各题型"][test_type]["平均分"] += this_type_score
                     if data["各题型"][test_type]["最高分"] < this_type_score:
@@ -682,16 +671,13 @@ def analyse():
                     data["各分数段"]["90~100"] += 1
             else:
                 # 有些人就是不参加考试,我还要为他写个if语句
-                for test_type in data["各小题"].keys():
+                for test_type in data["各题型"].keys():
                     data["各题型"][test_type]["最低分"] = 0
                 data["各分数段"]["0~59"] += 1
 
             page_number += 1
-            first_flag = False
         # 各种平均分
-        for test_type in data["各小题"].keys():
-            for i in range(len(data["各小题"][test_type])):
-                data["各小题"][test_type][i]["得分率"] /= page_number * test_number
+        for test_type in data["各题型"].keys():
             data["各题型"][test_type]["平均分"] /= page_number
         data["总分"]["平均分"] /= page_number
         # 计算各分数段比例:
