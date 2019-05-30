@@ -687,7 +687,7 @@ def analyse():
         for key in data["各分数段"].keys():
             data["各分数段"][key] /= page_number
         # 优秀与及格率:
-        data["总分"]["优秀率"] = (data["各分数段"]["80~89"] + data["各分数段"]["90~100"]) / page_number
+        data["总分"]["优秀率"] = data["各分数段"]["80~89"] + data["各分数段"]["90~100"]
         data["总分"]["及格率"] = 1 - (data["各分数段"]["0~59"])
         data["实考人数"] = finished_number
         data["应考人数"] = should_number
