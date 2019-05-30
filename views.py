@@ -668,7 +668,7 @@ def analyse():
                 elif 60 <= page.code <= 69:
                     data["各分数段"]["60~69"] += 1
                 elif 70 <= page.code <= 79:
-                    data["各分数段"]["80~89"] += 1
+                    data["各分数段"]["70~79"] += 1
                 elif 80 <= page.code <= 89:
                     data["各分数段"]["80~89"] += 1
                 else:
@@ -722,7 +722,7 @@ def analyse():
                     for i in range(page_structure[type_]):
                         data_item[type_]["各小题"].append(0)
                     data_item[type_]["总分"] = 0
-            data_item["总分"] = 0
+            data_item["总分"] = page.code
             data.append(data_item)
         return render_template("原始数据页面.html", classes=classes, data=data, current_class_id=current_class_id,
                                current_button=current_button, date=date, time_start=time_start, subject_id=subject_id)

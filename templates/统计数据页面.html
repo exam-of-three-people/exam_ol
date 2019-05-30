@@ -40,106 +40,107 @@
 
     {% for table_name in data.keys() %}
         {% if table_name not in ['及格人数', '应考人数', '实考人数'] %}
-        <!-- 一块完整的手风琴 -->
-        <div class="panel panel-default">
-            <!-- 手风琴的头 -->
-            <div class="panel-heading">
-                <a class="panel-title" data-toggle="collapse"
-                   href="#panel-element-{{ table_name }}">{{ table_name }}</a>
-            </div>
-            <!-- 手风琴的body -->
-            <div id="panel-element-{{ table_name }}" class="panel-collapse in">
-                <div class="panel-body">
-                    <!-- 手风琴切换 #1 的内容 -->
-                    {% if table_name == '各题型' %}
-                        {% for test_type in data[table_name].keys() %}
-                            <!-- 题型标签 -->
-                            <span class="label label-info">{{ test_type }}</span>
+            <!-- 一块完整的手风琴 -->
+            <div class="panel panel-default">
+                <!-- 手风琴的头 -->
+                <div class="panel-heading">
+                    <a class="panel-title" data-toggle="collapse"
+                       href="#panel-element-{{ table_name }}">{{ table_name }}</a>
+                </div>
+                <!-- 手风琴的body -->
+                <div id="panel-element-{{ table_name }}" class="panel-collapse in">
+                    <div class="panel-body">
+                        <!-- 手风琴切换 #1 的内容 -->
+                        {% if table_name == '各题型' %}
+                            {% for test_type in data[table_name].keys() %}
+                                <!-- 题型标签 -->
+                                <span class="label label-info">{{ test_type }}</span>
 
+                                <table class="table">
+                                    <thead>
+                                    <tr>
+                                        {% for table_key in data[table_name][test_type].keys() %}
+                                            <th>{{ table_key }}</th>
+                                        {% endfor %}
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr>
+                                        {% for table_key in data[table_name][test_type].keys() %}
+                                            <td>{{ "%.2f"|format(data[table_name][test_type][table_key]) }}</td>
+                                        {% endfor %}
+                                    </tr>
+                                    </tbody>
+                                </table>
+
+                            {% endfor %}
+
+                            {#                    {% elif table_name == '各小题' %}#}
+                            {#                        {% for test_type in data[table_name].keys() %}#}
+                            {#                            <!-- 题型标签 -->#}
+                            {#                            <span class="label label-info">{{ test_type }}</span>#}
+                            {#                            <table class="table">#}
+                            {#                                <thead>#}
+                            {#                                <tr>#}
+                            {#                                    <!-- 各小题题号 -->#}
+                            {#                                    {% for test in data[table_name][test_type] %}#}
+                            {#                                        <td><a class="test_" id="test_{{ test["id"] }}">{{ loop.index }}</a></td>#}
+                            {#                                        <td>{{ loop.index }}</td>#}
+                            {#                                    {% endfor %}#}
+                            {#                                </tr>#}
+                            {#                                </thead>#}
+                            {#                                <tbody>#}
+                            {#                                <tr>#}
+                            {#                                    {% for test in data[table_name][test_type] %}#}
+                            {#                                        <td>{{ test["得分率"] }}</td>#}
+                            {#                                    {% endfor %}#}
+                            {#                                </tr>#}
+                            {#                                </tbody>#}
+                            {#                            </table>#}
+                            {#                        {% endfor %}#}
+                        {% else %}
+                            <!-- table_name是‘总分’和‘各分数段比例’ -->
                             <table class="table">
                                 <thead>
                                 <tr>
-                                    {% for table_key in data[table_name][test_type].keys() %}
+                                    {% for table_key in data[table_name].keys() %}
                                         <th>{{ table_key }}</th>
                                     {% endfor %}
                                 </tr>
                                 </thead>
                                 <tbody>
                                 <tr>
-                                    {% for table_key in data[table_name][test_type].keys() %}
-                                        <td>{{ data[table_name][test_type][table_key] }}</td>
+                                    {% for table_key in data[table_name].keys() %}
+                                        {% if data[table_name][table_key] <= 1 %}
+                                            <td>{{ "%.2f%%" | format(data[table_name][table_key]*100) }}</td>
+                                        {% else %}
+                                            <td>{{ "%.2f" | format(data[table_name][table_key]) }}</td>
+                                        {% endif %}
                                     {% endfor %}
                                 </tr>
                                 </tbody>
                             </table>
-
-                        {% endfor %}
-
-{#                    {% elif table_name == '各小题' %}#}
-{#                        {% for test_type in data[table_name].keys() %}#}
-{#                            <!-- 题型标签 -->#}
-{#                            <span class="label label-info">{{ test_type }}</span>#}
-{#                            <table class="table">#}
-{#                                <thead>#}
-{#                                <tr>#}
-{#                                    <!-- 各小题题号 -->#}
-{#                                    {% for test in data[table_name][test_type] %}#}
-{#                                        <td><a class="test_" id="test_{{ test["id"] }}">{{ loop.index }}</a></td>#}
-{#                                        <td>{{ loop.index }}</td>#}
-{#                                    {% endfor %}#}
-{#                                </tr>#}
-{#                                </thead>#}
-{#                                <tbody>#}
-{#                                <tr>#}
-{#                                    {% for test in data[table_name][test_type] %}#}
-{#                                        <td>{{ test["得分率"] }}</td>#}
-{#                                    {% endfor %}#}
-{#                                </tr>#}
-{#                                </tbody>#}
-{#                            </table>#}
-{#                        {% endfor %}#}
-
-                    {% elif table_name in ['及格人数', '应考人数', '实考人数'] %}
-
-                    {% else %}
-                        <!-- table_name是‘总分’和‘各分数段比例’ -->
-                        <table class="table">
-                            <thead>
-                            <tr>
-                                {% for table_key in data[table_name].keys() %}
-                                    <th>{{ table_key }}</th>
-                                {% endfor %}
-                            </tr>
-                            </thead>
-                            <tbody>
-                            <tr>
-                                {% for table_key in data[table_name].keys() %}
-                                    <td>{{ data[table_name][table_key] }}</td>
-                                {% endfor %}
-                            </tr>
-                            </tbody>
-                        </table>
-                    {% endif %}
+                        {% endif %}
+                    </div>
                 </div>
             </div>
-        </div>
         {% endif %}
 
     {% endfor %}
 
 
     <!-- 点击查看具体各小题 -->
-{#    <div class="hidden">#}
-{#        {% for test_type in data[table_name].keys() %}#}
-{#            {% for test in data[table_name][test_type] %}#}
-{#                <div class="alert alert-dismissable alert-info" id="more_{{ test["id"] }}">#}
-{#                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>#}
-{#                    <textarea id="text" readonly="readonly" class="test_more" contenteditable="false"#}
-{#                              rows="{{ Test.query.get(test["id"]).question.count('\n',0) + 2 }}"#}
-{#                              style="text-align:left;border-color: moccasin">{{ Test.query.get(test["id"]).question }}</textarea>#}
-{#                </div>#}
-{#            {% endfor %}#}
-{#        {% endfor %}#}
-{#    </div>#}
+    {#    <div class="hidden">#}
+    {#        {% for test_type in data[table_name].keys() %}#}
+    {#            {% for test in data[table_name][test_type] %}#}
+    {#                <div class="alert alert-dismissable alert-info" id="more_{{ test["id"] }}">#}
+    {#                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>#}
+    {#                    <textarea id="text" readonly="readonly" class="test_more" contenteditable="false"#}
+    {#                              rows="{{ Test.query.get(test["id"]).question.count('\n',0) + 2 }}"#}
+    {#                              style="text-align:left;border-color: moccasin">{{ Test.query.get(test["id"]).question }}</textarea>#}
+    {#                </div>#}
+    {#            {% endfor %}#}
+    {#        {% endfor %}#}
+    {#    </div>#}
 
 {% endblock %}

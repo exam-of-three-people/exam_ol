@@ -12,7 +12,7 @@ from models import Page, Test, db
 
 pages = Page.query.all()
 
-random_bool = [True, True, True, False]
+random_bool = [True, True, False, True, True, False, True, True, ]
 
 for page in pages:
     page_structure_detail = {"选择题": [0, 0, 0], "填空题": [0, 0, 0],
