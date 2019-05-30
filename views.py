@@ -261,7 +261,6 @@ def testCreater():
         form.class_.choices = choices
         return render_template("教师创建考试页面.html", form=form)
     else:
-        flash("创建时间可能较长,请耐心等待....")
         form = TestCreaterForm(request.form)
         page_structure = {}
         page_structure["选择题"] = form.choice_question_number.data
@@ -513,7 +512,7 @@ def createPage(page_id):
 
         page = Page.query.get(page_id)
         page.content = json.dumps(id_list)
-        page.rest_time = page.time_length * 60
+        page.rest_time = page.time_length
         page.ongoing = True
         db.session.commit()
     else:
@@ -622,7 +621,7 @@ def analyse():
 
     if current_button == "统计数据":
         # 数据结构准备
-        data = {"总分": {"平均分": 0, "及格率": 0, "最高分": 0, "最低分": 0, "优秀率": 0},
+        data = {"总分": {"平均分": 0, "及格率": 0, "最高分": 0, "最低分": 1000, "优秀率": 0},
                 "各分数段": {"0~59": 0, "60~69": 0, "70~79": 0, "80~89": 0, "90~100": 0},
                 "各题型": {"选择题": {"平均分": 0, "最高分": 0, "最低分": 1000},
                         "填空题": {"平均分": 0, "最高分": 0, "最低分": 1000},

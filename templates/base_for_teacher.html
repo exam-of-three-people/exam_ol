@@ -134,6 +134,23 @@
                         </div>
                         <div class="col-md-10 column">
                             <!-- 除去顶部和左边按钮的页面主体 -->
+                            <div class="container">
+                                <div class="row clearfix">
+                                    <div class="col-md-1 column">
+
+                                    </div>
+                                    <div class="col-md-1 column">
+                                        {% for msg in get_flashed_messages() %}
+                                            <div class="alert alert-danger fade in"
+                                                 style="   width: 250px;height: 46px">
+                                                <button type="button" class="close" data-dismiss="alert">&times;
+                                                </button>
+                                                <strong class="login-box-msg">{{ msg }}</strong></div>
+
+                                        {% endfor %}
+                                    </div>
+                                </div>
+                            </div>
                             {% block main_windows %}
 
                             {% endblock %}
@@ -146,22 +163,6 @@
             </div>
         </div>
 
-    </div>
-
-    <div class="container">
-        <div class="row clearfix">
-            <div class="col-md-1 column">
-
-            </div>
-            <div class="col-md-1 column">
-                {% for msg in get_flashed_messages() %}
-                    <div class="alert alert-danger fade in" style="   width: 250px;height: 46px">
-                        <button type="button" class="close" data-dismiss="alert">&times;</button>
-                        <strong class="login-box-msg">{{ msg }}</strong></div>
-
-                {% endfor %}
-            </div>
-        </div>
     </div>
     </body>
 {% endblock %}
