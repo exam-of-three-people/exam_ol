@@ -9,16 +9,16 @@
 
 {% block main_windows %}
 
-    <table class="table">
+    <table class="table" style="table-layout: fixed;">
         <thead>
         <tr>
-            <th>学号</th>
-            <th>姓名</th>
-            <th>试卷总分</th>
+            <th style="width: 90px">学号</th>
+            <th style="width: 70px">姓名</th>
+            <th style="width: 80px">试卷总分</th>
             {% for key in ["选择题","填空题", "判断题", "解答题"] %}
-                <th>{{ key }}总分</th>
+                <th style="width: 100px">{{ key }}总分</th>
                 {% for test in data[0][key]["各小题"] %}
-                    <th>{{ loop.index }}</th>
+                    <th style="width: 50px">{{ loop.index }}</th>
                 {% endfor %}
             {% endfor %}
         </tr>
@@ -41,3 +41,8 @@
     </table>
 
 {% endblock %}
+
+<!-- 将表格文字居中的代码 -->
+<script>
+$("td,th").addClass("text-center");
+</script>
